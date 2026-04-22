@@ -204,7 +204,73 @@ minor=0
 passed=0
 
 dispatch_detector() {
-  passed=$((passed + 1))
+  local rule="$1"
+  local rule_id dtype severity cfg
+  rule_id="$(printf '%s' "$rule" | jq -r '.id')"
+  dtype="$(printf '%s' "$rule" | jq -r '.detector.type')"
+  severity="$(printf '%s' "$rule" | jq -r '.severity')"
+  cfg="$(printf '%s' "$rule" | jq -c '.detector')"
+
+  local raw='[]'
+
+  case "$dtype" in
+    find-extensions)
+      local scope
+      scope="$(printf '%s' "$cfg" | jq -r '.scope // "plugin-root"')"
+      if [[ "$scope" == "plugin-root" ]]; then
+        local plugin_root
+        plugin_root="$(dirname "$(dirname "$(dirname "$SKILL_PATH")")")"
+        local allowlist
+        allowlist="$(printf '%s' "$cfg" | jq -c '.allowlist')"
+        raw="$(detect_find_extensions "$plugin_root" "$allowlist")"
+      fi
+      ;;
+    grep-denylist)
+      local denylist
+      if printf '%s' "$cfg" | jq -e '.source' >/dev/null; then
+        local src
+        src="$(printf '%s' "$cfg" | jq -r '.source')"
+        denylist="$(cat "${REF}/../${src}")"
+      else
+        denylist="$(printf '%s' "$cfg" | jq -c '{entries: .["inline-entries"]}')"
+      fi
+      raw="$(detect_grep_denylist "$SKILL_PATH" "$denylist")"
+      ;;
+    grep-required)
+      raw="$(detect_grep_required "$SKILL_PATH" "$cfg")"
+      ;;
+    regex-line)
+      raw="$(detect_regex_line "$SKILL_PATH" "$cfg")"
+      ;;
+    bash-syntax)
+      raw="$(detect_bash_syntax "$SKILL_PATH" "$cfg")"
+      ;;
+    dot-parse)
+      raw="$(detect_dot_parse "$SKILL_PATH" "$cfg")"
+      ;;
+    yaml-frontmatter|section-order|cross-reference|hard-gate-span)
+      local js_out
+      js_out="$(node "${HERE}/lint.js" --detector "$dtype" --skill "$SKILL_PATH" --config "$cfg" 2>/dev/null)"
+      raw="$(printf '%s' "$js_out" | jq -c '.findings // []')"
+      ;;
+  esac
+
+  local count
+  count="$(printf '%s' "$raw" | jq 'length')"
+  if [[ "$count" == "0" ]]; then
+    passed=$((passed + 1))
+    return
+  fi
+
+  case "$severity" in
+    CRITICAL)  critical=$((critical + count)) ;;
+    IMPORTANT) important=$((important + count)) ;;
+    MINOR)     minor=$((minor + count)) ;;
+  esac
+
+  local tagged
+  tagged="$(printf '%s' "$raw" | jq --arg id "$rule_id" --arg sev "$severity" 'map(. + {ruleId:$id, severity:$sev})')"
+  findings_json="$(printf '%s' "$findings_json" | jq --argjson extra "$tagged" '. + $extra')"
 }
 
 count="$(printf '%s' "$RULES_JSON" | jq '.rules | length')"

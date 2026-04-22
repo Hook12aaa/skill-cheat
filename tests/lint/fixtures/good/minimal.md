@@ -61,3 +61,4 @@ Open scope.md and confirm all required fields are present.
 ```bash
 echo "VERDICT: READY"
 ```
+<!-- design-region-clean-of-hard-gates -->
