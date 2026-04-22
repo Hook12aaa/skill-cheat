@@ -14,10 +14,18 @@ if [[ "$actual" != "$expected" ]]; then
   exit 1
 fi
 
-actual="$(emit_context 'line with "quotes" and \backslash')"
+tricky='line with "quotes" and \backslash'
+actual="$(emit_context "$tricky")"
 if ! printf '%s' "$actual" | jq -e . >/dev/null; then
   echo "FAIL: emit_context output is not valid JSON for tricky input"
   echo "$actual"
+  exit 1
+fi
+extracted="$(printf '%s' "$actual" | jq -r '.hookSpecificOutput.additionalContext')"
+if [[ "$extracted" != "$tricky" ]]; then
+  echo "FAIL: tricky input not preserved through JSON round-trip"
+  echo "  sent:     $tricky"
+  echo "  got:      $extracted"
   exit 1
 fi
 
