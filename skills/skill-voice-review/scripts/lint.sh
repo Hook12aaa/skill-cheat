@@ -153,6 +153,30 @@ detect_bash_syntax() {
   fi
 }
 
+# detect_dot_parse <skill-path> <config-json> → findings JSON array on stdout
+detect_dot_parse() {
+  local skill="$1"
+  local cfg="$2"
+  local section
+  section="$(printf '%s' "$cfg" | jq -r '.section')"
+
+  local body
+  body="$(extract_section "$skill" "$section")"
+  [[ -z "$body" ]] && echo '[]' && return
+
+  local fence
+  fence="$(printf '%s\n' "$body" | awk '/^```dot/ {f=1; next} /^```/ {if(f){exit}} f {print}')"
+  [[ -z "$fence" ]] && echo '[]' && return
+
+  local stderr_out
+  if stderr_out="$(printf '%s\n' "$fence" | dot -Tcanon 2>&1 >/dev/null)"; then
+    echo '[]'
+  else
+    jq -n --arg err "$stderr_out" --arg s "$section" \
+      '[{location:null, message:("dot-parse failed in "+$s), excerpt:$err}]'
+  fi
+}
+
 if [[ -z "${_LINT_SOURCE_ONLY:-}" ]]; then
 
 if [[ $# -lt 1 ]]; then

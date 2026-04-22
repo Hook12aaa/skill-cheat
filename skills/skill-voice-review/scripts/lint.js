@@ -8,6 +8,7 @@ const detectors = {
   "yaml-frontmatter": detectYamlFrontmatter,
   "section-order": detectSectionOrder,
   "cross-reference": detectCrossReference,
+  "hard-gate-span": detectHardGateSpan,
 };
 
 function parseArgs(args) {
@@ -167,6 +168,39 @@ function detectCrossReference(skillText, config) {
     }
   }
 
+  return findings;
+}
+
+function detectHardGateSpan(skillText, config) {
+  const findings = [];
+  const maxSentences = config["max-sentences"] ?? 2;
+  const forbidden = config["forbidden-tokens"] ?? [];
+  const spanRe = /<HARD-GATE>([\s\S]*?)<\/HARD-GATE>/g;
+  let match;
+  while ((match = spanRe.exec(skillText)) !== null) {
+    const content = match[1].trim();
+    const sentences = content
+      .split(/[.!?](?:\s+|$)/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+    if (sentences.length > maxSentences) {
+      findings.push({
+        location: null,
+        message: `HARD-GATE has ${sentences.length} sentences (max ${maxSentences})`,
+        excerpt: content.slice(0, 120),
+      });
+    }
+    for (const token of forbidden) {
+      const re = new RegExp("\\b" + token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
+      if (re.test(content)) {
+        findings.push({
+          location: null,
+          message: `HARD-GATE contains forbidden token: ${token}`,
+          excerpt: content.slice(0, 120),
+        });
+      }
+    }
+  }
   return findings;
 }
 
