@@ -3,6 +3,62 @@ set -euo pipefail
 
 # Invariant: lint.sh emits a single JSON object to stdout with keys {skill, designSha, runId, summary, findings, verdict}.
 # Invariant: non-zero exit on schema violation, lint engine errors, or REJECT_CRITICAL verdict. Exit 0 on ACCEPT / ACCEPT_WITH_MINOR.
+# Invariant: when invoked with --source-only, lint.sh only defines functions and does not execute main logic.
+if [[ "${1:-}" == "--source-only" ]]; then
+  _LINT_SOURCE_ONLY=1
+  shift
+fi
+
+# detect_find_extensions <dir> <json-allowlist-array> → findings JSON array on stdout
+detect_find_extensions() {
+  local dir="$1"
+  local allowlist_json="$2"
+  local allow_args=()
+  local ext
+  while IFS= read -r ext; do
+    allow_args+=( -o -name "*$ext" )
+  done < <(printf '%s' "$allowlist_json" | jq -r '.[]')
+  allow_args=("${allow_args[@]:1}")
+  local violations
+  violations="$(find "$dir" -type f \( ! \( "${allow_args[@]}" \) \) -print 2>/dev/null || true)"
+  if [[ -z "$violations" ]]; then
+    echo '[]'; return
+  fi
+  printf '%s\n' "$violations" | jq -R -s 'split("\n") | map(select(length > 0)) | map({location: {path: .}, excerpt: null})'
+}
+
+# detect_grep_denylist <skill-path> <denylist-json-object> → findings JSON array
+detect_grep_denylist() {
+  local skill="$1"
+  local denylist="$2"
+  local patterns
+  patterns="$(printf '%s' "$denylist" | jq -r '.entries[]')"
+  local findings='[]'
+  local word line_num line_content
+  while IFS= read -r word; do
+    while IFS=: read -r line_num line_content; do
+      [[ -z "$line_num" ]] && continue
+      findings="$(printf '%s' "$findings" | jq --arg word "$word" --arg ln "$line_num" --arg ex "$line_content" \
+        '. + [{location:{line:($ln|tonumber)}, message:("denylist hit: "+$word), excerpt:$ex}]')"
+    done < <(grep -niwn -E "\\b${word}\\b" "$skill" 2>/dev/null || true)
+  done <<< "$patterns"
+  echo "$findings"
+}
+
+# detect_grep_required <skill-path> <config-json> → findings JSON array
+detect_grep_required() {
+  local skill="$1"
+  local cfg="$2"
+  local pattern
+  pattern="$(printf '%s' "$cfg" | jq -r '.pattern')"
+  if grep -qF -- "$pattern" "$skill"; then
+    echo '[]'
+  else
+    jq -n --arg p "$pattern" '[{location:null, message:("required pattern missing: "+$p), excerpt:null}]'
+  fi
+}
+
+if [[ -z "${_LINT_SOURCE_ONLY:-}" ]]; then
 
 if [[ $# -lt 1 ]]; then
   echo "usage: lint.sh <path-to-SKILL.md>" >&2
@@ -59,3 +115,5 @@ case "$verdict" in
   REJECT_CRITICAL|REJECT_IMPORTANT) exit 1 ;;
   *) exit 0 ;;
 esac
+
+fi
