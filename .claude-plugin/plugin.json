@@ -1,0 +1,10 @@
+{
+  "name": "skill-cheat",
+  "description": "Scaffolds Claude Code skills in the imperative, gate-driven, contract-first style. Self-triggers on skill-authoring prompts.",
+  "version": "0.1.0",
+  "author": { "name": "hook" },
+  "license": "MIT",
+  "homepage": "https://github.com/hook/skill-cheat",
+  "repository": "https://github.com/hook/skill-cheat",
+  "keywords": ["skills", "scaffolding", "plugin-authoring", "lint", "hooks"]
+}

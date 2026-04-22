@@ -1,0 +1,10 @@
+{
+  "name": "skill-cheat-local",
+  "description": "Local marketplace for the skill-cheat plugin during development.",
+  "plugins": [
+    {
+      "name": "skill-cheat",
+      "path": "."
+    }
+  ]
+}
