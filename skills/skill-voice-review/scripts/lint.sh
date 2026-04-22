@@ -47,10 +47,13 @@ fi
 jq -n \
   --arg skill "$SKILL_PATH" \
   --arg runId "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  --argjson summary "{\"critical\":$critical,\"important\":$important,\"minor\":$minor,\"passed\":$passed}" \
+  --argjson critical "$critical" \
+  --argjson important "$important" \
+  --argjson minor "$minor" \
+  --argjson passed "$passed" \
   --argjson findings "$findings_json" \
   --arg verdict "$verdict" \
-  '{skill:$skill, designSha:null, runId:$runId, summary:$summary, findings:$findings, verdict:$verdict}'
+  '{skill:$skill, designSha:null, runId:$runId, summary:{critical:$critical, important:$important, minor:$minor, passed:$passed}, findings:$findings, verdict:$verdict}'
 
 case "$verdict" in
   REJECT_CRITICAL|REJECT_IMPORTANT) exit 1 ;;
