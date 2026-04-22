@@ -18,13 +18,16 @@ detect_find_extensions() {
   while IFS= read -r ext; do
     allow_args+=( -o -name "*$ext" )
   done < <(printf '%s' "$allowlist_json" | jq -r '.[]')
+  if (( ${#allow_args[@]} == 0 )); then
+    echo '[]'; return
+  fi
   allow_args=("${allow_args[@]:1}")
   local violations
   violations="$(find "$dir" -type f \( ! \( "${allow_args[@]}" \) \) -print 2>/dev/null || true)"
   if [[ -z "$violations" ]]; then
     echo '[]'; return
   fi
-  printf '%s\n' "$violations" | jq -R -s 'split("\n") | map(select(length > 0)) | map({location: {path: .}, excerpt: null})'
+  printf '%s\n' "$violations" | jq -R -s 'split("\n") | map(select(length > 0)) | map({location: {path: .}, message: "disallowed file extension", excerpt: null})'
 }
 
 # detect_grep_denylist <skill-path> <denylist-json-object> → findings JSON array
@@ -40,7 +43,7 @@ detect_grep_denylist() {
       [[ -z "$line_num" ]] && continue
       findings="$(printf '%s' "$findings" | jq --arg word "$word" --arg ln "$line_num" --arg ex "$line_content" \
         '. + [{location:{line:($ln|tonumber)}, message:("denylist hit: "+$word), excerpt:$ex}]')"
-    done < <(grep -niwn -E "\\b${word}\\b" "$skill" 2>/dev/null || true)
+    done < <(grep -niw -E "\\b${word}\\b" "$skill" 2>/dev/null || true)
   done <<< "$patterns"
   echo "$findings"
 }
