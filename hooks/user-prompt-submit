@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Invariant: never fail the prompt-submit path. On any error, exit silent.
+
+# shellcheck source=/dev/null
+source "${CLAUDE_PLUGIN_ROOT}/config.sh"
+# shellcheck source=lib/emit-context.sh
+source "${CLAUDE_PLUGIN_ROOT}/hooks/lib/emit-context.sh"
+# shellcheck source=lib/detect-skill-intent.sh
+source "${CLAUDE_PLUGIN_ROOT}/hooks/lib/detect-skill-intent.sh"
+
+payload="$(cat)"
+prompt="$(printf '%s' "$payload" | jq -r '.prompt // empty' 2>/dev/null || true)"
+[[ -z "$prompt" ]] && exit 0
+
+if detect_skill_intent "$prompt" "${SKILL_CHEAT_TRIGGER_KEYWORDS[@]}"; then
+  emit_context "SKILL-AUTHORING INTENT DETECTED. Invoke /skill-scope before any other action when building or scaffolding a skill."
+fi
