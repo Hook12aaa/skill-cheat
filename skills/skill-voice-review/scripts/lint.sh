@@ -191,11 +191,41 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REF="$(cd "${HERE}/../references" && pwd)"
 RULES_FILE="${REF}/lint-rules.json"
 
-if [[ ! -f "$RULES_FILE" ]]; then
-  RULES_JSON='{"schemaVersion":"1.0","rules":[]}'
-else
-  RULES_JSON="$(cat "$RULES_FILE")"
-fi
+# resolve_manifest → merged-rules-json on stdout
+resolve_manifest() {
+  local skill_dir
+  skill_dir="$(dirname "$SKILL_PATH")"
+  local local_manifest="${skill_dir}/lint.json"
+  local base_manifest="${REF}/lint-rules.json"
+
+  if [[ ! -f "$base_manifest" ]]; then
+    echo '{"schemaVersion":"1.0","rules":[]}'
+    return
+  fi
+
+  if [[ ! -f "$local_manifest" ]]; then
+    cat "$base_manifest"
+    return
+  fi
+
+  local extends_val
+  extends_val="$(jq -r '.extends // empty' "$local_manifest")"
+  if [[ "$extends_val" == "skill-cheat:baseline" ]]; then
+    jq -s '
+      .[0].rules as $base
+      | .[1].rules as $local
+      | (.[1].disable // []) as $disabled
+      | (.[1].rules // [] | map(.id)) as $local_ids
+      | ($base | map(select(.id as $id | ($local_ids | index($id)) | not))
+               | map(select(.id as $id | ($disabled | index($id)) | not))) as $kept
+      | { schemaVersion: .[0].schemaVersion, rules: ($kept + $local) }
+    ' "$base_manifest" "$local_manifest"
+  else
+    cat "$local_manifest"
+  fi
+}
+
+RULES_JSON="$(resolve_manifest)"
 
 findings_json='[]'
 critical=0
