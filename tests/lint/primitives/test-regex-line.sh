@@ -60,4 +60,22 @@ if ! printf '%s' "$findings" | jq -e 'length == 1' >/dev/null; then
   echo "$findings"; exit 1
 fi
 
+cat > "${TMP}/hardgate.md" <<'EOF'
+<HARD-GATE>
+Do NOT proceed without a named scope.
+</HARD-GATE>
+
+<HARD-GATE>
+The scope should really be named before proceeding.
+</HARD-GATE>
+EOF
+
+cfg='{"section":"hard-gate-blocks","must-match":"^(Do NOT|Never|STOP|NEVER) "}'
+findings="$(detect_regex_line "${TMP}/hardgate.md" "$cfg")"
+count="$(printf '%s' "$findings" | jq 'length')"
+if [[ "$count" != "1" ]]; then
+  echo "FAIL: hard-gate must-match expected 1 finding, got $count"
+  echo "$findings"; exit 1
+fi
+
 echo "PASS: regex-line"

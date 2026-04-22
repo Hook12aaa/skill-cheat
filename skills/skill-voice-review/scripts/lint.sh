@@ -79,8 +79,8 @@ extract_section() {
       if (hdr == target) { emit=1; next }
       if (emit) exit
     }
-    /<\/HARD-GATE>/ { if (target == "hard-gate-blocks" && emit) { print; emit=0; next } }
-    /<HARD-GATE>/   { if (target == "hard-gate-blocks") { emit=1; print; next } }
+    /<\/HARD-GATE>/ { if (target == "hard-gate-blocks" && emit) { emit=0; next } }
+    /<HARD-GATE>/   { if (target == "hard-gate-blocks") { emit=1; next } }
     emit { print }
   ' "$skill"
 }
@@ -103,7 +103,7 @@ detect_regex_line() {
   local line_num=0 line
   while IFS= read -r line; do
     line_num=$((line_num + 1))
-    if [[ -n "$must_match" && "$line" =~ ^-\ .+ ]]; then
+    if [[ -n "$must_match" && -n "$line" ]]; then
       if ! printf '%s' "$line" | grep -qE -- "$must_match"; then
         findings="$(printf '%s' "$findings" | jq --arg ln "$line_num" --arg ex "$line" --arg s "$section" \
           '. + [{location:{line:($ln|tonumber)}, message:("regex-line must-match failed in "+$s), excerpt:$ex}]')"
