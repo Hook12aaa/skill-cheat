@@ -1,0 +1,63 @@
+---
+name: minimal-demo
+description: Trigger /minimal-demo. Verdicts are READY, REJECT, BLOCKED. Use when testing the lint engine.
+---
+
+# minimal-demo
+
+<HARD-GATE>
+The scope should really be named before proceeding.
+</HARD-GATE>
+
+## Anti-Pattern
+
+**"I can skip the gate this once"** — every invocation goes through the gate. No exceptions.
+
+## Core Principle
+
+Verify preconditions before acting.
+
+## Process Flow
+
+```dot
+digraph minimal {
+    start [shape=box];
+    ok [shape=doublecircle];
+    start -> ok;
+}
+```
+
+## Checklist
+
+1. Read the scope document.
+
+## Step Details
+
+### 1. Read the scope document
+
+Open scope.md and confirm all required fields are present.
+
+## Gate Functions
+
+- BEFORE proceeding: "Does scope.md exist?"
+
+## Rationalization Table
+
+| You think... | Reality |
+|---|---|
+| "Scope is obvious from context" | Context drifts. Read scope.md. |
+
+## Red Flags
+
+- "I already know what the scope is"
+- "Scope check is overkill"
+
+## Key Principles
+
+- **Verify.** Read before acting.
+
+## The Bottom Line
+
+```bash
+echo "VERDICT: READY"
+```
