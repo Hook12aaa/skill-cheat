@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "skill-cheat lint rules manifest",
+  "type": "object",
+  "required": ["schemaVersion", "rules"],
+  "properties": {
+    "schemaVersion": { "type": "string", "enum": ["1.0"] },
+    "extends": { "type": "string" },
+    "disable": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[A-Z]+-[0-9]{3}$" }
+    },
+    "rules": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/rule" }
+    }
+  },
+  "definitions": {
+    "rule": {
+      "type": "object",
+      "required": ["id", "description", "severity", "detector"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Z]+-[0-9]{3}$" },
+        "description": { "type": "string", "minLength": 10 },
+        "severity": { "type": "string", "enum": ["CRITICAL", "IMPORTANT", "MINOR"] },
+        "detector": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "find-extensions",
+                "grep-denylist",
+                "grep-required",
+                "regex-line",
+                "yaml-frontmatter",
+                "dot-parse",
+                "bash-syntax",
+                "section-order",
+                "cross-reference",
+                "hard-gate-span"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}
