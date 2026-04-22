@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "word-denylist",
+  "entries": [
+    "consider",
+    "probably",
+    "may",
+    "might",
+    "perhaps",
+    "seems",
+    "seem",
+    "try to",
+    "somewhat",
+    "roughly",
+    "approximately",
+    "mostly",
+    "generally",
+    "usually",
+    "typically"
+  ]
+}
