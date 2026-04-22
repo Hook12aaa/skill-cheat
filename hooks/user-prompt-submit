@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'exit 0' ERR
 
 # Invariant: never fail the prompt-submit path. On any error, exit silent.
 

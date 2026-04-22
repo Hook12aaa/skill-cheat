@@ -30,4 +30,13 @@ if [[ -n "$out" ]]; then
   echo "$out"; exit 1
 fi
 
+(
+  unset CLAUDE_PLUGIN_ROOT
+  out="$(printf '%s' '{"prompt":"author a skill"}' | bash "${HERE}/hooks/user-prompt-submit" 2>/dev/null || true)"
+  if [[ -n "$out" ]]; then
+    echo "FAIL: non-empty output when CLAUDE_PLUGIN_ROOT unset"
+    echo "$out"; exit 1
+  fi
+)
+
 echo "PASS: user-prompt-submit"
