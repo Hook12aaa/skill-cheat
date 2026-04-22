@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Invariant: fail silent if bootstrap missing — never block session start.
+
+BOOTSTRAP="${CLAUDE_PLUGIN_ROOT}/skills/using-skill-cheat/SKILL.md"
+[[ -f "$BOOTSTRAP" ]] || exit 0
+
+# shellcheck source=../hooks/lib/emit-context.sh
+source "${CLAUDE_PLUGIN_ROOT}/hooks/lib/emit-context.sh"
+
+emit_context "$(cat "$BOOTSTRAP")"
