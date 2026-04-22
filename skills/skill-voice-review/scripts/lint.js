@@ -64,14 +64,14 @@ function detectYamlFrontmatter(skillText, config) {
   const description = fields["description"] ?? "";
 
   if (config["description-contains-trigger"]) {
-    const hasTrigger = /\/\w+/.test(description) || /\btrigger\b/i.test(description);
+    const hasTrigger = /\/[a-z][\w-]*/i.test(description) || /\btrigger\b/i.test(description);
     if (!hasTrigger) {
       findings.push({ location: null, message: "description does not name a trigger", excerpt: description });
     }
   }
 
   if (config["description-contains-verdict"]) {
-    const hasVerdict = /\b[A-Z]{3,}\b/.test(description);
+    const hasVerdict = /\b[A-Z][A-Z0-9]{3,}(_[A-Z0-9]+)*\b/.test(description);
     if (!hasVerdict) {
       findings.push({ location: null, message: "description does not name an ALL-CAPS verdict token", excerpt: description });
     }

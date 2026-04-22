@@ -55,4 +55,18 @@ if ! printf '%s' "$out" | jq -e '.findings | length >= 1' >/dev/null; then
   echo "FAIL: missing frontmatter not flagged: $out"; exit 1
 fi
 
+cat > "${TMP}/false-short-caps.md" <<'EOF'
+---
+name: demo
+description: Trigger /demo. Use SET or GET for testing.
+---
+
+# demo
+EOF
+out="$(node "$LINT_JS" --detector yaml-frontmatter --skill "${TMP}/false-short-caps.md" --config "$cfg")"
+if ! printf '%s' "$out" | jq -e '.findings | length == 1' >/dev/null; then
+  echo "FAIL: SET/GET should not qualify as verdict tokens (expected 1 finding: no verdict)"
+  echo "$out"; exit 1
+fi
+
 echo "PASS: yaml-frontmatter"
