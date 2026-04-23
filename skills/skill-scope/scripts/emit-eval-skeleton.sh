@@ -15,6 +15,9 @@ SCOPE="$1"
 skill_name="$(jq -r '.name' "$SCOPE")"
 [[ -n "$skill_name" && "$skill_name" != "null" ]] || { echo "emit-eval-skeleton: scope.name required" >&2; exit 65; }
 
+triggers_count="$(jq '.triggers | if type == "array" then length else 0 end' "$SCOPE")"
+[[ "$triggers_count" -gt 0 ]] || { echo "emit-eval-skeleton: scope.triggers[] must be a non-empty array" >&2; exit 65; }
+
 positives_json="$(jq -c '
   [.triggers[] |
     {

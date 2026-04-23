@@ -26,4 +26,11 @@ unique_ids="$(jq '[.cases[].id] | unique | length' "${tmp}/out.json")"
 
 jq . "${tmp}/out.json" >/dev/null || { echo "FAIL: emitted JSON invalid"; exit 1; }
 
+# Invariant: missing or empty triggers[] exits non-zero with a clear diagnostic.
+printf '%s\n' '{"schemaVersion":"1.0","name":"no-triggers","slashCommand":"/x","triggers":[],"verdicts":["X"],"antiPattern":"\"x\"","targetPath":"/tmp","pluginMode":"new"}' > "${tmp}/empty-triggers.json"
+if bash "$EMIT" "${tmp}/empty-triggers.json" >/dev/null 2>"${tmp}/err"; then
+  echo "FAIL: emitter accepted empty triggers[] (should exit non-zero)"; exit 1
+fi
+grep -q "triggers" "${tmp}/err" || { echo "FAIL: empty-triggers diagnostic missing; stderr was: $(cat "${tmp}/err")"; exit 1; }
+
 echo "PASS: emit-eval-skeleton"
