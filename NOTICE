@@ -1,0 +1,24 @@
+skill-cheat
+Copyright 2026 The skill-cheat Authors.
+
+This product includes subagent prompt templates adapted from the
+anthropics/skills repository (https://github.com/anthropics/skills),
+licensed under the Apache License, Version 2.0.
+
+The following files are derivative works of anthropics/skills
+(skill-creator skill, commit b9e19e6 "Fill in Apache 2.0 copyright
+notice in claude-api LICENSE.txt"):
+
+- skills/skill-voice-review/agents/grader.md
+  (adapted from skill-creator/agents/grader.md)
+- skills/skill-voice-review/agents/comparator.md
+  (adapted from skill-creator/agents/comparator.md)
+- skills/skill-voice-review/agents/analyzer.md
+  (adapted from skill-creator/agents/analyzer.md)
+
+Adaptations: prose rewritten for imperative voice; Inputs/Outputs
+sections reshaped to the dispatch-prompt template used by the
+skill-cheat voice-reviewer.
+
+A copy of the Apache 2.0 license text is available at
+https://www.apache.org/licenses/LICENSE-2.0.
