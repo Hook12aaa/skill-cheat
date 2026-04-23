@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "hardGates": [
+    {"id": 1, "body": "Do NOT proceed without a named scope. STOP and invoke /skill-scope."}
+  ],
+  "gateFunctions": [
+    {"before": "asking questions", "question": "Am I about to ask more than one thing at once?"},
+    {"before": "locking scope", "question": "Does the Anti-Pattern name a quoted rationalization?"}
+  ],
+  "antiPatternFirstSentence": "\"I can skip the gate this once\" — every invocation goes through the gate.",
+  "checklistSteps": [
+    "Verify hard gates",
+    "Load the next unstarted batch"
+  ]
+}
