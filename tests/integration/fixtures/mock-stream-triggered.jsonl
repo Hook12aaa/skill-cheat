@@ -1,0 +1,4 @@
+{"type":"system","subtype":"init","session_id":"test-sess-1"}
+{"type":"stream_event","event":{"type":"content_block_start","content_block":{"type":"tool_use","name":"Skill","input":{"name":"my-skill"}}}}
+{"type":"assistant","message":{"content":[{"type":"text","text":"Running the my-skill workflow..."}]}}
+{"type":"result","subtype":"success","duration_ms":4200,"total_tokens":12345}

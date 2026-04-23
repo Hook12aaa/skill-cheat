@@ -1,0 +1,3 @@
+{"type":"system","subtype":"init","session_id":"test-sess-2"}
+{"type":"assistant","message":{"content":[{"type":"text","text":"Direct answer without invoking a skill."}]}}
+{"type":"result","subtype":"success","duration_ms":1100,"total_tokens":800}
