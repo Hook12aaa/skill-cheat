@@ -1,6 +1,45 @@
 {
   "schemaVersion": "1.0",
   "kind": "identifier-denylist",
+  "purpose": "Contract-first enforcement for SKILL.md. `entries` are framework-pickers — naming one implicitly rules out alternatives (CRITICAL: auto-REJECT). `warnings` are domain libraries that might be the skill's legitimate subject (IMPORTANT: voice-reviewer subagent judgment). Detector is case-insensitive with word boundaries; English-word collisions (requests, click, fetch, bootstrap, guidance, anthropic, openai, typescript) are deliberately excluded.",
+  "sources": [
+    {
+      "id": "hugovk-top-pypi",
+      "name": "hugovk — Top PyPI packages (monthly, by download count).",
+      "url": "https://hugovk.dev/top-pypi-packages/top-pypi-packages.min.json",
+      "role": "Canonical JSON feed for Python library popularity. Structure: .rows[].project. Seeds the PyPI-derived entries."
+    },
+    {
+      "id": "npm-rank",
+      "name": "tristan-f-r/npm-rank — Top npm packages (monthly release).",
+      "url": "https://github.com/tristan-f-r/npm-rank/releases/download/latest/raw.json",
+      "role": "Canonical JSON feed for npm library popularity. Structure: [].name. Seeds the npm-derived entries."
+    },
+    {
+      "id": "crates-io-api",
+      "name": "crates.io API — Rust crate popularity (CC0 data).",
+      "url": "https://crates.io/api/v1/crates?sort=downloads&per_page=100",
+      "role": "Canonical JSON feed for Rust. Not yet sampled into entries but available for future ecosystem expansion."
+    },
+    {
+      "id": "libraries-io",
+      "name": "libraries.io — Multi-ecosystem SourceRank open dataset.",
+      "url": "https://libraries.io/data",
+      "role": "Cross-ecosystem popularity metric (CC-BY-SA). Useful for future validation and for ecosystems lacking a dedicated JSON feed."
+    },
+    {
+      "id": "anthropic-skills-canonical",
+      "name": "anthropics/skills — skill-creator and claude-api SKILL.md.",
+      "url": "https://github.com/anthropics/skills",
+      "role": "Canonical Anthropic-authored skills. skill-creator is the model of contract-first voice (few library names); claude-api is the counter-example (names SDKs in body). Used to calibrate which library names most commonly leak into instructional prose."
+    },
+    {
+      "id": "awesome-cursorrules",
+      "name": "PatrickJS/awesome-cursorrules — corpus of AI-coding-assistant instructions.",
+      "url": "https://github.com/PatrickJS/awesome-cursorrules",
+      "role": "Corpus for identifying which libraries are most frequently named in AI instruction prose (Cursor rules, Copilot instructions)."
+    }
+  ],
   "entries": [
     "React",
     "Vue",
@@ -31,6 +70,51 @@
     "SQLAlchemy",
     "Prisma",
     "Mongoose",
-    "TypeORM"
+    "TypeORM",
+    "tailwindcss",
+    "shadcn",
+    "mui",
+    "chakra-ui",
+    "redux",
+    "zustand",
+    "jotai",
+    "mobx",
+    "rxjs",
+    "eslint",
+    "prettier"
+  ],
+  "warnings": [
+    "langchain",
+    "langgraph",
+    "llamaindex",
+    "llama-index",
+    "crewai",
+    "autogen",
+    "haystack",
+    "dspy",
+    "vllm",
+    "ollama",
+    "pydantic",
+    "zod",
+    "yup",
+    "joi",
+    "pandas",
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "httpx",
+    "aiohttp",
+    "axios",
+    "boto3",
+    "alembic",
+    "psycopg2",
+    "asyncpg",
+    "pymongo",
+    "lodash",
+    "ramda",
+    "dayjs",
+    "luxon",
+    "beautifulsoup",
+    "lxml"
   ]
 }

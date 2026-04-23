@@ -47,7 +47,7 @@
       "id": "LINT-008",
       "description": "Red Flags bullets are quoted fragments with no em-dash explanation",
       "severity": "CRITICAL",
-      "detector": { "type": "regex-line", "section": "red-flags", "must-not-match": " — " }
+      "detector": { "type": "regex-line", "section": "red-flags", "must-match": "^- \"", "must-not-match": " — " }
     },
     {
       "id": "LINT-009",
@@ -99,6 +99,36 @@
       "description": "HARD-GATE blocks only inside Integrity Block or rendered SKILL.md, not in design.md editable region",
       "severity": "CRITICAL",
       "detector": { "type": "grep-required", "pattern": "design-region-clean-of-hard-gates", "scope": "design-editable-region" }
+    },
+    {
+      "id": "LINT-017",
+      "description": "HARD-GATE 'Do NOT' sentences carry a precondition keyword (without/if/until/outside/unless)",
+      "severity": "CRITICAL",
+      "detector": { "type": "regex-line", "section": "hard-gate-blocks", "must-match": "^(Do NOT\\b.*\\b(without|if|until|outside|unless)\\b|Never |STOP |NEVER )" }
+    },
+    {
+      "id": "LINT-018",
+      "description": "HARD-GATE body contains at least one STOP or NEVER fail-action sentence",
+      "severity": "CRITICAL",
+      "detector": { "type": "hard-gate-span", "required-fail-pattern": "^(STOP |NEVER )" }
+    },
+    {
+      "id": "LINT-019",
+      "description": "Rationalization Table Reality cells contain an imperative counter",
+      "severity": "CRITICAL",
+      "detector": { "type": "rationalization-table-cells", "source": "references/imperative-verbs-allowlist.json" }
+    },
+    {
+      "id": "LINT-020",
+      "description": "Soft hedge words in SKILL.md body (context-dependent; voice-reviewer judgment)",
+      "severity": "IMPORTANT",
+      "detector": { "type": "grep-denylist", "source": "references/hedge-words-denylist.json", "field": "warnings", "scope": "skill-body" }
+    },
+    {
+      "id": "LINT-021",
+      "description": "Domain library names in SKILL.md body (may be the skill's subject; voice-reviewer judgment)",
+      "severity": "IMPORTANT",
+      "detector": { "type": "grep-denylist", "source": "references/library-names-denylist.json", "field": "warnings", "scope": "skill-body-outside-references" }
     }
   ]
 }

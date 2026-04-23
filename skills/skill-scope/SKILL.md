@@ -58,7 +58,7 @@ digraph skill_scope {
 
 ### 1. Ask the user for a skill name and slash command
 
-One question at a time. Multiple choice when possible. Read references/trigger-vocabulary.md first.
+One question at a time. Prefer multiple-choice phrasing. Read references/trigger-vocabulary.md first.
 
 ### 2. Ask the user for verdict tokens and trigger kinds
 
@@ -93,7 +93,7 @@ Save to docs/skill-cheat/skills-in-progress/<skill-name>/scope.md. Include name,
 |---|---|
 | "The user will figure out the Anti-Pattern later" | Later never comes. Ask now or the lint enforcement downstream has nothing to anchor on. |
 | "A simple skill needs no scope" | Simple scopes hide the deepest assumptions. Lock scope regardless. |
-| "Multiple questions at once saves time" | One question at a time. Batching produces shallow answers. |
+| "Multiple questions at once saves time" | Ask one question at a time. Refuse batched prompts. |
 
 ## Red Flags
 

@@ -30,13 +30,16 @@ detect_find_extensions() {
   printf '%s\n' "$violations" | jq -R -s 'split("\n") | map(select(length > 0)) | map({location: {path: .}, message: "disallowed file extension", excerpt: null})'
 }
 
-# detect_grep_denylist <skill-path> <denylist-json-object> → findings JSON array
+# detect_grep_denylist <skill-path> <denylist-json-object> [field=entries] → findings JSON array
+# Invariant: reads the named array (entries or warnings) from the denylist; no per-finding severity — dispatcher tags from rule-level severity.
 detect_grep_denylist() {
   local skill="$1"
   local denylist="$2"
+  local field="${3:-entries}"
   local patterns
-  patterns="$(printf '%s' "$denylist" | jq -r '.entries[]')"
+  patterns="$(printf '%s' "$denylist" | jq -r --arg f "$field" '(.[$f] // []) | .[]')"
   local findings='[]'
+  [[ -z "$patterns" ]] && { echo "$findings"; return; }
   local word line_num line_content
   while IFS= read -r word; do
     while IFS=: read -r line_num line_content; do
@@ -256,7 +259,8 @@ dispatch_detector() {
       fi
       ;;
     grep-denylist)
-      local denylist
+      local denylist field
+      field="$(printf '%s' "$cfg" | jq -r '.field // "entries"')"
       if printf '%s' "$cfg" | jq -e '.source' >/dev/null; then
         local src
         src="$(printf '%s' "$cfg" | jq -r '.source')"
@@ -264,7 +268,7 @@ dispatch_detector() {
       else
         denylist="$(printf '%s' "$cfg" | jq -c '{entries: .["inline-entries"]}')"
       fi
-      raw="$(detect_grep_denylist "$SKILL_PATH" "$denylist")"
+      raw="$(detect_grep_denylist "$SKILL_PATH" "$denylist" "$field")"
       ;;
     grep-required)
       raw="$(detect_grep_required "$SKILL_PATH" "$cfg")"
@@ -278,7 +282,7 @@ dispatch_detector() {
     dot-parse)
       raw="$(detect_dot_parse "$SKILL_PATH" "$cfg")"
       ;;
-    yaml-frontmatter|section-order|cross-reference|hard-gate-span)
+    yaml-frontmatter|section-order|cross-reference|hard-gate-span|rationalization-table-cells)
       local js_out
       js_out="$(node "${HERE}/lint.js" --detector "$dtype" --skill "$SKILL_PATH" --config "$cfg" 2>/dev/null)"
       raw="$(printf '%s' "$js_out" | jq -c '.findings // []')"
@@ -327,7 +331,7 @@ jq -n \
   '{skill:$skill, designSha:null, runId:$runId, summary:{critical:$critical, important:$important, minor:$minor, passed:$passed}, findings:$findings, verdict:$verdict}'
 
 case "$verdict" in
-  REJECT_CRITICAL|REJECT_IMPORTANT) exit 1 ;;
+  REJECT_CRITICAL) exit 1 ;;
   *) exit 0 ;;
 esac
 
