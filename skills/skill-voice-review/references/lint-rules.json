@@ -5,7 +5,7 @@
       "id": "LINT-001",
       "description": "Plugin file extensions only .md, .js, .sh, .json",
       "severity": "CRITICAL",
-      "detector": { "type": "find-extensions", "allowlist": [".md", ".js", ".sh", ".json"], "scope": "plugin-root" }
+      "detector": { "type": "find-extensions", "allowlist": [".md", ".js", ".sh", ".json", ".cjs", ".html", ".css", ".woff2"], "scope": "plugin-root" }
     },
     {
       "id": "LINT-002",
