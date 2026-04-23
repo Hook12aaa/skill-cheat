@@ -3,8 +3,9 @@
 // Invariant: --mock-stream-file reads a pre-recorded JSONL stream instead of spawning claude; never used in production runs.
 // Invariant: triggered=true iff the stream contains a content_block_start whose tool_use input name matches --skill-name.
 
+import { spawn } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { argv, exit, stderr, stdout } from "node:process";
+import process, { argv, exit, stderr, stdout } from "node:process";
 
 function parseArgs(args) {
   const out = {};
@@ -58,7 +59,24 @@ if (args["mock-stream-file"]) {
   mock = true;
   streamLines = readFileSync(args["mock-stream-file"], "utf8").split("\n");
 } else {
-  fail("production mode not implemented in Plan 5 Task 9; use --mock-stream-file. Task 10 wires real claude subprocess.", 65);
+  const claudeArgs = [
+    "-p", args.query,
+    "--include-partial-messages",
+    "--output-format", "stream-json",
+  ];
+  if (args.model) claudeArgs.push("--model", args.model);
+  const child = spawn("claude", claudeArgs, {
+    cwd: args["skill-path"],
+    env: process.env,
+  });
+  let buf = "";
+  child.stdout.setEncoding("utf8");
+  await new Promise((resolve, reject) => {
+    child.stdout.on("data", (chunk) => { buf += chunk; });
+    child.on("error", reject);
+    child.on("close", resolve);
+  });
+  streamLines = buf.split("\n");
 }
 
 const analysis = analyseStream(streamLines, args["skill-name"]);
