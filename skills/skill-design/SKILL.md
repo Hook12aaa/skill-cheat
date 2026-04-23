@@ -65,6 +65,7 @@ digraph skill_design {
 8. Write the Integrity Block with all six immutable fields.
 9. Emit the SHA-256 sidecar file.
 10. Write design.json alongside design.md (design.json follows references/design-schema.md).
+11. Emit evals/assertion-skeleton.json (run `bash scripts/emit-assertion-skeleton.sh --skill-name <skill-name> --design-json design.json --design-md design.md > evals/assertion-skeleton.json`).
 
 ## Step Details
 
@@ -107,6 +108,10 @@ Run `bash scripts/integrity-hash.sh <design-path>`. Confirm sidecar lands at `<d
 ### 10. Write design.json alongside design.md
 
 Save design.json to docs/skill-cheat/skills-in-progress/<skill-name>/design.json. Follow references/design-schema.md. Extract the fields mechanically from the drafted sections — do NOT hand-edit the JSON after emission. Downstream stages read design.json, not design.md.
+
+### 11. Emit evals/assertion-skeleton.json for the behavioral benchmark
+
+Run `bash scripts/emit-assertion-skeleton.sh --skill-name <skill-name> --design-json design.json --design-md design.md > evals/assertion-skeleton.json`. The emitter seeds one assertion per HARD-GATE and one per Gate Function. /skill-voice-review (Plan 5) dispatches these against the benchmark runs.
 
 ## Gate Functions
 
