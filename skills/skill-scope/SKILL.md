@@ -52,7 +52,7 @@ digraph skill_scope {
 3. Ask the user to name the Anti-Pattern phrase.
 4. Ask the user for the target project path.
 5. Ask whether this authors a new plugin or extends an existing one.
-6. Write scope.md with the captured fields.
+6. Write scope.md and scope.json with the captured fields (scope.json follows references/scope-schema.md).
 
 ## Step Details
 
@@ -76,15 +76,17 @@ Absolute path. Confirm the directory exists.
 
 Multiple choice: new plugin (full scaffold) or existing plugin (skill-only).
 
-### 6. Write scope.md with the captured fields
+### 6. Write scope.md and scope.json with the captured fields
 
-Save to docs/skill-cheat/skills-in-progress/<skill-name>/scope.md. Include name, triggers, verdicts, Anti-Pattern, target path, plugin-mode.
+Save scope.md to docs/skill-cheat/skills-in-progress/<skill-name>/scope.md. Include name, triggers, verdicts, Anti-Pattern, target path, plugin-mode as human-readable prose.
+
+Save scope.json to docs/skill-cheat/skills-in-progress/<skill-name>/scope.json. Follow references/scope-schema.md. Downstream stages read scope.json, not scope.md.
 
 ## Gate Functions
 
 - BEFORE asking questions: "Am I about to ask more than one thing at once?"
 - BEFORE locking scope: "Does the user's Anti-Pattern name a quoted rationalization, or is it a vague statement?"
-- BEFORE emitting SCOPE_LOCKED: "Does scope.md have all six fields populated?"
+- BEFORE emitting SCOPE_LOCKED: "Does scope.json validate against references/scope-schema.md?"
 - BEFORE moving on: "Did the user confirm the target project path exists on disk?"
 
 ## Rationalization Table
