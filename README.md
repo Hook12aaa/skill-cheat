@@ -20,11 +20,11 @@ Any of these invocations kicks off the 5-stage pipeline:
 
 ## Stages
 
-1. `/skill-scope` — lock name, triggers, verdicts, Anti-Pattern.
-2. `/skill-design` — write HARD-GATEs, Core Principle, flow, checklist; emit Integrity Block + SHA-256.
+1. `/skill-scope` — lock name, triggers, verdicts, Anti-Pattern. Emits `scope.md`, `scope.json`, `evals/eval-set-skeleton.json`.
+2. `/skill-design` — write HARD-GATEs, Core Principle, flow, checklist. Emits `design.md`, `design.json`, `evals/assertion-skeleton.json`, Integrity Block + SHA-256.
 3. `/skill-author` — fill the skill body; verify Integrity Block unchanged.
-4. `/skill-voice-review` — mechanical lint + voice-reviewer subagent; REJECT or ACCEPT.
-5. `/skill-scaffold` — emit the plugin tree at the target path.
+4. `/skill-voice-review` — mechanical lint + voice-reviewer subagent; REJECT or ACCEPT. Phase-3 behavioral benchmark lands in Plan 5+.
+5. `/skill-scaffold` — emit the plugin tree at the target path (`evals/` travels with the skill).
 
 ## Principles
 
@@ -86,3 +86,19 @@ jq -r '.[:200][].name'       docs/library-research/npm-rank.json          > npm-
 ```
 
 Before merging new names into `entries[]`, filter out English-word collisions (`requests`, `click`, `fetch`, `bootstrap`, `six`, `wheel`, `build`, `guidance`, `anthropic`, `openai`) — the detector is case-insensitive with word boundaries, so any library name that doubles as a common English word will produce false positives.
+
+## Benchmark artifacts
+
+Every skill authored through skill-cheat carries its own behavioral benchmark inputs in `skills/<name>/evals/`:
+
+- `eval-set-skeleton.json` — positive + adversarial trigger cases, seeded by `/skill-scope` from declared triggers via `scripts/emit-eval-skeleton.sh`.
+- `assertion-skeleton.json` — one behavioral assertion per HARD-GATE + Gate Function, seeded by `/skill-design` via `scripts/emit-assertion-skeleton.sh`.
+
+The skeletons are JSON-seeded contracts. The skill author fills in realistic queries and refines assertions before `/skill-voice-review` dispatches them against git-isolated baseline/candidate worktrees (Plan 5).
+
+Schemas live in:
+
+- `skills/skill-scope/references/scope-schema.md`
+- `skills/skill-design/references/design-schema.md`
+- `skills/skill-voice-review/references/benchmark-plan-schema.md`
+- `skills/skill-voice-review/references/adversarial-eval-patterns.md`
