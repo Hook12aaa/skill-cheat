@@ -64,6 +64,7 @@ digraph skill_design {
 7. Spawn the voice-reviewer subagent.
 8. Write the Integrity Block with all six immutable fields.
 9. Emit the SHA-256 sidecar file.
+10. Write design.json alongside design.md (design.json follows references/design-schema.md).
 
 ## Step Details
 
@@ -102,6 +103,10 @@ Use the exact delimiter strings from references/integrity-block.md. Include: ski
 ### 9. Emit the SHA-256 sidecar file
 
 Run `bash scripts/integrity-hash.sh <design-path>`. Confirm sidecar lands at `<design-path>.sha256`.
+
+### 10. Write design.json alongside design.md
+
+Save design.json to docs/skill-cheat/skills-in-progress/<skill-name>/design.json. Follow references/design-schema.md. Extract the fields mechanically from the drafted sections — do NOT hand-edit the JSON after emission. Downstream stages read design.json, not design.md.
 
 ## Gate Functions
 
