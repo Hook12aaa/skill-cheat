@@ -28,28 +28,20 @@ Never edit content inside `<!-- integrity-block:start/end -->` markers. STOP if 
 </HARD-GATE>
 ```
 
-## Anti-patterns
+## Rationalization Table
 
-NOT this (rationale inside gate):
-```
-<HARD-GATE>
-Do NOT proceed without scope because the scope lock is load-bearing.
-</HARD-GATE>
-```
+| You think... | Reality |
+|---|---|
+| "The author will not remember why this gate exists unless I add `because` here" | Strip the rationale out of the gate. Put the `why` in prose outside the `<HARD-GATE>` block. |
+| "One more sentence clarifies the follow-up action and makes the gate safer" | Keep the gate at one or two imperative sentences. Rewrite the third sentence as a checklist item elsewhere. |
+| "Saying `Should not proceed` sounds less hostile than `Do NOT proceed`" | Rewrite the opener as `Do NOT`, `Never`, or `STOP`. Hedged voice is not a gate. |
 
-NOT this (too many sentences):
-```
-<HARD-GATE>
-Do NOT proceed without scope. STOP and invoke /skill-scope. Then confirm nothing else is pending.
-</HARD-GATE>
-```
+## Red Flags
 
-NOT this (library name inside gate):
-```
-<HARD-GATE>
-Do NOT use React without declaring its version. STOP if unspecified.
-</HARD-GATE>
-```
+- "because"
+- "since"
+- "Should not proceed"
+- "in order to"
 
 ## Rule
 

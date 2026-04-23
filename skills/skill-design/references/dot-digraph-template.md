@@ -36,3 +36,18 @@ digraph <skill_name> {
 - Every node named in the graph has at least one incoming OR outgoing edge.
 - Every path reaches a terminal (doublecircle) or a declared backtrack loop.
 - The graph parses under `dot -Tcanon` — no syntax errors, no unresolved references.
+
+## Rationalization Table
+
+| You think... | Reality |
+|---|---|
+| "The terminal is obvious from the last node" | Name every terminal with doublecircle. A missing terminal fails the Required properties check. |
+| "Prose describes the flow well enough" | Rewrite the prose as nodes and edges. Structure validates at parse time; paragraphs do not. |
+| "Every step is a box; shape distinction is cosmetic" | Use diamond for decisions and doublecircle for terminals. Shape encodes semantics, not style. |
+
+## Red Flags
+
+- "No decision labels, the reader will figure out yes/no"
+- "One stray node with no edges is fine"
+- "Skip the doublecircle, the graph ends where it ends"
+- "Every node is a box"

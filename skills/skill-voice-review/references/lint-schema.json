@@ -40,7 +40,8 @@
                 "bash-syntax",
                 "section-order",
                 "cross-reference",
-                "hard-gate-span"
+                "hard-gate-span",
+                "rationalization-table-cells"
               ]
             }
           },

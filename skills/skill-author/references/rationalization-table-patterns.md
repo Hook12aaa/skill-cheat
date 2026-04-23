@@ -42,3 +42,18 @@ Better:
 ## Rule
 
 Every row's Reality is STRICTER than its You-think. If Reality is softer or equivocal, delete the row.
+
+## Rationalization Table
+
+| You think... | Reality |
+|---|---|
+| "The Reality cell just needs to explain the nuance" | Rewrite it as an imperative. Explanation without a verb is a hedge. |
+| "Opening with 'You might want to consider' sounds balanced" | Strip the hedge. Reality leads with an imperative or it fails LINT-019. |
+| "The row reads fine with a generic 'this is simple' on the left" | Quote the actual self-talk verbatim. Generic You-think produces generic Reality. |
+
+## Red Flags
+
+- "Consider revising the approach here"
+- "You may want to rethink this"
+- "It's generally better to"
+- "This might be worth reconsidering"

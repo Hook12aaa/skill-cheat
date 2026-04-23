@@ -1,6 +1,6 @@
 ---
 name: skill-voice-review
-description: Trigger /skill-voice-review. Stage 4 of the pipeline. Runs lint then dispatches the voice-reviewer subagent and merges verdicts. Emits ACCEPT, ACCEPT_WITH_MINOR, REJECT_CRITICAL, REJECT_IMPORTANT, INCONCLUSIVE, or BLOCKED_VOICE.
+description: Stage 4 of a skill-cheat pipeline. Trigger /skill-voice-review whenever the user says "review my SKILL.md I just wrote", "voice-check my authored draft", "run lint and reviewer on my draft", "audit my authored draft for drift", or "check imperative voice before shipping". Fires only after AUTHOR_DONE is in hand. Runs lint.sh first to catch structural violations, then dispatches a fresh voice-reviewer subagent with no authoring context so an author never grades an author's own work, and merges both verdicts into one. Emits ACCEPT, ACCEPT_WITH_MINOR, REJECT_CRITICAL, REJECT_IMPORTANT, INCONCLUSIVE, or BLOCKED_VOICE.
 ---
 <!-- design-region-clean-of-hard-gates -->
 
@@ -117,7 +117,7 @@ Print `VERDICT: <token>` where token is one of ACCEPT, ACCEPT_WITH_MINOR, REJECT
 | You think... | Reality |
 |---|---|
 | "I wrote it, I can judge it" | The author's familiarity masks the exact gaps a fresh subagent finds. Dispatch always. |
-| "Lint false-positived, I can override" | Override requires a lint.json disable entry committed to the repo, not an in-session judgment call. |
+| "Lint false-positived, I can override" | Commit a lint.json disable entry or accept the finding. No in-session override. |
 | "The agent is slow, skip it" | A slow agent review is cheaper than a shipped skill with a structural defect. Never skip. |
 
 ## Red Flags

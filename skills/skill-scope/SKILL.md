@@ -1,6 +1,6 @@
 ---
 name: skill-scope
-description: Trigger /skill-scope. Stage 1 of the pipeline. Locks skill name, trigger vocabulary, verdict tokens, Anti-Pattern, and target project path before any design work. Emits SCOPE_LOCKED, SCOPE_INCOMPLETE, or BLOCKED_NEEDS_USER.
+description: Stage 1 of skill-cheat pipeline. Trigger /skill-scope whenever the user says "I want to build a skill for X", "scaffold a new Claude Code skill", "let's author a skill", "start a new skill", or "kick off a skill design". Locks name, triggers, verdict tokens, Anti-Pattern phrase, target project path, and plugin-mode before any design work begins. Emits SCOPE_LOCKED, SCOPE_INCOMPLETE, or BLOCKED_NEEDS_USER.
 ---
 <!-- design-region-clean-of-hard-gates -->
 
