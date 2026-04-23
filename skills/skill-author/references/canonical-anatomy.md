@@ -57,6 +57,22 @@ The canonical 13-section order below does NOT include `## Triggers`. Trigger phr
 - Third-person self-reference: "the skill", "this skill mandates", "skill deviation".
 - Comments in JSON / JS / SH that describe history, intent, or personal notes.
 
+## Skill directory layout
+
+Every skill directory follows this shape:
+
+```
+<skill-name>/
+├── SKILL.md         (required)
+├── scripts/         (optional — executable .sh or .js bundled with the skill)
+├── references/      (optional — prose loaded as-needed)
+├── assets/          (optional — templates, icons, fonts)
+├── agents/          (optional — subagent prompt templates dispatched by the skill)
+└── evals/           (optional — behavioral benchmark inputs: eval-set-skeleton.json, assertion-skeleton.json)
+```
+
+Omit any subdirectory you do not use. Only these names are permitted — LINT-001 enforces extension policy, not directory policy, so new subdirectories MUST be added here before use.
+
 ## Rationalization Table
 
 | You think... | Reality |
