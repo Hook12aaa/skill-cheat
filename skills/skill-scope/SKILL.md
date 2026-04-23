@@ -52,7 +52,7 @@ digraph skill_scope {
 3. Ask the user to name the Anti-Pattern phrase.
 4. Ask the user for the target project path.
 5. Ask whether this authors a new plugin or extends an existing one.
-6. Write scope.md and scope.json with the captured fields (scope.json follows references/scope-schema.md).
+6. Write scope.md, scope.json, and evals/eval-set-skeleton.json (run `bash scripts/emit-eval-skeleton.sh scope.json > evals/eval-set-skeleton.json`).
 
 ## Step Details
 
@@ -76,11 +76,13 @@ Absolute path. Confirm the directory exists.
 
 Multiple choice: new plugin (full scaffold) or existing plugin (skill-only).
 
-### 6. Write scope.md and scope.json with the captured fields
+### 6. Write scope.md, scope.json, and evals/eval-set-skeleton.json
 
 Save scope.md to docs/skill-cheat/skills-in-progress/<skill-name>/scope.md. Include name, triggers, verdicts, Anti-Pattern, target path, plugin-mode as human-readable prose.
 
 Save scope.json to docs/skill-cheat/skills-in-progress/<skill-name>/scope.json. Follow references/scope-schema.md. Downstream stages read scope.json, not scope.md.
+
+Run `bash scripts/emit-eval-skeleton.sh scope.json > evals/eval-set-skeleton.json` to seed the behavioral benchmark eval set with one positive case per trigger and five adversarial placeholders. The scope author fills in realistic queries before /skill-voice-review dispatches the benchmark (Plan 5).
 
 ## Gate Functions
 
