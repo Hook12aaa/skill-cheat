@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0",
+  "extends": "skill-cheat:baseline",
+  "rules": [
+    {
+      "id": "CUSTOM-001",
+      "description": "This skill must name DOMAIN-SPECIFIC TOKEN somewhere in its body",
+      "severity": "CRITICAL",
+      "detector": { "type": "grep-required", "pattern": "DOMAIN-SPECIFIC TOKEN" }
+    }
+  ]
+}

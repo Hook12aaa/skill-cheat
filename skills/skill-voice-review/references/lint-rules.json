@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0",
+  "rules": [
+    {
+      "id": "LINT-001",
+      "description": "Plugin file extensions only .md, .js, .sh, .json",
+      "severity": "CRITICAL",
+      "detector": { "type": "find-extensions", "allowlist": [".md", ".js", ".sh", ".json"], "scope": "plugin-root" }
+    },
+    {
+      "id": "LINT-002",
+      "description": "Every HARD-GATE sentence opens with an imperative verb",
+      "severity": "CRITICAL",
+      "detector": { "type": "regex-line", "section": "hard-gate-blocks", "must-match": "^(Do NOT|Never|STOP|NEVER) " }
+    },
+    {
+      "id": "LINT-003",
+      "description": "Zero hedge words in SKILL.md body outside references",
+      "severity": "CRITICAL",
+      "detector": { "type": "grep-denylist", "source": "references/hedge-words-denylist.json", "scope": "skill-body" }
+    },
+    {
+      "id": "LINT-004",
+      "description": "Frontmatter description names at least one ALL-CAPS verdict token",
+      "severity": "CRITICAL",
+      "detector": { "type": "yaml-frontmatter", "required-fields": ["name","description"], "description-contains-verdict": true }
+    },
+    {
+      "id": "LINT-005",
+      "description": "Zero library or framework names in SKILL.md body",
+      "severity": "CRITICAL",
+      "detector": { "type": "grep-denylist", "source": "references/library-names-denylist.json", "scope": "skill-body-outside-references" }
+    },
+    {
+      "id": "LINT-006",
+      "description": "HARD-GATE content contains no because/since/in-order-to, max 2 sentences",
+      "severity": "CRITICAL",
+      "detector": { "type": "hard-gate-span", "max-sentences": 2, "forbidden-tokens": ["because","since","in order to"] }
+    },
+    {
+      "id": "LINT-007",
+      "description": "Gate Functions bullets match 'BEFORE <action>: \"<question>?\"'",
+      "severity": "CRITICAL",
+      "detector": { "type": "regex-line", "section": "gate-functions", "must-match": "^- BEFORE .+: \".+\\?\"$" }
+    },
+    {
+      "id": "LINT-008",
+      "description": "Red Flags bullets are quoted fragments with no em-dash explanation",
+      "severity": "CRITICAL",
+      "detector": { "type": "regex-line", "section": "red-flags", "must-not-match": " — " }
+    },
+    {
+      "id": "LINT-009",
+      "description": "Bottom Line contains an executable bash/sh fence that passes bash -n",
+      "severity": "CRITICAL",
+      "detector": { "type": "bash-syntax", "section": "the-bottom-line" }
+    },
+    {
+      "id": "LINT-010",
+      "description": "Section order matches the canonical sequence",
+      "severity": "CRITICAL",
+      "detector": {
+        "type": "section-order",
+        "expected-order": ["<HARD-GATE>","Anti-Pattern","Core Principle","Process Flow","Checklist","Step Details","Gate Functions","Rationalization Table","Red Flags","Key Principles","The Bottom Line"]
+      }
+    },
+    {
+      "id": "LINT-011",
+      "description": "Process Flow dot block parses under dot -Tcanon",
+      "severity": "CRITICAL",
+      "detector": { "type": "dot-parse", "section": "process-flow" }
+    },
+    {
+      "id": "LINT-012",
+      "description": "Frontmatter has name and description; description names at least one trigger",
+      "severity": "CRITICAL",
+      "detector": { "type": "yaml-frontmatter", "required-fields": ["name","description"], "description-contains-trigger": true }
+    },
+    {
+      "id": "LINT-013",
+      "description": "Checklist numbers match Step Details numbered headings 1:1",
+      "severity": "CRITICAL",
+      "detector": { "type": "cross-reference", "left-section": "checklist", "right-section": "step-details", "left-pattern": "^\\d+\\.\\s", "right-pattern": "^###\\s+\\d+\\." }
+    },
+    {
+      "id": "LINT-014",
+      "description": "No third-person self-reference",
+      "severity": "CRITICAL",
+      "detector": { "type": "grep-denylist", "inline-entries": ["the skill","this skill","skill deviation","skill mandates"], "scope": "skill-body" }
+    },
+    {
+      "id": "LINT-015",
+      "description": "Anti-Pattern contains a quoted phrase in its first sentence",
+      "severity": "CRITICAL",
+      "detector": { "type": "regex-line", "section": "anti-pattern", "first-sentence-must-match": "\".+\"" }
+    },
+    {
+      "id": "LINT-016",
+      "description": "HARD-GATE blocks only inside Integrity Block or rendered SKILL.md, not in design.md editable region",
+      "severity": "CRITICAL",
+      "detector": { "type": "grep-required", "pattern": "design-region-clean-of-hard-gates", "scope": "design-editable-region" }
+    }
+  ]
+}
