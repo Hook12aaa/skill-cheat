@@ -3,3 +3,6 @@
 *.swo
 .skill-cheat.sh
 tests/tmp/
+docs/skill-cheat/
+node_modules/
+.skill-cheat-qa/
