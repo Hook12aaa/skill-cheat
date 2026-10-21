@@ -102,3 +102,18 @@ Schemas live in:
 - `skills/skill-design/references/design-schema.md`
 - `skills/skill-voice-review/references/benchmark-plan-schema.md`
 - `skills/skill-voice-review/references/adversarial-eval-patterns.md`
+
+## Benchmark engine
+
+Plan 5 ships the runtime that consumes the eval and assertion skeletons emitted by `/skill-scope` and `/skill-design` and produces enriched per-skill benchmark results.
+
+Components in `skills/skill-voice-review/`:
+
+- `scripts/git-worktree-setup.sh` — materializes baseline + candidate worktrees at `<root>/<run-id>/{baseline,candidate}/`.
+- `scripts/benchmark-plan-init.sh` — writes `benchmark-plan.json` + `benchmark-plan.md` (with Integrity Block) + SHA-256 sidecar from scope.json + eval-set + assertion-skeleton + refs.
+- `scripts/benchmark-integrity-hash.sh` — companion hasher for benchmark-plan.md's integrity block.
+- `scripts/run-eval.js` / `run-eval.sh` — spawns `claude -p --include-partial-messages`, watches the JSONL stream for skill activation (`content_block_start` with matching tool_use name), emits `{triggered, durationMs, totalTokens, streamEvents}`. Mock-stream mode (`--mock-stream-file`) unblocks CI.
+- `scripts/aggregate-benchmark.js` — folds N run-eval outputs into pass-rate + mean/stddev tokens + mean/stddev duration per ref, plus delta.
+- `agents/grader.md` / `comparator.md` / `analyzer.md` — subagent prompts (ported from [anthropics/skills](https://github.com/anthropics/skills) under Apache 2.0; see `/NOTICE`).
+
+Plan 6 wires `/skill-voice-review` phase 3 to this engine and adds the Node dashboard UI (mirrors model_trainer/report's `dashboard/` layout).
