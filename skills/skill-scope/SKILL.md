@@ -1,6 +1,6 @@
 ---
 name: skill-scope
-description: Trigger /skill-scope. Stage 1 of the pipeline. Locks skill name, trigger vocabulary, verdict tokens, Anti-Pattern, and target project path before any design work. Emits SCOPE_LOCKED, SCOPE_INCOMPLETE, or BLOCKED_NEEDS_USER.
+description: Stage 1 of skill-cheat pipeline. Trigger /skill-scope whenever the user says "I want to build a skill for X", "scaffold a new Claude Code skill", "let's author a skill", "start a new skill", or "kick off a skill design". Locks name, triggers, verdict tokens, Anti-Pattern phrase, target project path, and plugin-mode before any design work begins. Emits SCOPE_LOCKED, SCOPE_INCOMPLETE, or BLOCKED_NEEDS_USER.
 ---
 <!-- design-region-clean-of-hard-gates -->
 
@@ -52,13 +52,13 @@ digraph skill_scope {
 3. Ask the user to name the Anti-Pattern phrase.
 4. Ask the user for the target project path.
 5. Ask whether this authors a new plugin or extends an existing one.
-6. Write scope.md with the captured fields.
+6. Write scope.md, scope.json, and evals/eval-set-skeleton.json (run `bash scripts/emit-eval-skeleton.sh scope.json > evals/eval-set-skeleton.json`).
 
 ## Step Details
 
 ### 1. Ask the user for a skill name and slash command
 
-One question at a time. Multiple choice when possible. Read references/trigger-vocabulary.md first.
+One question at a time. Prefer multiple-choice phrasing. Read references/trigger-vocabulary.md first.
 
 ### 2. Ask the user for verdict tokens and trigger kinds
 
@@ -76,15 +76,19 @@ Absolute path. Confirm the directory exists.
 
 Multiple choice: new plugin (full scaffold) or existing plugin (skill-only).
 
-### 6. Write scope.md with the captured fields
+### 6. Write scope.md, scope.json, and evals/eval-set-skeleton.json
 
-Save to docs/skill-cheat/skills-in-progress/<skill-name>/scope.md. Include name, triggers, verdicts, Anti-Pattern, target path, plugin-mode.
+Save scope.md to docs/skill-cheat/skills-in-progress/<skill-name>/scope.md. Include name, triggers, verdicts, Anti-Pattern, target path, plugin-mode as human-readable prose.
+
+Save scope.json to docs/skill-cheat/skills-in-progress/<skill-name>/scope.json. Follow references/scope-schema.md. Downstream stages read scope.json, not scope.md.
+
+Run `bash scripts/emit-eval-skeleton.sh scope.json > evals/eval-set-skeleton.json` to seed the behavioral benchmark eval set with one positive case per trigger and five adversarial placeholders. The scope author fills in realistic queries before /skill-voice-review dispatches the benchmark (Plan 5).
 
 ## Gate Functions
 
 - BEFORE asking questions: "Am I about to ask more than one thing at once?"
 - BEFORE locking scope: "Does the user's Anti-Pattern name a quoted rationalization, or is it a vague statement?"
-- BEFORE emitting SCOPE_LOCKED: "Does scope.md have all six fields populated?"
+- BEFORE emitting SCOPE_LOCKED: "Does scope.json validate against references/scope-schema.md?"
 - BEFORE moving on: "Did the user confirm the target project path exists on disk?"
 
 ## Rationalization Table
@@ -93,7 +97,7 @@ Save to docs/skill-cheat/skills-in-progress/<skill-name>/scope.md. Include name,
 |---|---|
 | "The user will figure out the Anti-Pattern later" | Later never comes. Ask now or the lint enforcement downstream has nothing to anchor on. |
 | "A simple skill needs no scope" | Simple scopes hide the deepest assumptions. Lock scope regardless. |
-| "Multiple questions at once saves time" | One question at a time. Batching produces shallow answers. |
+| "Multiple questions at once saves time" | Ask one question at a time. Refuse batched prompts. |
 
 ## Red Flags
 

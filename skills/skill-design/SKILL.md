@@ -1,6 +1,6 @@
 ---
 name: skill-design
-description: Trigger /skill-design. Stage 2 of the pipeline. Writes HARD-GATEs, Core Principle, Process Flow, and Integrity Block for a new skill. Emits DESIGN_LOCKED, DESIGN_REJECTED, or BLOCKED_REVIEWER.
+description: Stage 2 of skill-cheat, the five-stage SKILL.md pipeline. Trigger /skill-design. Fire whenever the user says "design it now", "write the HARD-GATEs", "draft the contract", "move on from scope to design", or "lock the immutable fields". Writes HARD-GATEs, Core Principle, Process Flow, and Integrity Block, then emits design.md plus a SHA-256 sidecar once SCOPE_LOCKED is in hand. Emits DESIGN_LOCKED, DESIGN_REJECTED, or BLOCKED_REVIEWER.
 ---
 <!-- design-region-clean-of-hard-gates -->
 
@@ -11,7 +11,7 @@ Do NOT proceed without reading scope.md in this session. STOP and invoke /skill-
 </HARD-GATE>
 
 <HARD-GATE>
-Do NOT name libraries or frameworks in HARD-GATE content. STOP and rewrite.
+Never name libraries or frameworks in HARD-GATE content. STOP and rewrite.
 </HARD-GATE>
 
 <HARD-GATE>
@@ -64,6 +64,8 @@ digraph skill_design {
 7. Spawn the voice-reviewer subagent.
 8. Write the Integrity Block with all six immutable fields.
 9. Emit the SHA-256 sidecar file.
+10. Write design.json alongside design.md (design.json follows references/design-schema.md).
+11. Emit evals/assertion-skeleton.json (run `bash scripts/emit-assertion-skeleton.sh --skill-name <skill-name> --design-json design.json --design-md design.md > evals/assertion-skeleton.json`).
 
 ## Step Details
 
@@ -103,6 +105,14 @@ Use the exact delimiter strings from references/integrity-block.md. Include: ski
 
 Run `bash scripts/integrity-hash.sh <design-path>`. Confirm sidecar lands at `<design-path>.sha256`.
 
+### 10. Write design.json alongside design.md
+
+Save design.json to docs/skill-cheat/skills-in-progress/<skill-name>/design.json. Follow references/design-schema.md. Extract the fields mechanically from the drafted sections — do NOT hand-edit the JSON after emission. Downstream stages read design.json, not design.md.
+
+### 11. Emit evals/assertion-skeleton.json for the behavioral benchmark
+
+Run `bash scripts/emit-assertion-skeleton.sh --skill-name <skill-name> --design-json design.json --design-md design.md > evals/assertion-skeleton.json`. The emitter seeds one assertion per HARD-GATE and one per Gate Function. /skill-voice-review (Plan 5) dispatches these against the benchmark runs.
+
 ## Gate Functions
 
 - BEFORE drafting HARD-GATEs: "Is each precondition one or two imperative sentences?"
@@ -114,9 +124,9 @@ Run `bash scripts/integrity-hash.sh <design-path>`. Confirm sidecar lands at `<d
 
 | You think... | Reality |
 |---|---|
-| "HARD-GATEs need a rationale clause" | Rationale lives outside the block in prose. Gates are imperatives only. |
-| "The Core Principle can reference the main tool" | One sentence, no tool or library names. The principle describes shape, not implementation. |
-| "Integrity Block is overkill for a small skill" | Every design.md needs an Integrity Block. Size is not an exemption criterion. |
+| "HARD-GATEs need a rationale clause" | Keep rationale outside the block. Write gates as imperatives only. |
+| "The Core Principle can reference the main tool" | Name the shape, not the tool. Strip any library name before locking. |
+| "Integrity Block is overkill for a small skill" | Emit the Integrity Block regardless of skill size. No exemptions. |
 | "I can tighten the gates after the review" | Gates authored after the body drift to match it. Write the contract first. |
 
 ## Red Flags

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": "1.0",
+  "extends": "skill-cheat:baseline",
+  "disable": ["LINT-001", "LINT-004", "LINT-010", "LINT-013"],
+  "rules": []
+}

@@ -92,3 +92,18 @@ fi
 ## Rule
 
 Every template above is a STARTING POINT. The scaffold emits these then adapts to scope-declared specifics. Do NOT emit templates without substituting placeholders.
+
+## Rationalization Table
+
+| You think... | Reality |
+|---|---|
+| "`set -euo pipefail` is noisy; I'll skip it and catch errors manually." | Keep `set -euo pipefail` on every hook script. An unbound variable or silent pipe failure emits malformed JSON and Claude stamps the turn with a hook error. |
+| "A non-zero exit from the normal path is harmless — Claude ignores stdout anyway." | Never exit non-zero on the happy path. Exit 2 blocks the turn and exit 0 is the only code where `hookSpecificOutput` is parsed. |
+| "I'll hardcode `/Users/me/plugins/foo` so the path is unambiguous during local testing." | Always resolve paths through `${CLAUDE_PLUGIN_ROOT}`. Baked absolute paths break every install outside your machine and the hook fails before emitting JSON. |
+
+## Red Flags
+
+- "I don't need `set -euo pipefail` here."
+- "Exiting 1 on the normal path is fine."
+- "I'll hardcode the absolute path for now."
+- "I'll log the raw prompt into additionalContext so I can debug later."

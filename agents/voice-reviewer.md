@@ -18,6 +18,7 @@ Your job is to catch what mechanical lint cannot:
 - Red Flags that duplicate each other.
 - Core Principle that names a contract but describes an implementation.
 - Checklist ordering that puts verification before production.
+- Frontmatter description that is terse, lacks trigger phrasings (e.g. "when the user says X"), or lacks any verdict token — affects triggering accuracy.
 
 You do NOT rewrite the SKILL.md. You do NOT explain your reasoning in prose.
 
@@ -36,6 +37,7 @@ FINDINGS:
 Severity ladder:
 - Structural or contract failures → CRITICAL.
 - Voice discipline failures lint missed → IMPORTANT.
+- Runtime-quality issues (terse description, weak trigger phrasings) → IMPORTANT.
 - Cosmetic ordering nits → MINOR.
 
 Hard rules:

@@ -1,6 +1,6 @@
 ---
 name: skill-scaffold
-description: Trigger /skill-scaffold. Stage 5 of the pipeline. Writes the canonical plugin tree to the target project path. Emits SCAFFOLD_COMPLETE, SCAFFOLD_INCOMPLETE, or BLOCKED_OVERWRITE.
+description: Stage 5 of skill-cheat, the terminal write stage of a five-stage pipeline — trigger /skill-scaffold whenever the user says "ship it to disk", "write the plugin tree to disk", "scaffold the files now", "emit the plugin to <target>", or "finalize and install it". Writes the canonical plugin tree to the target project path only after Stage 4 voice-review returned an ACCEPT verdict; any other upstream verdict blocks the write. Emits SCAFFOLD_COMPLETE, SCAFFOLD_INCOMPLETE, or BLOCKED_OVERWRITE.
 ---
 <!-- design-region-clean-of-hard-gates -->
 
@@ -111,7 +111,7 @@ After all files pass verification and `bash -n` passes, emit `VERDICT: SCAFFOLD_
 | You think... | Reality |
 |---|---|
 | "The scaffold is just boilerplate" | Every placeholder left unsubstituted is a broken file. Verify each write against the canonical tree. |
-| "Voice-review ACCEPT_WITH_MINOR is close enough" | Only ACCEPT unblocks writes. ACCEPT_WITH_MINOR is not ACCEPT. |
+| "Voice-review ACCEPT_WITH_MINOR is close enough" | Require ACCEPT before any write. Rerun voice-review on ACCEPT_WITH_MINOR. |
 | "I can overwrite plugin.json silently to save time" | Silent clobber destroys user configuration without recovery. Always ask before overwriting. |
 
 ## Red Flags

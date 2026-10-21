@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0",
+  "name": "my-skill",
+  "slashCommand": "/my-skill",
+  "triggers": [
+    {"kind": "slash", "value": "/my-skill"},
+    {"kind": "phrase", "value": "I want to build X"}
+  ],
+  "verdicts": ["READY", "REJECTED", "BLOCKED_NEEDS_USER"],
+  "antiPattern": "\"I can skip this step because X\"",
+  "targetPath": "/tmp/target",
+  "pluginMode": "new"
+}

@@ -5,6 +5,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 LINT="${HERE}/skills/skill-voice-review/scripts/lint.sh"
 
 PIPELINE_SKILLS=(
+  "using-skill-cheat"
   "skill-scope"
   "skill-design"
   "skill-author"

@@ -2,13 +2,16 @@
 // Invariant: stdin/argv in, single JSON object on stdout, exit 0 on success, non-zero on detector error (not on rule failure).
 
 import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { argv, exit, stderr, stdout } from "node:process";
+import { fileURLToPath } from "node:url";
 
 const detectors = {
   "yaml-frontmatter": detectYamlFrontmatter,
   "section-order": detectSectionOrder,
   "cross-reference": detectCrossReference,
   "hard-gate-span": detectHardGateSpan,
+  "rationalization-table-cells": detectRationalizationTableCells,
 };
 
 function parseArgs(args) {
@@ -173,8 +176,9 @@ function detectCrossReference(skillText, config) {
 
 function detectHardGateSpan(skillText, config) {
   const findings = [];
-  const maxSentences = config["max-sentences"] ?? 2;
+  const maxSentences = config["max-sentences"] ?? null;
   const forbidden = config["forbidden-tokens"] ?? [];
+  const requiredFailPattern = config["required-fail-pattern"] ?? null;
   const spanRe = /<HARD-GATE>([\s\S]*?)<\/HARD-GATE>/g;
   let match;
   while ((match = spanRe.exec(skillText)) !== null) {
@@ -183,7 +187,7 @@ function detectHardGateSpan(skillText, config) {
       .split(/[.!?](?:\s+|$)/)
       .map((s) => s.trim())
       .filter((s) => s.length > 0);
-    if (sentences.length > maxSentences) {
+    if (maxSentences !== null && sentences.length > maxSentences) {
       findings.push({
         location: null,
         message: `HARD-GATE has ${sentences.length} sentences (max ${maxSentences})`,
@@ -200,7 +204,93 @@ function detectHardGateSpan(skillText, config) {
         });
       }
     }
+    if (requiredFailPattern !== null) {
+      const re = new RegExp(requiredFailPattern);
+      const hasMatch = sentences.some((s) => re.test(s));
+      if (!hasMatch) {
+        findings.push({
+          location: null,
+          message: `HARD-GATE missing required fail-action pattern: ${requiredFailPattern}`,
+          excerpt: content.slice(0, 120),
+        });
+      }
+    }
   }
+  return findings;
+}
+
+function detectRationalizationTableCells(skillText, config) {
+  const findings = [];
+  const lines = skillText.split("\n");
+
+  let sectionStart = -1;
+  let sectionEnd = lines.length;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (sectionStart === -1) {
+      if (/^##\s+Rationalization Table\s*$/.test(line)) {
+        sectionStart = i + 1;
+      }
+      continue;
+    }
+    if (/^##\s+/.test(line)) {
+      sectionEnd = i;
+      break;
+    }
+  }
+  if (sectionStart === -1) return findings;
+
+  const here = dirname(fileURLToPath(import.meta.url));
+  const source = config.source;
+  if (!source) {
+    return [{ location: null, message: "rationalization-table-cells detector missing source", excerpt: null }];
+  }
+  const allowlistPath = resolve(here, "..", source);
+  const allowlist = JSON.parse(readFileSync(allowlistPath, "utf8"));
+  const verbs = new Set(allowlist.entries);
+
+  const tableRowRe = /^\s*\|(.+)\|\s*$/;
+  const separatorRe = /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/;
+
+  for (let i = sectionStart; i < sectionEnd; i++) {
+    const line = lines[i];
+    if (!tableRowRe.test(line)) continue;
+    if (separatorRe.test(line)) continue;
+    const inner = line.replace(/^\s*\|/, "").replace(/\|\s*$/, "");
+    const cells = inner.split("|").map((c) => c.trim());
+    if (cells.length < 2) continue;
+    if (/^you\s+think/i.test(cells[0]) && /^reality/i.test(cells[1])) continue;
+
+    const reality = cells[1];
+    if (reality === "") continue;
+
+    const sentences = reality
+      .split(/(?<=\.)\s+|(?<=\.)$/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+
+    let pass = false;
+    for (const sentence of sentences) {
+      if (/^(Never|No|STOP|Always)\s/.test(sentence)) {
+        pass = true;
+        break;
+      }
+      const firstWordMatch = sentence.match(/^([A-Z][a-zA-Z]*)\b/);
+      if (firstWordMatch && verbs.has(firstWordMatch[1])) {
+        pass = true;
+        break;
+      }
+    }
+
+    if (!pass) {
+      findings.push({
+        location: { line: i + 1 },
+        message: "Rationalization Table Reality cell has no imperative-led sentence",
+        excerpt: reality,
+      });
+    }
+  }
+
   return findings;
 }
 

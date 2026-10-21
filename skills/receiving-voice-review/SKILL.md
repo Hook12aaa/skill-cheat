@@ -1,13 +1,13 @@
 ---
 name: receiving-voice-review
-description: Pair skill invoked reflexively after /skill-voice-review returns a verdict. Trigger follows any REJECT_CRITICAL, REJECT_IMPORTANT, or ACCEPT_WITH_MINOR. Emits FEEDBACK_PROCESSED when author has finished fixing or pushing back.
+description: Receiving half of voice-review, paired with /skill-voice-review and triggered automatically whenever the reviewer returns REJECT_CRITICAL, REJECT_IMPORTANT, or ACCEPT_WITH_MINOR. Fires when the user says "the reviewer found issues, what do I do", "triage the voice-review findings", "fix-or-push-back on these rejections", "I got REJECT_CRITICAL, now what", or "process the review feedback". Verify each finding against the actual SKILL.md line cited before agreeing to fix or pushing back with a technical reason — no performative "you are absolutely right". Emits FEEDBACK_PROCESSED once every finding is resolved and lint re-runs clean.
 ---
 <!-- design-region-clean-of-hard-gates -->
 
 # receiving-voice-review
 
 <HARD-GATE>
-Do NOT agree performatively. STOP and verify before implementing.
+Never agree performatively. STOP and verify before implementing.
 </HARD-GATE>
 
 <HARD-GATE>
@@ -99,7 +99,7 @@ When every finding is either fixed and lint-verified, or formally pushed back wi
 | You think... | Reality |
 |---|---|
 | "You are absolutely right" | State the fix or push back. No performative agreement. |
-| "Batch fixes save time" | One fix per commit. Re-run lint after each. |
+| "Batch fixes save time" | Apply one fix per commit. Rerun lint after each. |
 | "The reviewer missed context; I can override" | Push back with a technical reason or implement the fix. No silent override. |
 
 ## Red Flags

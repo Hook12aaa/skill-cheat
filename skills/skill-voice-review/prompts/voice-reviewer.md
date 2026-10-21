@@ -19,11 +19,18 @@ Lint report JSON: {LINT_REPORT_PATH}
 
 If {LINT_REPORT_PATH} has any critical findings, STOP and return INCONCLUSIVE immediately. Do not second-guess lint.
 
+IMPORTANT findings (severity=IMPORTANT in the lint report) reach YOU because they are context-dependent — the flagged word might be the skill's legitimate subject. For each IMPORTANT finding:
+
+- If the named word is the skill's own Anti-Pattern, declared subject, or the whole reason the skill exists (e.g. a skill teaching langgraph that names langgraph): ACCEPT or ACCEPT_WITH_MINOR.
+- If the named word is gratuitously prescribing a tool or descriptively weakening an imperative: REJECT_IMPORTANT.
+- Weigh against the Rationalization Table and Red Flags in the target SKILL.md.
+
 Rubric you MUST read before reviewing:
 
 - skills/skill-voice-review/references/canonical-anatomy.md
 - skills/skill-voice-review/references/lint-rules.json (not to re-run; to understand what lint already checked)
 - skills/skill-voice-review/references/library-names-denylist.json
+- skills/skill-voice-review/references/hedge-words-denylist.json
 
 Catch what lint cannot:
 

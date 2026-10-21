@@ -1,0 +1,966 @@
+                                                                 Available online at www.jlls.org
+
+                                   JOURNAL OF LANGUAGE AND LINGUISTIC STUDIES
+                         ISSN: 1305-578X
+                         Journal of Language and Linguistic Studies, 14(4), 74-92; 2018
+
+
+
+                 Hedging and academic writing: an analysis of lexical hedges
+
+
+                                                            Cüneyt Demira*
+                                                a
+                                                    The University of Siirt, Siirt, 56100, Turkey
+APA Citation:
+
+Demir, C.. (2018). Hedging and academic writing: an analysis of lexical hedges. Journal of Language and Linguistic Studies, 14(4), 74-92.
+Submission Date:12/12/2017
+Acceptance Date:25/07/2018
+
+
+Abstract
+Hedging is an important metadiscourse device that should be used for various motives particularly in academic
+writing because it acts as a face-saving strategy and represents the certainty of the scientists’ knowledge on the
+study field, but nevertheless it is not an obvious consideration for many non-native writers of English. Although
+the significance of hedging in academic writing is beyond argument, excessive use of it may create a counter-
+productive result. In other words while underuse of hedging may lead to overstatement, overuse of it may bring
+about suspicions on the credibility of the statements, therefore a moderate and balanced used of hedging is
+necessary for the true credibility of the author on the reader. In this regard, the present study investigated academic
+texts of native writers and non-native writers of English with purposes of revealing the differences between them
+in terms of hedging strategies while composing an academic text; detecting lexical hedges used by native writers
+and non-native writers of English and diversity of these hedges through some analyses, creating a list of lexical
+hedges, and offering some suggestions regarding the use of lexical hedges in academic writing.
+© 2018 JLLS and the Authors - Published by JLLS.
+
+
+Keywords: Hedging; academic writing; metadiscourse; downtoner; mitigation
+
+
+1. Introduction
+
+    Lexical conventions that embellish academic texts have come to the fore for various reasons since
+the discovery of discourse devices, and the ability to use these devices has been commensurate with
+language proficiency. Therefore, competence in using discourse devices is seen as a sign of being native
+in the target language. Accordingly, of many discourse devices hedges deserve special attention as
+incorrect or unbalanced use of them may utterly disrupt rhetorical persuasion on the credibility of the
+statements of authors.
+   Hedging devices are “vitally important” (Slager-Mayer, 1994, p. 241) and should be used even in
+textbooks on top of academic writing (Hyland, 1994), therefore either you use hedges to distinguish
+facts from opinion, or "honesty, modesty and proper caution" (Swales, 1990, p. 174), they have
+undoubtedly been a key issue for all levels of writing. Though, hedging the statements is not an obvious
+consideration for many non-native writers of English (Hinkel, 2004), which may be because they regard
+hedges “extremely troublesome” (Hyland, 1996, p. 278). However, that non-native writers avoid being
+
+* Corresponding author. Tel.: +90-505-9374345
+ E-mail address: ardgelen@hotmail.com
+.              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92              75
+
+
+assertive in their scientific papers through unnecessary hedges may lead to invisibility of authorial stance
+over their claims. This shadowy position of the writer in a scientific text may be deemed as a sign of
+indeterminacy over the discussed issue, and may lower the credibility, which may prompt lack of
+confidence or doubt in readers. That inescapable conclusion is, out of doubt, undesirable by a writer
+whose primary aim is to persuade the reader over the claim.
+    Although the significance of hedging in academic writing is beyond argument, excessive use of it
+may create a counter-productive result. In other words, while underuse of hedging may lead to
+overstatement, overuse of it may bring about suspicions on the credibility of the statements. Therefore,
+hedging should be used evenly by authors. Appropriate use of hedges in academic texts may keep
+criticisms away from writers, and may increase persuasive power on audiences. In this regard, the
+present study investigated academic texts of native writers (NWs) and non-native writers (NNWs) of
+English with the purpose of revealing the differences between NWs and NNWs of English in terms of
+hedging strategies while composing an academic text, detecting lexical hedges used by NWs and NNWs
+and diversity of these hedges through some analyses, creating a list of lexical hedges, and offering some
+suggestions regarding the use of lexical hedges in academic writing.
+
+1.2. Literature review
+
+   George Lakoff seems to be the first researcher who introduced the term hedge in linguistic studies.
+He defined hedges as follow:
+
+      “For me, some of the most interesting questions are raised by the study of words whose
+      meaning implicitly involves fuzziness - words whose job is to make things fuzzier or less
+      fuzzy. 1 will refer to such words as 'hedges' (1973, p. 471).”
+
+   After the introduction of hedging, the term was introduced to the linguistics by Politeness Theory of
+Brown and Levinson’s (1978), which is widely known as politeness strategies. At this stage, hedges
+came to be known as face-saving acts, and were analysed mostly in oral conversations (Iida, 2007) as
+well as in written products. Towards the end of 1980s hedges began to gain attention and ground in
+English linguistics and English for Academic Purposes with the spreading of contrastive/cross-cultural
+analyses, and meanwhile, Prince et al. (1982) introduced two new terms in association with hedges:
+approximators and shields. According to Prince et al., approximators are linguistic devices that “affect
+the propositional content” while “shields are linguistic components that affect the degree and type of
+speaker-commitment that is inferred” (p. 93). However, it was not until Crompton (1997) that hedges
+caught attention and became widely known in the area of linguistics. Crompton underscored the
+importance of distinguishing “shields” and “approximators” for academic writing education.
+    Hinkel (1997) carried a cross-linguistic study based on corpus analysis, and compared native
+speakers and non-native speakers with the purpose of revealing referential, lexical, syntactic, and
+rhetorical indirectness devices, i.e. hedges. The results demonstrated that non-native speakers had
+greater frequencies than natives in using indirectness devices like disclaimers, rhetorical questions and
+tags, vagueness and ambiguity, ambiguous pronouns, and passive voices; however, a non-significant
+difference was detected between natives and non-natives in terms of using hedging devices like
+downtoners, distancing, diminutives, understatements, nominalization, conditional tenses, and other
+discourse particles. It is understood that differences remain between natives and non-natives in terms of
+their hedge word preferences. In a similar way of Hinkel’s (1997), the present study aims at revealing
+hedging word preferences of NWs and NNWs but through a different taxonomy.
+    There is no doubt that hedging is an important rhetorical device that “represent a major contribution
+to the social negotiation of knowledge and writers’ efforts to persuade readers of the correctness of their
+76             Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+claims, helping them to gain community acceptance for their work” (Hyland, 2000, p. 89); however,
+what is challenging for academics is the balance that must be kept between cautious language and
+assertive language while presenting their ideas (Hyland, 2001). Hyland’s another study together with
+Milton (1997) showed that how to redress a balance of appropriate certainty in academic texts is a
+problematic issue. Accordingly, Dafouz-Milne (2008) found that academic texts with a true balance of
+rhetorical devices became more convincing in terms of audience persuasiveness. In short, hedging have
+a significant role in constituting central pragmatic features in the process of influencing, persuading, and
+engaging readers to assent to the writer’s claims (Rubio, 2011). However, what should be kept in the
+picture is that any immoderate and unbalanced use of hedging could lead to a counter effect on writers’
+credibility in the readers’ eyes, which is a challenge that should be dealt with.
+   Hyland (1998b) placed hedges into the list of the most frequent features of a writer’s perspective
+because we know that hedging is of paramount importance in scientific papers due to the fact that it both
+acts as a face-saving strategy and represents the certainty of the scientists’ knowledge on the study field
+(Meyer, 1997). In addition, hedging devices, in English for Academic Purposes (EAP), have been
+identified as a basic unit of communication in research articles written in English (for example Adams-
+Smith, 1984; Hyland, 1994; Hyland, 1998; Hinkel, 2004). According to Hyland (1998b), what makes
+hedges so necessary is the power of “speculative means” of them; i.e. to leave door ajar to the issues
+ending with weakness and indecision so that others will have the chance of empowering the issues which
+cast doubt on full precision. To put it another way, complete precision of scientific statements cannot
+be invariably possible (Grabe & Kaplan, 1997). Therefore, redundant consistency on a claim may lead
+to criticism, counter-sayings and prolonged debates in opposition to the author. On the other hand,
+Hinkel (2004) reported that non-native writers are not as concerned as native writers in employing
+hedging devices in their papers.
+   The close relation between academic writing flair and the cautious use of hedges attracted attention
+and it was studied from different aspects. Accordingly Wu (2017) compared expert and student writing,
+and found that expert writings included more diverse hedging devices than novice writings. Similarly
+Sarani and Talati-Baghsiahi (2017) conducted an applied study to gauge the effectiveness of hedging
+devices on student writings. In a longitudinal study, Aull and Bandarage (2017) found that the more a
+student becomes professional in writing, the more s/he uses rhetorical devices in his/her writings.
+Regarding the difficulty of scientific communication in a foreign language particularly for non-native
+writers, Chen and Zhang (2017) advised non-Anglophone academic English writers to enhance their
+ability in using rhetorical and stylistic expressions like hedging. In brief, writer need to be aware of the
+importance of hedges in academic writing. Different from other studies in the literature, this study will
+be useful in terms of clarifying how and to what extent NWs and NNWs use hedges in their academic
+texts written in English and why hedges should be spotted particularly by NNWs who do not seem well
+aware of.
+
+
+
+2. Methodology
+
+2.1. Corpora
+
+    The corpus of the present study was composed of 200 (100 from NWs and 100 from NNWs)
+scientific articles written in English on ELT. The principal motive behind choosing articles only on ELT
+is that rhetorical devices are said to have changed across disciplines (Hyland, 2005). Verification about
+the author status of being native or non-native writer of English was ensured through the name and
+nationality. In articles where more than one scholar is involved, the corresponding author or the first
+.              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92           77
+
+
+author in the affiliation was regarded as the writer of article, hence the nationality of the first or
+corresponding author determined the nationality of all others.
+    The articles were selected randomly from diverse journals that accept papers on language education,
+language teaching, or other language pedagogy issues. The journals that NWs’ articles were picked up
+are shown in the table 1.
+
+                    Table 1. The journals that built the data for native writers of English.
+
+                    The name of the journal                            Number            %
+                    ELT journal                                          30              30
+                    English for Specific Purposes                        13              13
+                    System                                               10              10
+                    Applied Linguistics                                  8                8
+                    Language Learning                                    8                8
+                    TESOL Quarterly                                      8                8
+                    Language Teaching Research                           5                5
+                    Journal of Second Language Writing                   4                4
+                    Language Teaching                                    4                4
+                    First Language                                       3                3
+                    RELC Journal                                         3                3
+                    Journal of English for Academic Purposes             2                2
+                    Journal of Second Language Writing                   2                2
+                    Total                                               100             100
+
+  NNWs of English in the present study are Turkish writers. The table 2 shows the journals and the
+number of articles.
+
+                  Table 2. The journals that built the data for non-native writers of English.
+
+              The name of the journal                                           Number          %
+              Journal of Language and Linguistic Studies                          40           40
+              Hacettepe University Journal of Education Faculty                   16           16
+              The Reading Matrix                                                   8            8
+              Journal of Language and Literature Education                         7            7
+              Çukurova University Faculty of Education Journal                     6            6
+              Turkish Journal of Education                                         6            6
+              Novitas-ROYAL (Research on Youth and Language)                       6            6
+              Atatürk University Journal of Social Sciences                        4            4
+              ELT Journal                                                          4            4
+              Turkish Online Journal of Qualitative Inquiry                        2            2
+              International Journal of Languages’ Education and Teaching           1            1
+              Total                                                              100           100
+
+   To be able to see synchronic variations on the use of lexical boosting, articles published only in the
+recent years were gathered. Not to cause any reliability concern, the corpora were compiled from equi-
+length articles as shown in the table 3.
+
+                                             Table 3. Corpus size
+                            Author group                   Tokens        Types
+                            Native writers                 601025        24076
+                            Non-native writers             590109        22427
+                            Total                         1191134        48152
+78             Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+   To assure the representativeness of the corpora, a probabilistic sample using simple random sampling
+technique was used in order to collect articles and to construct the corpora. Probabilistic sample
+technique refers to a sampling procedure in which “all members of the population have the same
+probability of being selected” (Schreiber & Asner-Self, 2011, p. 87).
+
+2.2. Identification of hedges
+
+    Hedges can be divided into three major headings: (1) rhetorical devices; (2) syntactic markers; and
+(3) lexical and referential markers (Uysal, 2014). Rhetorical devices are structures in a sentence like
+denials, disclaimers, ambiguity markers, and vagueness while syntactic markers are hedging devices
+like passive voices and if conditionals. On the other hand, lexical and referential markers are those that
+function as point of view distancing, downtoners, demonstratives, discourse particles, diminutives, and
+indefinite pronouns on which the present study focused.
+   Although different taxonomies have been used for the categorization of hedging (e.g. Skelton, 1988;
+Hinkel, 1997; Crompton, 1997; Koutsantoni, 2004), the taxonomy for this study came from Hyland's
+suggestions (1998c) with some minor changes. They are:
+
+        1.   Modal auxiliaries and semi-modal verbs (may, might, can, could etc.)
+        2.   Verbs (seem, believe, appear, estimate, argue etc.)
+        3.   Epistemic adjectives (possible, approximate, uncertain)
+        4.   Epistemic adverbs (slightly, presumably, merely, partly etc.)
+        5.   Quantifiers/determiners (a few, some, many)
+        6.   Nouns (assumption, estimate, suggestion, claim)
+
+2.3. Data analysis and procedure
+
+    The corpora were manually scanned although there were PC-based word processing software
+programs. A PC based software program, namely a concordance program, was not employed for some
+grave reasons. First of all, making a scan of the corpora manually by researcher is necessary to be able
+to detect the semantic referring of the words; however, a concordance program would only give the
+statistical information about the words but not semantic or pragmatic data. In other words, a concordance
+program would provide a result regardless of the illocutionary meaning of a word; however, many modal
+verbs have multiple meanings that change depending on the context they are used in. More specifically,
+a modal may be epistemic (possibility), deontic (obligations), or dynamic (self-willingness or ability)
+depending on the context. For example, the modal verb ‘can’ in the example the results can provide
+valuable information about... is a modal verb acting as hedge while in the example it can be seen it does
+not function as a hedge but more generally a directing word. Therefore, in order to ensure whether a
+word functions as a hedge or not, a manual scanning of the data is of great importance to find out the
+exact meaning that the words have.
+   Having scanned the data and picked up hedge words, the researcher categorized these words
+according to the taxonomy stated in 2.2. Then each category was inserted to SPSS program and Chi-
+squire test was used to investigate whether there were statistically significant differences between NWs
+and NNWs in terms of lexical hedges.
+.                                                         Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92              79
+
+
+3. Results
+
+3.1. Numerical findings
+
+   The figure 1 provides total and categorical numbers of hedges. As seen, there is a parallelism between
+NWs and NNWs. In total, epistemic verbs is the most used category while the category of nouns is the
+least used; respectively, 2976; 303. On the other hands, regarding total use of hedge words NWs are
+ahead of NNWs; respectively, 5487, 3813.
+
+
+
+                                                              3000
+
+
+
+
+                    Distribution of Lexical Hedges
+                                                              2500
+                                                              2000
+                                                              1500
+                                                              1000
+                                                               500
+                                                                   0
+                                                                        Epis.       Epis.                           Deter./
+                                                                                            Adjective Adverb                     Noun       Total
+                                                                       Modal        Verb                            Quan.
+                                                     Native authors     1732        1835        222       1159        342        197        5487
+                                                     Turkish authors    1158        1141        166       621         221        106        3813
+                                                     Total              2890        2976        388       1780        563        303        9300
+                                                                   Figure 1. Total and categorical number of hedges in the data.
+
+
+   The figure 2 provides hedge diversity of the groups. Epistemic verbs is the category to which both
+NWs and NNWs inclined the most while the second and the third most frequent hedge types are the
+same for both groups: epistemic modal and adverbial hedges. Similarly, Nouns is the category that is
+the least frequent hedge category both for NWs and NNWs. Furthermore, native authors of English have
+a higher lexicon of hedges when compared to non-native writers of English. NWs used 2424 different
+hedges while NNWs had only 1489 hedges.
+
+
+                                                            2000
+
+
+
+
+     Distribution of Hedge Diversity
+                                                            1800
+                                                            1600
+                                                            1400
+                                                            1200
+                                                            1000
+                                                             800
+                                                             600
+                                                             400
+                                                             200
+                                                               0
+                                                                       Epis.     Epis.                             Deter./
+                                                                                           Adjective   Adverb                  Noun        Total
+                                                                       Modal     Verb                              Quan.
+                                            Native authors              368      856          151       693         203         153        2424
+                                            Turkish authors             308      557          101       358         106         59         1489
+                                            Total                       676      1413         252       1051        309         212        3913
+                                                           Figure 2. Total and categorical number of hedging word diversity in the data.
+80             Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+3.2. Statistical findings
+
+    The present study employed two statistical analyses. The first analysis calculated whether there was
+a statistically significant difference between NWs and NNWs in terms of the number of hedge diversity
+while the second analysis was done to detect whether there was a statistically significant difference
+between NWs and NNWs in terms of total and categorical hedge number. As the table 4 shows, a
+statistically significant difference was found between NWs and NNWs in terms of modal hedges
+(X2(5)=17.910, p=.003); in terms of verbal hedges (X2(15)=52.749, p<.001); in terms of adjectival
+hedges (X2(6)=17.559, p=.007); in terms of adverbial hedges (X2(12)=73.539, p<.001); in terms of
+determiner/quantifier hedges (X2(6)=37.035, p<.001); in terms of noun hedges (X2(6)=47.709, p<.001);
+and in terms of total hedges (X2(33)=93.518, p<.001). In brief, NWs have a larger lexical repertoire of
+hedge words than NNWs.
+
+
+                              Table 4. Statistical Findings of Hedge Diversity
+
+                  Variables                   Value              df              Sig. Value
+                  Modal                      17.910               5                .003**
+                  Verb                       52.749              15                .001**
+                  Adjective                  17.559               6                .007**
+                  Adverb                     73.539              12                .001**
+                  Deter/Quan                 37.035               6                .001**
+                  Noun                       47.709               6                .001**
+                  Total                      93.518              33                .001**
+                 ** represents for a p value at .01
+
+   The results of the second analysis were given in the table 5 which shows that there is a statistically
+significant difference between native and non-native writers of English in terms of modal hedges
+(X2(38)=55.033, p=.036); in terms of verbal hedges (X2(39)=72.479, p=.001); in terms of adverbial
+hedges (X2(21)=73.506, p<.001); in terms of determiner/quantifier hedges (X2(13)=36.359, p=.001);
+and in terms of noun hedges (X2(8)=42.444, p<.001). However, a statistically significant difference
+was not found between NWs and NNWs in terms of adjectival hedges (X2(9)=13.695, p=.134), and in
+terms of total hedging word (X2(73)=85.343, p=.153).
+
+                               Table 5. Statistical Findings of lexical hedges
+                  Variables                   Value                df          Sig. Value
+                  Modal                      55.033                38             .036*
+                  Verb                       72.479                39            .001**
+                  Adjective                  13.695                 9            .134
+                  Adverb                     73.506                21            .001**
+                  Deter/Quan                 36.359                13            .001**
+                  Noun                       42.444                 8            .001**
+                  Total                      85.343                73            .153
+                 * represents for a p value at .05
+                 ** represents for a p value at .01
+.                Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92                   81
+
+
+3.3. Descriptive findings
+
+3.3.1. Findings for native writers
+  EPISTEMIC MODALS. NWs are more prone to using may than any other epistemic modals while
+downtoning their statements. Below you can see the authentic examples collected from NW corpus.
+
+(1) ... speakers of more distant languages can be expected to encounter fewer difficulties...
+(2) Future work that explores these qualitative differences could substantially further our understanding of…
+(3) ... dominant norms for expert writers may not be a dominant norm for second language student writers...
+(4) ... local languages might work together as languages of education...
+(5) The target should be the acquisition of a multilingual model.
+(6) It would seem possible to argue, therefore, that...
+
+   In the form of lexical and referential markers, NWs generally use hedging devices such as may and
+might in order to create indirectness in their statements. The figure 3 shows the epistemic modals acting
+as hedges from top-down order.
+
+
+                 May            Can            Might        Could        Should        Would
+
+
+                            Figure 3. Epistemic modals acting as hedges in NWs data.
+
+   VERBAL HEDGES. Evidential verbs (e.g. look, seem) are common in the NW sample data. The table
+6 provides verbal hedges that were compiled from NWs’ data.
+
+                                     Table 6. Verbs acting as hedges in NW data
+      1.   Advise                    10. Consider                   19. Indicate               28. Propose
+      2.   Anticipate                11. Demonstrate                20. Look                   29. Report
+      3.   Appear                    12. Display                    21. Maintain               30. Reveal
+      4.   Argue                     13. Estimate                   22. Observe                31. Seem
+      5.   Assert                    14. Expect                     23. Offer                  32. Show
+      6.   Assume                    15. Feel                       24. Prone to               33. Suggest
+      7.   Attempt                   16. Find                       25. Postulate              34. Surmise
+      8.   Believe                   17. Guess                      26. Predict
+      9.   Claim                     18. Hope                       27. Presume
+
+
+    NWs used 35 verbal hedges in order to make the language more tentative. The verbs suggest, tend
+to, reveal, appear, and show are the most frequent ones. Furthermore, it seems that point of view
+distancing is generally done through the combination of a pronoun and a verbal hedge as can be seen in
+the examples:
+
+(7) In this light, we advise literacy educators and assessment designers to consider...
+(8) ... they may assume that AAL patterns are representative of poor English grammar.
+(9) ... post hoc analysis did reveal the intriguing case of...
+(10) We hope that the concept of mid-frequency vocabulary will lead...
+(11) we attempt to illustrate some of the benefits of researching ‘with’ children.
+
+   ADJECTIVAL HEDGES. Adjectives acting as hedging devices appear not to be as common as verbal
+hedges in NW corpus as seen in the table 7.
+82              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+                                 Table 7. Adjectives acting as hedges NW Data.
+
+                                 1. Advisable                     7. Possible
+                                 2. Conjunction with              8. Potential
+                                 3. In consistent with            9. Probable
+                                 4. Harmony with                  10. Slight
+                                 5. In line with                  11. Subtle
+                                 6. Partial
+
+
+   Native writers are prone to using adjectives such as possible, potential, partial more than others as
+seen in the authentic examples:
+
+(12) One possible source of the problem is the underdeveloped area of...
+(13) It then discusses the potential exploitation of the learner corpus for pedagogic purposes.
+(14) The present data suggest a partial advantage for...
+(15) ... some more subtle distinctions might be useful for some applications.
+(16) Although there was a slight increase in the use of...
+
+   ADVERBIAL HEDGES. Discourse understatements (fairly, rather, slightly) are commonly used as
+adverbial hedges. You may find adverbs functioning as hedges in NW in the table 8.
+
+
+                                   Table 8. Adverbs acting as hedges in NW data.
+                              1. About               13. Occasionally    25. Rarely
+                              2. Almost              14. Often           26. Rather
+                              3. Approximately       15. Partially       27. Reasonably
+                              4. Arguably            16. Partly          28. Relatively
+                              5. Fairly              17. Perhaps         29. Roughly
+                              6. Frequently          18. Possibly        30. Seemingly
+                              7. Generally           19. Potentially     31. Slightly
+                              8. Hardly              20. Predictably     32. Sometimes
+                              9. Largely             21. Presumably      33. Somewhat
+                              10. Likely             22. Primarily       34. Supposedly
+                              11. Mostly             23. Probably        35. Usually
+                              12. Nearly             24. Quite           36. Virtually
+
+
+   NWs widely used the adverbial hedges in order to balance their stance between commitment and
+detachment. Furthermore, NWs had more inclination to using some adverbs than other adverbs. For
+example, adverbs like about, generally, seemingly, mostly, largely, and usually are more common across
+the data. Some authentic examples regarding the use of these adverbs were provided in the following:
+(17) It was generally easy for them to check concordance structures...
+(18) Given the seemingly infrequent transfer here, these are pertinent questions
+(19)... obtained in previous research, which mostly found moderate relationships.
+(20) Southern White English is a localized dialect of American English which is largely constrained to...
+(21) ... where male authors usually do not have a strong presence…
+
+   Not only discourse understatements, but also downtoners (almost, partly, hardly, etc.) were also
+observed heavily in NW sample data. Some authentic examples are:
+
+(22) Ellipsis is a central feature of all trades talk, partly because of...
+(23) Much of the hardly voluminous research in this area has centred on...
+(24) he sample contained an almost equal balance of...
+.                Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92            83
+
+
+   QUANTIFIERS / DETERMINERS. Determiners found in the data functioned as diminutives (little,
+few etc.) while quantifiers functioned in a way of vagueness and ambiguity (several, much, more, etc).
+The table 9 shows the quantifiers and the determiners that were included in NW corpus.
+
+                       Table 9. Quantifiers and determiners acting as hedges in NW data.
+
+               1. (a) Few                   6. Much                    11. To a lesser degree
+               2. (a) Little                7. Not all                 12. To a minor extent
+               3. Many                      8. On occasion             13. To an extent
+               4. More or less              9. Several                 14. To some extent
+               5. Most                      10. Some
+
+
+    As seen in the table, 14 different quantifier/determiners were used by NWs. Some examples are:
+
+(25) Several factors make important contributions to sophisticated vocabulary learning from...
+(26) To an extent, one could argue that...
+(27)... genre differences explain much of the variation between texts and...
+
+   Apart from vague and ambiguous lexical quantifiers, some determiners which functioned as
+diminutives were found in the NW data. Some real examples collected from NW corpus are as follows:
+
+(28) A few studies controlled for background knowledge.
+(29) Since weaker learners experience difficulty and little success in lexical inferencing.
+
+   NOUNS. Nouns as hedges were not common in NW writing when compared other lexical
+indirectness structures. Yet, there are a number of hedge nouns shown in the table 11.
+
+                                   Table 10. Nouns acting as hedges in NW data
+
+           1. Assertion               4. Claim                   7. Majority           10. Probability
+           2. Assumption              5. Estimate                8. Possibility        11. Suggestion
+           3. Attempt                 6. Expectation             9. Prediction         12. Tendency
+
+   Of all nouns, majority, assumption, suggestion, and tendency were the most used ones. Some
+examples are as follows:
+
+(30) ...it currently represents the ‘marked’ case for the majority of US schools.
+(31) An assumption could be made that candidates with a Bachelor’s degree would...
+(32) This suggestion for language-focused instruction stems from the lower use of...
+(33)... students had a tendency to engage in self-assessment...
+(34) One attempt to answer this question is provided in...
+
+3.3.2. Findings for Turkish writers
+   EPISTEMIC MODALS. NNWs were more prone to using can instead of may, which is in contrast to
+NWs who preferred may to can. Five modal verbs employed by NNWs were provided in the figure 4 in
+top-down order. The findings also proved that NNWs did not use would with a purpose of indirectness
+device as NWs did.
+
+
+
+                       Can            May            Might           Could          Should
+
+                             Figure 4. Epistemic modals acting as hedges in NNW data.
+84              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+   Also, can and may constituted three-fourth of all modal verbs included in the data. Some examples
+are as follows:
+
+(35) The strong influence of gender norms on our behaviour can be explained by...
+(36) ...but they may cause serious unhealthy gender stereotypes.
+(37) ...the reasons for this might stem from (a) Turkey being geographically far away from...
+(38) These simple steps could promise a lot to EFL learners...
+(39) Preparing a child for the future life should mean to give him command of himself...
+
+  VERBAL HEDGES. Evidential verbs were extensively used. The table 11 shows the verbs that
+NNWs included in their scientific writings.
+
+                                Table 11. Verbs acting as hedges in NNW data.
+
+     1. Allege            9. Consider               17.Hope                  25.Offer             33.Seem
+     2. Appear            10.Correlate with         18.Hypothesize           26.Recommend         34.Show
+     3. Argue             11.Demonstrate            19.Imply                 27.Report            35.Suggest
+     4. Assert            12.Display                20.Indicate              28.Reveal            36.Suppose
+     5. Assume            13.Expect                 21.Look                  29.Predict           37.Surmise
+     6. Attempt           14.Feel                   22.Maintain              30.Presume           38.Tend to
+     7. Believe           15.Find                   23.Mention               31.Prone to
+     8. Claim             16.Guess                  24.Observe               32.Propose
+
+   NNWs did not use the verbs advise, anticipate, estimate, and postulate while NWs used. Similarly
+some other verbs that were included in NNW data were not tracked in NW corpus, which were allege,
+hypothesize, imply, and recommend. Some authentic examples including these specific verbs are below:
+
+(40) They hypothesize that in acquiring an L2, the learner adopts...
+(41)... performance differences in this study imply the basic language skills...
+(42) Definitions and description of types of misbehaviours provided by the participants appear to be…
+(43) A great number of the teachers believe that...
+(44) The results indicate that the purpose of examinations is...
+(45) The same result was found by Chacon
+
+  Furthermore, NNWs had a marginal tendency toward using some verbal hedges more than others,
+which were appear, believe, find, indicate, offer, reveal, seem, and show.
+
+   ADJECTIVAL HEDGES. NNWs did not tend to use adjectival hedges as much as other hedge
+categories. The adjective acting as hedges are consistent with, in conjunction with, in line with, in tune
+with, simple, possible, potential, and probable. In other words, eight adjectival hedges were discovered
+in NNW corpus. Of all, the word of possible was the most preferred adjectival hedges. Some authentic
+examples collected from NNW corpus were given below:
+
+(46) There appears to be three possible reasons for...
+(47)... it is possible for teachers to face with...
+(48) In order to minimise the potential threat of an FTA, participants mitigate...
+(49)... it is quiet probable to mispronounce a vocabulary item.
+(50)...language exchange communities increased the level of English exposure, which is in tune with Krashen’s
+comprehensible input.
+
+   ADVERBIAL HEDGES. Adverbial hedges, which were used as downtoners, took up a significant
+place in NNWs’ academic writing. It was also observed that NNWs had a tendency of using discourse
+understatements in their scientific writing. You may see the adverbial hedges that NNWs used in the
+table 12. In pursuit of the table, authentic examples follow.
+.                Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92              85
+
+
+                                Table 12. Adverbs acting as hedges in NNW data.
+
+    1. Almost                     11. Maybe                     21.       Predictably     31. Slightly
+    2. Approximately              12. Mildly                    22.       Presumably      32. Simply
+    3. Easily                     13. Mostly                    23.       Primarily       33. Sometimes
+    4. Fairly                     14. Nearly                    24.       Probably        34. Somewhat
+    5. Frequently                 15. Occasionally              25.       Quite           35. Supposedly
+    6. Generally                  16. Often                     26.       Rarely          36. Usually
+    7. Hardly                     17. Partly                    27.       Rather          37. Virtually
+    8. Largely                    18. Partially                 28.       Reasonably
+    9. Likely                     19. Possibly                  29.       Relatively
+    10. Mainly                    20. Potentially               30.       Roughly
+
+
+(51) ...we see that while MCC group mostly used...
+(52) ...students are likely to rapidly forget words...
+(53) Almost all of these concepts are...
+(54)... nearly everyone believes that...
+(55) ... teachers often explain the aim of each lesson…
+
+   QUANTIFIERS / DETERMINERS. Although there are few quantifiers or determiners functioning
+as hedging devices, they were extensively used. Quantifiers and determiners acting as hedging devices
+in NNW corpus were (a) few, fewer, (a) little, many, most, much, to some extent, several, and some. In
+addition to diminutives and vague/ambiguous, NNWs highly used quantifiers/determiners of many,
+most, and some. Below you may find some real examples picked up from NNW data.
+
+  (56) Teaching of a language has many sub-considerations.
+(57) Most of the teachers may not make use of this fact…
+(58)... they can exert some influence and control their environment,...
+(59) ...there were optimistic results to some extent
+(60) ... much of this knowledge is culture specific.
+
+   NOUNS. Ten nouns acting as hedges were discovered in NNW data, which are assumption, belief,
+inclination, majority, possibility, predictable, presupposition, recommendation, suggestion, and
+tendency. Some examples are:
+
+(61) ...speakers have a tendency to identify the unfamiliar sounds...
+(62) There is generally a higher possibility to publish in a journal...
+(63) Another suggestion might be to reconsider the cultural topics...
+(64) Qualitative analysis is completed with a belief that...
+(65) These findings are predictable considering the background of the participants.
+(66) ... the majority of the participants enjoyed...
+
+  Furthermore, NNWs were highly prone to using the nouns as suggestion, majority, and tendency
+when compared to other hedge nouns.
+
+
+
+4. Discussions and Conclusions
+
+   In non-Anglo-sphere academe, rhetorical persuasion does not connote hedging necessarily, and
+hedging the statements or claims is not an obvious consideration for many non-native writers of English
+(Hinkel, 2004) when compared to native writers. Accordingly, in a study aimed to find out non-native
+writers’ hedging tendencies in research articles, Hyland (1996) concluded that non-native writers of
+English find using hedges “extremely troublesome” (p. 278). However, qualitative analyses in the
+86             Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+present study showed that Turkish writers used a great many of hedging devices, which may be because
+the present study investigated those from the field of ELT. In other words, the writers in ELT have
+higher levels of English proficiency than those who write in the other disciplines, which may be the
+reason for the conflicting results with Hinkel’s.
+    Appertaining to hedges, the categories modal, verb, adverb, determiner/quantifier, and noun
+indicated a statistically significant difference while the category of adjective did not. Besides, no
+statistically significant difference was detected in total use of hedges between Anglophonic and Turkish
+writers of English. The study is in tune with Hamamcı’s results (2007) who found that there is not a
+statistically significant difference between Turkish and Native writers of English. Similarly, a small
+scale study (Ozdemir & Longo, 2014) that compared Turkish students’ and American students’ thesis
+abstracts demonstrated statistically non-significant results in terms of total hedge usage. On the other
+hand, the present study provided a contrastive result with Uysal’s (2014) who found that Turkish writers
+of English used more hedges than Anglophonic writers in conference abstracts. What gave rise to this
+contrastive result may be because of that Uysal investigated only abstracts, and conventional writing
+styles of conference abstract may be absolutely different from full text writing styles because writers
+may assuredly use a tentative language in abstracts due to the fact that the full study had not been
+conducted up until then.
+    The most frequently used subcategory of hedging devices is verbs for Anglophonic writers while it
+is modals for Turkish writers. These findings are consistent with Akbas’ study (2014) which investigated
+the most frequently used hedges. He found that epistemic verb can is the most frequently used hedging
+device in academic texts written in English by Turkish writers, which is the exact case in the present
+study. On the other hand, Anglophonic writers used may in substantial numbers. This difference may
+prompt a new linguistic perspective; on whether conventional writing styles of a nation may
+substantially incline to use some structures or vocabularies over others. In other words, the vast majority
+of Anglophonic writers and Turkish writers preferred to use different words unique to their group, which
+appears to be a case that cannot be seen as not better than a chance. Interestingly enough, some conscious
+or unconscious parameters should be the determinants for writers in deciding their words.
+   Turning to lexical diversity, unsurprisingly Anglophonic writers had robustly higher hedge and
+booster diversities than Turkish writers. Besides, the difference between Anglophonic writers and
+Turkish writers was statistically significant at all sub-categories as well as in total. In other words,
+Anglophonic writers produced more lexical hedges at all sub- categories in terms of lexical variety,
+which means that Anglophonic writers preferred to have more lexical variety in their academic writing
+than Turkish writers of English.
+
+4.1. Pedagogical implications
+
+       1. The balanced use of hedging devices is invariably a must for academic writers because
+          excessive use of hedging devices may create an adverse effect on the credibility of the claim,
+          hence, on the writer (Sanjaya, 2013).
+       2. When the speaker does not want to take full responsibility for the truth of his/her utterances
+          (Brown & Levinson, 1987), he/she can employ hedging modifiers can to suggest a
+          hypothetical possibility, and could to make the suggestion even more tentative (Leech,
+          2004).
+       3. ‘‘Native English speakers can be assumed to have drawn on their native intuition about the
+          use of hedging’’ (Burrough-Boenisch, 2004, p.35), but non-native English speakers are not
+          as much lucky as native ones, therefore they definitely need to spend a large amount of effort
+          and time in learning the precise way of strategically rejecting the claims belonging to others,
+.              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92             87
+
+
+           how to use hedging devices appropriately, and how to present a new allegation in a
+           persuasive way so that members of the scientific community may accede to the claim (Yang,
+           2013).
+       4. The L1 interference may be a problematic obstacle for non-native writers of English because
+          quite a few L2 writers of English incline to construct academic texts that are somewhat
+          inconsistent with the norms and expectations of the target discourse community (Lafuente-
+          Millan, 2014). Regarding the intercultural effect of L1 rhetorical style on L2 rhetoric, which
+          was called “hybridization phenomenon” (Perez-LIantada, 2010), non-native writers should
+          be fully aware of that hidden influence not to constitute blurring rhetorical practices in
+          academic texts.
+       5. The present study compiled a list of hedges (appendix A) with a purpose of presenting a
+          well-ordered word list that may be used by non-native writers. The ready-made lists of
+          hedging devices may be of great importance to facilitate non-native writers’ effort to find
+          the correct rhetorical word without leaving a stark mark.
+       6. The genre, discipline, text type, and the issue may require different authorial involvement.
+          Specifically, a very tentative language with mitigating statements, lots of epistemic modals,
+          and ambiguous statements in hard sciences may not be a much acceptable situation from the
+          aspect of claim reliability (cf. Vázquez & Giner, 2008). In brief, your rhetorical style cannot
+          completely be independent from the genre, discipline, text type, and the issue.
+       7. Plenty of cross-sectional studies which investigated sectional differences in terms of
+          including metadiscourse devices proved that there are significant differences among sections
+          in scientific articles. This may add contribution to a scientific writing to expand its sphere of
+          influence. A tentative language including diminutives, epistemic modals, or evidential verbs
+          may evoke a curiosity in audience to read the whole text. Therefore, a certain amount of
+          hedging can be more tolerable in the sections of abstract and introduction. However, the
+          same degree of uncertainty within discussion and conclusion may cause a counter-effect --
+          feeling of disappointment in audience because they may have an expectation of finding a
+          precise answer with a relatively more emphatic language to their feeling of curiosity evoked
+          in the introduction. Shortly, the sectional use of commitment and detachment in an academic
+          writing should not be stable throughout all sections, but should show variance in amount (cf.
+          Vassileva, 2001: Salek, 2014: Yağız & Demir, 2014: Biook & Mohseni, 2014).
+
+4.2. Strengths and further research
+
+   The present study collected data only from articles written in the field of ELT; however, rhetorical
+devices change depending on the genre they are used. Therefore, it would be of use to retain information
+on how hedges are used in other disciplines. In addition, the present study did not make a distinction in
+terms of gender; however, gender seems to play a key role in determining rhetorical styles of discourses.
+
+
+
+
+References
+Adams-Smith, D. E. (1984). Medical discourse: aspects of author's comment. The ESP Journal, 3,25-
+  36.
+Akbas, E. (2014). Are They Discussing in the Same Way? Interactional Metadiscourse in Turkish
+  Writers’ Texts. In A. Łyda, & K. Warchał, Occupying Niches: Interculturality, Cross-culturality
+88              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+     and Aculturality in Academic Research (pp. 119-133). Switzerland: Springer International
+     Publishing.
+Aull, L. L., Bandarage, D., & Miller, M. R. (2017). Generality in student and expert epistemic stance:
+   A corpus analysis of first-year, upper-level, and published academic writing. Journal of English for
+   Academic Purposes, 26, 29-41.
+Biook, B., & Mohseni, F. (2014). The Use of Hedginh in Research Articles. Journal of Current
+   Research in Science, 2(4):474-477.
+Azodi, N. (2014). Measuring the Lexical Richness of Productive Vocabulary in Iranian EFL
+   University Students’ Writing Performance. Theory and practice in language studies, 4(9): 1837-
+   1849, doi: 10.4304/tpls.4.9.1837-1849.
+Brown, P., & Levinson, S. (1978). Universals in language usage: Politeness phenomena. In E. Goody,
+   Questions and politeness (pp. 56-310). Cambridge: Cambridge University Press.
+Crompton, P. (1997). Hedging in academic writing: some theoretical problems. English for Specific
+   Purposes, 16(4), 271-287.
+Dafouz-Milne, E. (2008). The pragmatic role of textual and interpersonal metadiscourse markers in the
+   construction and attainment of persuasion: A cross-linguistic study of newspaper discourse.
+   Journal of Pragmatics, 40, 95-113.
+Dixon, J. A., & Foster, D. H. (1997). Gender and Hedging: From Sex Differences to Situated Practice.
+   Journal of Psycholinguistics Research, 26(1): 89-107, doi:10.1023/A:1025064205478.
+Grabe, W., & Kaplan, R. B. (1997). On the writing of science and the science of writing: Hedging in
+   science text and elsewhere. In R. Markkanen, & H. Schröder, Hedging and Discourse: Approaches
+   to the Analysis of a Pragmatic Phenomenon in Academic Texts (pp. 151-167). Berlin: Walter de
+   Gruyter.
+Halliday, M., & Hasan, R. (1989). Language, Context, and Text: Aspects of Language in a Socio-
+   semiotic Perspective. Oxford: Oxford University Press.
+Hamamcı, Z. (2007). The Use of Hedges in Research Articles by Turkish Interlanguage Speakers of
+  English and Native English Speakers in the Field of Social Sciences (master's thesis). Adana,
+  Turkey: The University of Çukurova.
+Hinkel, E. (1997). Indirectness in L1 and L2 academic writing. Journal of Pragmatics, 27, 361–386.
+Hinkel, E. (2004). Teaching Academic ESL Writing. New York: Routledge.
+Holmes, J. (1982). Expressing doubt and certainty in English. RELC Journal, 3: 9-28.
+Hyland, K. (1994). Hedging in Academic Writing and EAP. English for Specific Purposes, 3:239-256.
+Hyland, K. (1996). Talking to the Academy: Forms of Hedging in Science Research Articles. Written
+   Communication, 13(2), 251-281.
+Hyland, K. (1998c). Boosting, hedging, and the negotiation of academic knowledge. Text, 18(3), 349-
+   382.
+Hyland, K., & Milton, J. (1997). Qualification and certainty in L1 and L2 students' writing. Journal of
+   Second Language Writing, 6(2), 183-205.
+Iida, E. (2007). Hedges in Japanese English and American English Medical Research Articles.
+    Montreal: McGill University.
+.              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92               89
+
+
+Kim, C. H., & Suh, H. W. (2014). Epistemic Rhetorical Stance: Hedges and Boosters in L1 and L2
+   Students' English Writings. The Linguistic Association of Korea Journal, 22(2):61-93.
+Lafuente-Millan, E. (2014). Reader engagement across cultures, languages and contexts of publication
+   in business research articles. International Journal of Applied Linguistics, 24: 201-233, doi:
+   10.1111/ijal.12019.
+Lakoff, G. (1973). Hedges: A study in meaning criteria and the logic of fuzzy concepts. Journal of
+   Philosophical Logic, 2, 458-508.
+Leech, G. (2004). Meaning and the English verb (3rd edition). Harlow: Pearson Education Ltd.
+Lu, X. (2012). The Relationship of Lexical Richness to the Quality of ESL Learners’ Oral Narratives.
+   The Modern Language Journal, 96(2): 190-208, doi: 10.1111/j.1540-4781.2011.01232.x.
+Mehdi, K., & Salahshoor, F. (2014). The relative significance of lexical richness and syntactic
+  complexity as predictors of academic reading performance . International Journal of Research
+  Studies in Language Learning, 3(2): 17-28, doi: 10.5861/ijrsll.2013.477.
+Meyer, P. G. (1997). Hedging strategies in written academic discourse: Strengthening the argument by
+  weakening the claim. In R. Markkanen, & H. Schrôder, Hedging and discourse: Approaches to the
+  analysis of a pragmatic phenomenon in academic texts (pp. 21-41). Berlin: Walter de Gruyter.
+Ozdemir, N. O., & Longo, B. (2014). Metadiscourse Use in Thesis Abstracts: A Cross-cultural Study.
+   WCLTA (pp. 59-63, doi:10.1016/j.sbspro.2014.05.011). Barcelona: Procedia - Social and
+   Behavioral Sciences 141.
+Perez-Llantada, C. (2010). The discourse functions of metadiscourse in published academic writing:
+   issues of culture and language. Nordic Journal of English Studies, 9: 41-68.
+Pho, P. D. (2008). Research article abstracts in applied linguistics and educational technology: a study
+   of linguistic realizations of rhetorical structure and authorial stance. Discourse Studies, 10(2):231-
+   250, doi:10.1177/1461445607087010.
+Prince, E. F., Frader, J., & Bosk, C. (1982). On hedging in physician-physician discourse. In R. J. Di
+    Pietro, Linguistics and the professions (pp. 83-97). Hillsdale, NJ: Ablex.
+Riekkinen, N. (2009, 05 05). Softening Criticism: The Use of Lexical Hedges in Academic Spoken
+   Interaction. Retrieved May, 3rd, 2015, from:
+   http://www.helsinki.fi/englanti/elfa/ProGradu_Niina_Riekkinen.pdf.
+Rubio, M. M. (2011). pragmatic approach to the macro-structure and metadiscoursal features of
+   research article introductions in the field of Agricultural Sciences. English for Specific Purposes,
+   30, 258-271.
+Salager-Meyer, F. (1994). Hedges and textual communicative function in medical English written
+   discourse. English for Specific Purposes, 13 (2),149-170.
+Salager-Meyer, F. (1994). Hedges and textual communicative function in medical English written
+   discourse. English for Specific Purposes, 13(2): 149-170.
+Sanjaya, N. S. (2013). Hedging and Boosting in English and Indonesian Research Articles (PhD
+   Dissertation). Pennsylvania: The Pennsylvania State University.
+Schreiber, J., & Asner-Self, K. (2011). Educational Research: The Interrelationship of Questions,
+   Sampling, Design, and Analysis. Hoboken: John Wiley & Sons.
+90              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+Swales, J. (1990). Genre Analysis: English in Academic and Research Settings. Cambridge:
+  Cambridge university press.
+Uysal, H. (2014). A Cross-cultural Study of Indirectness and Hedging in the Conference Proposals of
+  English NS and NNS Scholars. Occupying Niches: Interculturality, Cross-culturality and
+  Aculturality in Academic Research, 179-195.
+Yağız, O., & Demir, C. (2014). Hedging strategies in academic discourse: A comparative analysis of
+   Turkish writers and native writers of English. 14th International Language, Literature and
+   Stylistics Symposium (pp. 260-268). İzmir: Dokuz Eylul University.
+Yeşilbursa, A. A. (2011). Mitigation of Suggestions and Advice in Post-Observation Conferences
+   Between 3 English Language Teacher Educators. Journal of Language and Linguistic Studies,
+   7(1): 18-35.
+
+
+
+
+Appendix A
+Hedges List (Page 1/2)
+
+Modals
+
+ Can               Might
+ Could             Should
+ May               Would
+
+
+Verbs
+
+ Advise                     Correlate with         Insinuate                Recommend
+ Advocate                   Demonstrate (show)     Intend                   Report
+ Agree with                 Display                Intimate                 Reveal
+ Allege                     Doubt                  Maintain                 Seem
+ Anticipate                 Estimate               Mention                  Show
+ Appear                     Expect                 Observe                  Signal
+ Argue                      Feel                   Offer                    Speculate
+ Assert                     Find                   Opine                    Suggest
+ Assume                     Guess                  Postulate                Support
+ Attempt                    Hint                   Predict                  Suppose
+ Believe                    Hope                   Presume                  Surmise
+ Calculate                  Hypothesize            Prone to                 Suspect
+ Conjecture                 Implicate              Propose                  Tend to
+ Contend                    Imply                  Proposition              Think
+ Consider                   Indicate               Reckon                   Try to
+
+Adjectives
+
+ Advisable                  Liable                 Probable                 Subtle
+ Approximate                Likely                 Prone to                 Suggested
+ Conjunction with           Partial                Reasonable               (in) tune with
+ (in) Consistent with       Plausible              Reported                 Uncertain
+ (in) harmony with          Possible               Rough                    Unlikely
+.                    Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92                91
+
+
+    (in) line with             Potential                 Slight
+
+
+Adverbs
+
+    About                        Likely                     Perhaps                     Scarcely
+    Admittedly                   Mainly                     Possibly                    Seemingly
+    All but                      Mildly                     Potentially                 Slightly
+    Almost                       Moderately                 Predictably                 Sometimes
+    Approximately                Mostly                     Presumably                  Somewhat
+    Arguably                     Near                       Primarily                   Subtly
+    Around                       Nearly                     Probably                    Supposedly
+    Averagely                    Not always                 Quite                       Tolerably
+    Fairly                       Occasionally               Rarely                      Usually
+    Frequently                   Often                      Rather                      Virtually
+    Generally                    Partially                  Reasonably
+    Hardly                       Partly                     Relatively
+    Largely                      Passably                   Roughly
+
+
+Quantifiers
+
+    (a) Few                                Much                               To a lesser
+    Little                                 Not all                            To a minor extent
+    More or less                           On occasion                        To an extent
+    Most                                   Several                            To some extent
+
+
+Noun
+
+    Agreement with               Doubt                      In accord with              Proposal
+    Assertion                    Estimate                   Majority                    Proposition
+    Assumption                   Expectation                Possibility                 Recommendation
+    Attempt                      Guidance                   Potential                   Suggestion
+    Belief                       Hope                       Prediction                  Tendency
+    Chance                       Implication                Presupposition
+    Claim                        Intention                  Probability
+
+
+
+
+              Kaçınma ve akademik yazım: Sözcüksel kaçınmaların bir analizi
+
+Öz
+Kaçınma, akademik metinlerde çeşitli sebepler için kullanılması gereken önemli bir söylem çeşididir çünkü
+çalışılan alanda eser üreten bilim insanının kesinlik düzeyini yansıtır. Buna rağmen kaçınma özellikle anadili
+İngilizce olmayan pek çok bilim insanı tarafından yeterince dikkate alınmamaktadır. Akademik yazımda önemi
+tartışmasız olmasına rağmen kaçınma ifadelerinin aşırı kullanımı istenmeyen sonuçlara yol açabilmektedir. Başka
+bir ifadeyle, kaçınma ifadelerinin az sayıda kullanılması aşırı özgüven duygusuna yol açabileceği gibi bu ifadelerin
+aşırı kullanılması ifadenin doğruluğu üzerinde şüphelere neden olabilmektedir. Bundan dolayı kaçınma
+ifadelerinin ılımlı ve dengeli bir şekilde kullanımı okuyucu üzerinde doğru bir izlenim bırakabilmesi açısından
+önemlidir. Bu anlamda, bu çalışma şu amaçları gerçekleştirmek üzere yapılmıştır: akademik bir metin yazarken
+92              Cüneyt Demir/ Journal of Language and Linguistic Studies, 14(4) (2018) 74–92
+
+
+anadili İngilizce olan yazarlar ile ana dili İngilizce olmayan yazarların kaçınma ifadelerini kullanım açısından
+istatiksel bir fark olup olmadığı; anadili İngilizce olan ve anadili İngilizce olmayan yazarların kullandığı kaçınma
+ifadelerini ortaya çıkarma ve hangi grubun daha geniş bir kaçınma ifadesi sözcük dağarcığına sahip olduğunu
+tespit etme; bir sözcüksel kaçınma ifadeleri listesi oluşturma; ve akademik yazımda kullanılan kaçınma ifadeleri
+üzerine çeşitli önerilerde bulunma.
+Anahtar sözcükler: Kaçınma ifadeleri; akademik yazım; söylem; indirgeme; yumuşatma
+
+
+AUTHOR BIODATA
+Cüneyt Demir is an Assistant Professor at Siirt University, Siirt-Turkey. He received his Ph.D on ELT. He is
+currently offering courses at the graduate and undergraduate levels at Siirt University. His profession includes
+educational academic writing, ESP, and adult education in ELT.
+

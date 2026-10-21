@@ -61,3 +61,18 @@ Two tamper patterns, both rejected by downstream stages:
 ## Rendered SKILL.md does not retain markers
 
 The scaffold stage inlines locked fields into canonical sections. The design.md + sidecar persist as the audit trail. Exception: skills that declare `authored-skill-has-its-own-runtime-integrity-block` in scope (e.g. ML-training skills that need per-run integrity) keep the markers in their rendered output.
+
+## Rationalization Table
+
+| You think... | Reality |
+|---|---|
+| "It's just a typo inside the block, I'll fix it and regenerate the sidecar" | Rehash after in-block edits defeats the contract. Revert the edit, rerun the design stage, re-approve, then emit the sidecar. |
+| "Moving this HARD-GATE outside the markers makes it easier to iterate" | Never edit gated fields through the back door. Keep all six immutable fields between the markers or fail the design stage. |
+| "The sidecar hash drifted by one byte from a trailing newline, that's not real drift" | Treat any hash mismatch as BLOCKED_TAMPER. No tolerance, no near-match, no whitespace exceptions. |
+
+## Red Flags
+
+- "I'll just regenerate the sidecar after this small fix"
+- "SHA-1 is shorter and good enough for this"
+- "Let me put a second end marker so the region is easier to edit"
+- "The hash drift is cosmetic, ship it"

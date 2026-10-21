@@ -1,21 +1,96 @@
 {
   "schemaVersion": "1.0",
   "kind": "word-denylist",
+  "purpose": "Imperative-voice enforcement for SKILL.md authored for AI coding assistants. `entries` are hard directive-weakeners (CRITICAL: auto-REJECT). `warnings` are context-dependent hedges (IMPORTANT: voice-reviewer subagent judgment).",
+  "sources": [
+    {
+      "id": "demir-2018",
+      "name": "Demir, C. (2018). Hedging and academic writing: an analysis of lexical hedges. Journal of Language and Linguistic Studies, 14(4), 74-92.",
+      "url": "http://www.jlls.org/index.php/jlls/article/view/812",
+      "role": "Consolidated Hyland taxonomy; Appendix A is the canonical hedge word list (extracted into docs/hedge-research/demir-2018.txt)."
+    },
+    {
+      "id": "hyland-1998",
+      "name": "Hyland, K. (1998). Hedging in Scientific Research Articles. John Benjamins.",
+      "url": "https://benjamins.com/catalog/pbns.54",
+      "role": "Original academic reference for the hedging taxonomy Demir consolidates."
+    },
+    {
+      "id": "conll-2010",
+      "name": "Farkas, R. et al. (2010). The CoNLL-2010 Shared Task: Learning to Detect Hedges and Their Scope.",
+      "url": "https://aclanthology.org/W10-3001/",
+      "role": "NLP canonical hedge-cue corpus (BioScope) with annotated cue lexicon."
+    },
+    {
+      "id": "wikipedia-mos-words-to-watch",
+      "name": "Wikipedia Manual of Style: Words to watch.",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Words_to_watch",
+      "role": "Community-maintained weasel-word and editorializing list (CC BY-SA 4.0)."
+    },
+    {
+      "id": "google-dev-style",
+      "name": "Google Developer Documentation Style Guide — prescriptive documentation.",
+      "url": "https://developers.google.com/style/prescriptive-documentation",
+      "role": "Industry style guide that bans hedges (should, could, try to, consider) in directive docs."
+    },
+    {
+      "id": "anthropic-prompting",
+      "name": "Anthropic — Prompt engineering overview.",
+      "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview",
+      "role": "Directive-voice guidance for instructions given to Claude; prefers imperative form over suggestion."
+    }
+  ],
   "entries": [
     "consider",
     "probably",
-    "may",
-    "might",
     "perhaps",
     "seems",
     "seem",
     "try to",
+    "should",
+    "could",
+    "you should",
+    "you could",
+    "you might",
+    "we should",
+    "ideally",
+    "feel free to",
+    "when possible",
+    "if appropriate",
+    "as needed",
+    "it's important",
+    "it is important",
+    "keep in mind",
+    "worth noting"
+  ],
+  "warnings": [
+    "may",
+    "might",
+    "may be",
+    "might be",
     "somewhat",
     "roughly",
     "approximately",
     "mostly",
     "generally",
     "usually",
-    "typically"
+    "typically",
+    "often",
+    "possibly",
+    "likely",
+    "apparently",
+    "presumably",
+    "arguably",
+    "supposedly",
+    "seemingly",
+    "suggest",
+    "suggests",
+    "appear",
+    "appears",
+    "appears to",
+    "indicate",
+    "indicates",
+    "tend to",
+    "tends to"
   ]
 }
