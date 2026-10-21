@@ -4,5 +4,7 @@
 .skill-cheat.sh
 tests/tmp/
 docs/skill-cheat/
+docs/library-research/npm-rank.json
+docs/library-research/top-pypi-packages.min.json
 node_modules/
 .skill-cheat-qa/
