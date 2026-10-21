@@ -1,0 +1,36 @@
+digraph skill_scaffold {
+    bgcolor="white";
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=11, style="filled", fillcolor="#f3f4f6", color="#374151", penwidth=1.3];
+    edge [fontname="Helvetica", fontsize=10, color="#6b7280"];
+    rankdir=TB;
+    ranksep=0.38;
+    nodesep=0.45;
+    "Read voice-review verdict" [shape=box];
+    "Verdict is ACCEPT?" [shape=diamond];
+    "Read scope mode from scope.md" [shape=box];
+    "Scope mode read?" [shape=diamond];
+    "New plugin?" [shape=diamond];
+    "Emit full canonical tree" [shape=box];
+    "Emit skill-only delta" [shape=box];
+    "Run authored Bottom Line" [shape=box];
+    "Bottom Line passes bash -n?" [shape=diamond];
+    "SCAFFOLD_INCOMPLETE" [shape=doublecircle, fillcolor="#fee2e2", color="#b91c1c"];
+    "SCAFFOLD_COMPLETE" [shape=doublecircle, fillcolor="#dcfce7", color="#15803d"];
+    "Read voice-review verdict" -> "Verdict is ACCEPT?";
+    "Verdict is ACCEPT?" -> "Read scope mode from scope.md" [label="ACCEPT"];
+    "Read scope mode from scope.md" -> "Scope mode read?";
+    "Scope mode read?" -> "New plugin?" [label="found"];
+    "New plugin?" -> "Emit full canonical tree" [label="yes"];
+    "New plugin?" -> "Emit skill-only delta" [label="no"];
+    "Emit full canonical tree" -> "Run authored Bottom Line";
+    "Emit skill-only delta" -> "Run authored Bottom Line";
+    "Run authored Bottom Line" -> "Bottom Line passes bash -n?";
+    "Bottom Line passes bash -n?" -> "SCAFFOLD_COMPLETE" [label="pass"];
+    "Verdict is ACCEPT?" -> "SCAFFOLD_INCOMPLETE" [label="not ACCEPT", color="#b91c1c", fontcolor="#b91c1c"];
+    "Scope mode read?" -> "SCAFFOLD_INCOMPLETE" [label="not found", color="#b91c1c", fontcolor="#b91c1c"];
+    "Bottom Line passes bash -n?" -> "SCAFFOLD_INCOMPLETE" [label="fail", color="#b91c1c", fontcolor="#b91c1c"];
+    { rank=same; "Read voice-review verdict"; "Verdict is ACCEPT?"; }
+    { rank=same; "Read scope mode from scope.md"; "Scope mode read?"; }
+    { rank=same; "SCAFFOLD_COMPLETE"; "SCAFFOLD_INCOMPLETE"; }
+}

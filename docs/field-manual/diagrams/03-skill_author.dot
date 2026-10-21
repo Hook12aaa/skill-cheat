@@ -1,0 +1,48 @@
+digraph skill_author {
+    bgcolor="white";
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=9, style="filled", fillcolor="#f3f4f6", color="#374151", penwidth=1.2, margin="0.06,0.03"];
+    edge [fontname="Helvetica", fontsize=9, color="#6b7280"];
+    rankdir=TB;
+    ranksep=0.26;
+    nodesep=0.16;
+
+    "Read design.md" [shape=box];
+    "Verify sidecar hash" [shape=diamond];
+    "BLOCKED_TAMPER" [shape=doublecircle, fillcolor="#fee2e2", color="#b91c1c"];
+    "Run bash -n" [shape=diamond];
+    "AUTHOR_DONE" [shape=doublecircle, fillcolor="#dcfce7", color="#166534"];
+
+    subgraph cluster_drafting {
+        label="drafting";
+        labelloc="t";
+        labeljust="l";
+        fontsize=9;
+        fontcolor="#6b7280";
+        color="#d1d5db";
+        style="rounded,dashed";
+        bgcolor="#fafafa";
+        "Draft pushy description" [shape=box];
+        "Draft Anti-Pattern" [shape=box];
+        "Draft Step Details" [shape=box];
+        "Draft Rationalization Table" [shape=box];
+        "Draft Red Flags" [shape=box];
+        "Draft Bottom Line" [shape=box];
+        "Draft pushy description" -> "Draft Anti-Pattern";
+        "Draft Anti-Pattern" -> "Draft Step Details";
+        "Draft Step Details" -> "Draft Rationalization Table";
+        "Draft Rationalization Table" -> "Draft Red Flags";
+        "Draft Red Flags" -> "Draft Bottom Line";
+        { rank=same; "Draft pushy description"; "Draft Anti-Pattern"; "Draft Step Details"; }
+        { rank=same; "Draft Rationalization Table"; "Draft Red Flags"; "Draft Bottom Line"; }
+    }
+
+    "Read design.md" -> "Verify sidecar hash";
+    "Verify sidecar hash" -> "BLOCKED_TAMPER" [label="drift", color="#b91c1c", fontcolor="#b91c1c", penwidth=1.6];
+    "Verify sidecar hash" -> "Draft pushy description" [label="clean"];
+    "Draft Bottom Line" -> "Run bash -n";
+    "Run bash -n" -> "AUTHOR_DONE" [label="pass"];
+    "Run bash -n" -> "Draft Bottom Line" [label="fail", style=dashed, constraint=false];
+
+    { rank=same; "Read design.md"; "Verify sidecar hash"; "BLOCKED_TAMPER"; }
+}

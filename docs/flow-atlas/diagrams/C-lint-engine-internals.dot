@@ -1,0 +1,230 @@
+digraph LintEngineInternals {
+  // Landscape tabloid 11x17in at 300dpi
+  graph [
+    layout=dot,
+    rankdir=TB,
+    size="17,11!",
+    ratio=fill,
+    dpi=300,
+    splines=polyline,
+    nodesep=0.35,
+    ranksep=0.55,
+    fontname="Helvetica",
+    labelloc="t",
+    label=<<B>Flow C — Lint Engine Internals</B><BR/><FONT POINT-SIZE="13">lint.sh &rarr; lint.js detectors &rarr; severity aggregation &rarr; verdict ladder</FONT>>,
+    fontsize=22
+  ];
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled", fillcolor="#F4F6F8", color="#222222", margin="0.14,0.08"];
+  edge [fontname="Helvetica", fontsize=9, color="#555555", arrowsize=0.7];
+
+  // ====================================================================
+  // 1. ENTRYPOINT
+  // ====================================================================
+  subgraph cluster_entry {
+    label="1. Entrypoint";
+    style="rounded,dashed";
+    color="#888888";
+    fontsize=13;
+    fontname="Helvetica-Bold";
+    bgcolor="#FAFAFA";
+
+    CLI     [label=<<B>lint.sh &lt;SKILL.md&gt;</B><BR/><FONT POINT-SIZE="9">bash entrypoint · set -euo pipefail<BR/>argv[1] = skill path; exit 64 if missing, 66 if not a file</FONT>>, fillcolor="#DDEBF7"];
+    REFS    [label=<<B>HERE / REF</B><BR/><FONT POINT-SIZE="9">HERE = dirname $BASH_SOURCE<BR/>REF  = $HERE/../references</FONT>>, fillcolor="#EAF2FA"];
+  }
+
+  // ====================================================================
+  // 2. RULE LOADER (extends + disable merge)
+  // ====================================================================
+  subgraph cluster_loader {
+    label="2. Rule Loader — resolve_manifest()";
+    style="rounded,dashed";
+    color="#888888";
+    fontsize=13;
+    fontname="Helvetica-Bold";
+    bgcolor="#FFF8E6";
+
+    BASE    [label=<<B>references/lint-rules.json</B><BR/><FONT POINT-SIZE="9">baseline manifest · schemaVersion 1.0<BR/>21 rules (LINT-001..LINT-021)</FONT>>, fillcolor="#FFF2CC", shape=folder];
+    LOCAL   [label=<<B>&lt;skill-dir&gt;/lint.json</B><BR/><FONT POINT-SIZE="9">per-skill overlay<BR/>{extends, disable[], rules[]}</FONT>>, fillcolor="#FFF2CC", shape=folder];
+    MERGE   [label=<<B>jq merge</B><BR/><FONT POINT-SIZE="9">extends == "skill-cheat:baseline"?<BR/>drop baseline ids in local.rules &amp; in disable[]<BR/>concat kept baseline + local rules</FONT>>, fillcolor="#FCE4A6"];
+    RULES   [label=<<B>RULES_JSON</B><BR/><FONT POINT-SIZE="9">{schemaVersion, rules:[&hellip;]}<BR/>iterated by for(i=0; i&lt;count; i++)</FONT>>, fillcolor="#F7D976"];
+  }
+
+  // ====================================================================
+  // 3. DISPATCHER (the centerpiece — type-based fanout)
+  // ====================================================================
+  DISPATCH [label=<<B>dispatch_detector(rule)</B><BR/><FONT POINT-SIZE="9">read .id, .severity, .detector.type, .detector (cfg)<BR/>case $dtype in &hellip; &rarr; detector function</FONT>>, shape=hexagon, fillcolor="#D5E8D4", width=4.8];
+
+  // ====================================================================
+  // 4. DETECTOR FAN-OUT (11 parallel nodes)
+  // ====================================================================
+  subgraph cluster_detectors_sh {
+    label="Shell detectors (lint.sh)";
+    style="rounded,dashed";
+    color="#4E7CA1";
+    fontsize=12;
+    fontname="Helvetica-Bold";
+    bgcolor="#EFF5FB";
+
+    D_FIND   [label=<<B>find-extensions</B><BR/><FONT POINT-SIZE="9">find &lt;plugin-root&gt; -type f NOT &isin; allowlist<BR/>emits {path,message:"disallowed file extension"}</FONT>>, fillcolor="#CFE2F3"];
+    D_DENY   [label=<<B>grep-denylist</B><BR/><FONT POINT-SIZE="9">grep -niw -E "\\b&lt;word&gt;\\b" SKILL.md<BR/>per-line hit &rarr; {line, message:"denylist hit: &lt;w&gt;", excerpt}<BR/>reads .entries or .warnings (field param)</FONT>>, fillcolor="#CFE2F3"];
+    D_REQ    [label=<<B>grep-required</B><BR/><FONT POINT-SIZE="9">grep -qF pattern · inverse detector<BR/>emits one finding if pattern absent</FONT>>, fillcolor="#CFE2F3"];
+    D_REG    [label=<<B>regex-line</B><BR/><FONT POINT-SIZE="9">extract_section(awk) &rarr; walk lines<BR/>must-match · must-not-match · first-sentence-must-match<BR/>per-line &rarr; {line,excerpt,section}</FONT>>, fillcolor="#CFE2F3"];
+    D_BASH   [label=<<B>bash-syntax</B><BR/><FONT POINT-SIZE="9">awk-extract ```bash/sh fence in section<BR/>pipe to `bash -n` · stderr &rarr; finding</FONT>>, fillcolor="#CFE2F3"];
+    D_DOT    [label=<<B>dot-parse</B><BR/><FONT POINT-SIZE="9">awk-extract ```dot fence in section<BR/>pipe to `dot -Tcanon` · stderr &rarr; finding</FONT>>, fillcolor="#CFE2F3"];
+  }
+
+  subgraph cluster_detectors_js {
+    label="JS detectors (lint.js · spawned per rule)";
+    style="rounded,dashed";
+    color="#8B4E8E";
+    fontsize=12;
+    fontname="Helvetica-Bold";
+    bgcolor="#F4EAF5";
+
+    D_YAML   [label=<<B>yaml-frontmatter</B><BR/><FONT POINT-SIZE="9">parse ---&hellip;--- block · key:value split<BR/>required-fields present?<BR/>description-contains-trigger (/[a-z-]+/ or "trigger")<BR/>description-contains-verdict (ALL_CAPS token)</FONT>>, fillcolor="#E1D5E7"];
+    D_ORDER  [label=<<B>section-order</B><BR/><FONT POINT-SIZE="9">scan for ## H2 + &lt;HARD-GATE&gt;<BR/>record first-occurrence index<BR/>emit "missing" or "out of sequence"</FONT>>, fillcolor="#E1D5E7"];
+    D_XREF   [label=<<B>cross-reference</B><BR/><FONT POINT-SIZE="9">extract left &amp; right sections<BR/>pluck leading numbers via regex<BR/>symmetric-difference &rarr; unmatched ids</FONT>>, fillcolor="#E1D5E7"];
+    D_HGSPAN [label=<<B>hard-gate-span</B><BR/><FONT POINT-SIZE="9">scan &lt;HARD-GATE&gt;&hellip;&lt;/HARD-GATE&gt; spans<BR/>count sentences vs max-sentences<BR/>forbidden-tokens \\b-scan · required-fail-pattern check</FONT>>, fillcolor="#E1D5E7"];
+    D_RTBL   [label=<<B>rationalization-table-cells</B><BR/><FONT POINT-SIZE="9">scan "## Rationalization Table" rows<BR/>reality-cell sentences · verb allowlist<BR/>pass if Never/No/STOP/Always or verb&isin;allowlist</FONT>>, fillcolor="#E1D5E7"];
+  }
+
+  // ====================================================================
+  // 5. DATA DEPENDENCIES (denylists / allowlists feeding detectors)
+  // ====================================================================
+  subgraph cluster_data {
+    label="Data dependencies (references/*.json)";
+    style="rounded,dashed";
+    color="#B07A2C";
+    fontsize=12;
+    fontname="Helvetica-Bold";
+    bgcolor="#FDF5E6";
+
+    REF_HEDGE [label=<<B>hedge-words-denylist.json</B><BR/><FONT POINT-SIZE="9">.entries (21 hard hedges · CRITICAL LINT-003)<BR/>.warnings (28 soft hedges · IMPORTANT LINT-020)</FONT>>, fillcolor="#FAE1B0", shape=note];
+    REF_LIB   [label=<<B>library-names-denylist.json</B><BR/><FONT POINT-SIZE="9">.entries (41 framework pickers · CRITICAL LINT-005)<BR/>.warnings (32 domain libs · IMPORTANT LINT-021)</FONT>>, fillcolor="#FAE1B0", shape=note];
+    REF_VERB  [label=<<B>imperative-verbs-allowlist.json</B><BR/><FONT POINT-SIZE="9">.entries (~85 imperative verbs)<BR/>case-sensitive first-word match (LINT-019)</FONT>>, fillcolor="#FAE1B0", shape=note];
+  }
+
+  // ====================================================================
+  // 6. FINDINGS AGGREGATION (severity buckets)
+  // ====================================================================
+  TAG      [label=<<B>tag findings</B><BR/><FONT POINT-SIZE="9">jq map(. + {ruleId, severity})<BR/>findings_json += tagged</FONT>>, fillcolor="#EEEEEE"];
+
+  BKT_C    [label=<<B>CRITICAL bucket</B><BR/><FONT POINT-SIZE="9">critical += count</FONT>>, fillcolor="#F8CECC", color="#B85450"];
+  BKT_I    [label=<<B>IMPORTANT bucket</B><BR/><FONT POINT-SIZE="9">important += count</FONT>>, fillcolor="#FFE6CC", color="#D79B00"];
+  BKT_M    [label=<<B>MINOR bucket</B><BR/><FONT POINT-SIZE="9">minor += count</FONT>>, fillcolor="#E6E6E6", color="#666666"];
+  BKT_P    [label=<<B>passed counter</B><BR/><FONT POINT-SIZE="9">count==0 &rarr; passed++</FONT>>, fillcolor="#D5E8D4", color="#82B366"];
+
+  // ====================================================================
+  // 7. VERDICT LADDER (decision-diamond chain)
+  // ====================================================================
+  Q_CRIT   [label=<<B>critical &gt; 0 ?</B>>, shape=diamond, fillcolor="#F8CECC", color="#B85450"];
+  Q_IMP    [label=<<B>important &gt; 0 ?</B>>, shape=diamond, fillcolor="#FFE6CC", color="#D79B00"];
+  Q_MIN    [label=<<B>minor &gt; 0 ?</B>>, shape=diamond, fillcolor="#E6E6E6", color="#666666"];
+
+  V_REJC   [label=<<B>REJECT_CRITICAL</B><BR/><FONT POINT-SIZE="9">exit 1</FONT>>, shape=box, style="rounded,filled,bold", fillcolor="#B85450", fontcolor="white"];
+  V_REJI   [label=<<B>REJECT_IMPORTANT</B><BR/><FONT POINT-SIZE="9">exit 0</FONT>>, shape=box, style="rounded,filled,bold", fillcolor="#D79B00", fontcolor="white"];
+  V_ACCM   [label=<<B>ACCEPT_WITH_MINOR</B><BR/><FONT POINT-SIZE="9">exit 0</FONT>>, shape=box, style="rounded,filled,bold", fillcolor="#8C8C8C", fontcolor="white"];
+  V_ACC    [label=<<B>ACCEPT</B><BR/><FONT POINT-SIZE="9">exit 0</FONT>>, shape=box, style="rounded,filled,bold", fillcolor="#82B366", fontcolor="white"];
+
+  // ====================================================================
+  // 8. JSON OUTPUT
+  // ====================================================================
+  OUT [label=<<B>JSON verdict report (stdout)</B><BR/><FONT POINT-SIZE="9">{ skill, designSha:null, runId(UTC ISO-8601),<BR/>&nbsp;&nbsp;summary:{critical, important, minor, passed},<BR/>&nbsp;&nbsp;findings:[{ruleId, severity, location, message, excerpt}&hellip;],<BR/>&nbsp;&nbsp;verdict }</FONT>>, shape=note, fillcolor="#D5E8D4"];
+
+  // ====================================================================
+  // EDGES — entry &rarr; loader
+  // ====================================================================
+  CLI -> REFS;
+  REFS -> BASE    [label="read"];
+  CLI  -> LOCAL   [label="dirname(skill)/lint.json"];
+  BASE -> MERGE;
+  LOCAL -> MERGE  [label="extends + disable"];
+  MERGE -> RULES;
+
+  // loader &rarr; dispatcher
+  RULES -> DISPATCH [label="for each rule", penwidth=1.4];
+
+  // dispatcher &rarr; detectors (fan-out)
+  DISPATCH -> D_FIND  [label="find-extensions"];
+  DISPATCH -> D_DENY  [label="grep-denylist"];
+  DISPATCH -> D_REQ   [label="grep-required"];
+  DISPATCH -> D_REG   [label="regex-line"];
+  DISPATCH -> D_BASH  [label="bash-syntax"];
+  DISPATCH -> D_DOT   [label="dot-parse"];
+  DISPATCH -> D_YAML  [label="yaml-frontmatter"];
+  DISPATCH -> D_ORDER [label="section-order"];
+  DISPATCH -> D_XREF  [label="cross-reference"];
+  DISPATCH -> D_HGSPAN[label="hard-gate-span"];
+  DISPATCH -> D_RTBL  [label="rationalization-table-cells"];
+
+  // data deps feed detectors
+  REF_HEDGE -> D_DENY [style=dashed, color="#B07A2C", label="LINT-003 entries\nLINT-020 warnings"];
+  REF_LIB   -> D_DENY [style=dashed, color="#B07A2C", label="LINT-005 entries\nLINT-021 warnings"];
+  REF_VERB  -> D_RTBL [style=dashed, color="#B07A2C", label="LINT-019 entries"];
+
+  // detectors &rarr; tag findings
+  D_FIND   -> TAG;
+  D_DENY   -> TAG;
+  D_REQ    -> TAG;
+  D_REG    -> TAG;
+  D_BASH   -> TAG;
+  D_DOT    -> TAG;
+  D_YAML   -> TAG;
+  D_ORDER  -> TAG;
+  D_XREF   -> TAG;
+  D_HGSPAN -> TAG;
+  D_RTBL   -> TAG;
+
+  // tag &rarr; severity buckets (4-way by rule.severity OR count==0)
+  TAG -> BKT_C [label="sev=CRITICAL", color="#B85450", fontcolor="#B85450"];
+  TAG -> BKT_I [label="sev=IMPORTANT", color="#D79B00", fontcolor="#D79B00"];
+  TAG -> BKT_M [label="sev=MINOR", color="#666666", fontcolor="#666666"];
+  TAG -> BKT_P [label="count==0", color="#82B366", fontcolor="#82B366"];
+
+  // buckets &rarr; verdict ladder
+  BKT_C -> Q_CRIT;
+  BKT_I -> Q_IMP;
+  BKT_M -> Q_MIN;
+
+  Q_CRIT -> V_REJC [label="yes", fontcolor="#B85450"];
+  Q_CRIT -> Q_IMP  [label="no"];
+  Q_IMP  -> V_REJI [label="yes", fontcolor="#D79B00"];
+  Q_IMP  -> Q_MIN  [label="no"];
+  Q_MIN  -> V_ACCM [label="yes", fontcolor="#8C8C8C"];
+  Q_MIN  -> V_ACC  [label="no", fontcolor="#82B366"];
+
+  // verdicts &rarr; stdout JSON
+  V_REJC -> OUT;
+  V_REJI -> OUT;
+  V_ACCM -> OUT;
+  V_ACC  -> OUT;
+  BKT_P  -> OUT [style=dotted, label="summary.passed"];
+
+  // ====================================================================
+  // LEGEND
+  // ====================================================================
+  subgraph cluster_legend {
+    label="Legend";
+    style="rounded,filled";
+    color="#444444";
+    fillcolor="#FAFAFA";
+    fontname="Helvetica-Bold";
+    fontsize=12;
+    rank=sink;
+
+    L_SH    [label="shell detector (lint.sh)", fillcolor="#CFE2F3"];
+    L_JS    [label="JS detector (lint.js)",    fillcolor="#E1D5E7"];
+    L_DATA  [label="reference data (JSON)",    fillcolor="#FAE1B0", shape=note];
+    L_CRIT  [label="CRITICAL severity",        fillcolor="#F8CECC", color="#B85450"];
+    L_IMP   [label="IMPORTANT severity",       fillcolor="#FFE6CC", color="#D79B00"];
+    L_MIN   [label="MINOR severity",           fillcolor="#E6E6E6", color="#666666"];
+    L_PASS  [label="pass / ACCEPT",            fillcolor="#82B366", color="#82B366", fontcolor="white"];
+    L_DEC   [label="verdict decision", shape=diamond, fillcolor="#FFFFFF"];
+
+    L_SH -> L_JS -> L_DATA -> L_CRIT -> L_IMP -> L_MIN -> L_PASS -> L_DEC [style=invis];
+  }
+
+  // rank hints to keep the story readable (detectors intentionally left clustered)
+  { rank=same; BKT_C; BKT_I; BKT_M; BKT_P; }
+  { rank=same; V_REJC; V_REJI; V_ACCM; V_ACC; }
+}

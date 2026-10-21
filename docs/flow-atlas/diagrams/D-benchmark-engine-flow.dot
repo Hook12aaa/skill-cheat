@@ -1,0 +1,365 @@
+// D-benchmark-engine-flow.dot
+// skill-cheat Plan 5 benchmark engine: 4-phase flow atlas
+// Render: dot -Tpng -Gdpi=300 D-benchmark-engine-flow.dot -o D-benchmark-engine-flow.png
+
+digraph benchmark_engine_flow {
+  graph [
+    rankdir=LR,
+    size="17,11!",
+    ratio=fill,
+    bgcolor="white",
+    fontname="Helvetica",
+    fontsize=14,
+    labelloc="t",
+    label=<<b>skill-cheat Plan 5 — Benchmark Engine Flow</b><br/><font point-size="11">scope.json + design.json &rarr; worktree-isolated runs &rarr; pass-rate/token/duration stats &rarr; blind subagent trio</font>>,
+    compound=true,
+    nodesep=0.28,
+    ranksep=0.55,
+    splines=spline,
+    pad=0.3
+  ];
+  node  [fontname="Helvetica", fontsize=10, margin="0.12,0.06"];
+  edge  [fontname="Helvetica", fontsize=9, color="#444444"];
+
+  // ---- node styles ----
+  // artifacts: light-blue cylinders
+  // scripts: white boxes
+  // subagents: purple
+  // verdicts/stats: green terminals
+  // integrity gates: red
+  // schema notes: note shape
+
+  // =========================================================
+  // PHASE 0 — SEEDING
+  // =========================================================
+  subgraph cluster_phase0 {
+    label=<<b>Phase 0 &mdash; seeding</b><br/><font point-size="9">scope/design &rarr; skeletons</font>>;
+    style="rounded,filled";
+    fillcolor="#FFF8E1";
+    color="#F9A825";
+    penwidth=2;
+    fontsize=12;
+
+    // upstream inputs
+    scope_json [label="scope.json", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+    design_json [label="design.json", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+    design_md [label="design.md", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+
+    // phase-0 emitters
+    emit_eval [label="emit-eval-skeleton.sh\n(skill-scope)", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+    emit_assert [label="emit-assertion-skeleton.sh\n(skill-design)", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+
+    // outputs
+    eval_skel [label="eval-set-skeleton.json", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+    assert_skel [label="assertion-skeleton.json", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+
+    // schema notes
+    eval_schema [shape=note, style=filled, fillcolor="#FFFDE7", color="#F9A825",
+      label=<<b>eval-set-skeleton.json</b><br align="left"/>
+{<br align="left"/>
+&nbsp;&nbsp;skillName: "&lt;name&gt;",<br align="left"/>
+&nbsp;&nbsp;cases: [<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;{id, query, shouldTrigger, note}<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;// 1 positive per trigger<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;// 5 adversarial:<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;//  trigger-collision<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;//  instruction-injection<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;//  degenerate-prompt<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;//  keyword-without-context<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;//  cross-skill-ambiguity<br align="left"/>
+&nbsp;&nbsp;]<br align="left"/>
+}<br align="left"/>>];
+
+    assert_schema [shape=note, style=filled, fillcolor="#FFFDE7", color="#F9A825",
+      label=<<b>assertion-skeleton.json</b><br align="left"/>
+{<br align="left"/>
+&nbsp;&nbsp;skillName: "&lt;name&gt;",<br align="left"/>
+&nbsp;&nbsp;assertions: [<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;{id, type, pattern, evidence}<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;// hard-gate-violation-absent<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;//   per hardGates[]<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;// gate-function-question<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;//   per gateFunctions[]<br align="left"/>
+&nbsp;&nbsp;]<br align="left"/>
+}<br align="left"/>>];
+
+    scope_json -> emit_eval [label="  jq .name\n  .triggers[]"];
+    emit_eval -> eval_skel;
+    eval_skel -> eval_schema [style=dotted, arrowhead=none, color="#F9A825"];
+
+    design_json -> emit_assert [label="  jq .hardGates[]\n  .gateFunctions[]"];
+    design_md -> emit_assert [style=dashed];
+    emit_assert -> assert_skel;
+    assert_skel -> assert_schema [style=dotted, arrowhead=none, color="#F9A825"];
+  }
+
+  // =========================================================
+  // PHASE 1 — PLAN INIT + WORKTREES + INTEGRITY
+  // =========================================================
+  subgraph cluster_phase1 {
+    label=<<b>Phase 1 &mdash; plan init &amp; worktrees</b><br/><font point-size="9">baseline-first, SHA-256 pinned</font>>;
+    style="rounded,filled";
+    fillcolor="#E8F5E9";
+    color="#2E7D32";
+    penwidth=2;
+    fontsize=12;
+
+    plan_init [label="benchmark-plan-init.sh", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+    integrity_hash [label="benchmark-integrity-hash.sh", shape=box, style="filled,rounded", fillcolor="#FFEBEE", color="#C62828"];
+    worktree_setup [label="git-worktree-setup.sh\n(baseline FIRST, then candidate)", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+
+    baseline_first [label="baseline ordering\ninvariant", shape=octagon, style=filled, fillcolor="#FFF3E0", color="#E65100", penwidth=2];
+
+    // integrity triad
+    plan_md [label="benchmark-plan.md\n<!-- integrity-block:start -->\n  skillName, baselineRef,\n  candidateRef, caseQueries[],\n  assertionPatterns[]\n<!-- integrity-block:end -->", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+    plan_md_sha [label="benchmark-plan.md.sha256\n(64 hex digest)", shape=cylinder, style=filled, fillcolor="#FFEBEE", color="#C62828"];
+    plan_json [label="benchmark-plan.json", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+
+    plan_schema [shape=note, style=filled, fillcolor="#FFFDE7", color="#F9A825",
+      label=<<b>benchmark-plan.json</b><br align="left"/>
+{<br align="left"/>
+&nbsp;&nbsp;schemaVersion: "1.0",<br align="left"/>
+&nbsp;&nbsp;skillName,<br align="left"/>
+&nbsp;&nbsp;runId (ISO-8601 UTC),<br align="left"/>
+&nbsp;&nbsp;integrityBlock: {<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;sha256, path<br align="left"/>
+&nbsp;&nbsp;},<br align="left"/>
+&nbsp;&nbsp;baselineRef,  // FIRST<br align="left"/>
+&nbsp;&nbsp;candidateRef, // SECOND<br align="left"/>
+&nbsp;&nbsp;worktrees: {baseline, candidate},<br align="left"/>
+&nbsp;&nbsp;cases[],<br align="left"/>
+&nbsp;&nbsp;assertions[],<br align="left"/>
+&nbsp;&nbsp;results: [],  // enriched P2<br align="left"/>
+&nbsp;&nbsp;aggregate: null // enriched P3<br align="left"/>
+}<br align="left"/>>];
+
+    // worktree dirs
+    wt_baseline [label="&lt;root&gt;/&lt;run-id&gt;/\nbaseline/", shape=folder, style=filled, fillcolor="#E1F5FE", color="#0277BD"];
+    wt_candidate [label="&lt;root&gt;/&lt;run-id&gt;/\ncandidate/", shape=folder, style=filled, fillcolor="#E1F5FE", color="#0277BD"];
+
+    plan_init -> plan_md       [label="  emits (markers+body)"];
+    plan_init -> integrity_hash [label="  invokes", style=dashed];
+    integrity_hash -> plan_md_sha [label="  sha256(byte range\n  BETWEEN markers,\n  markers excluded)"];
+    plan_md -> integrity_hash  [label="  awk-extract\n  integrity block", style=dashed, arrowhead=vee];
+    plan_md_sha -> plan_init   [label="  sha read back", style=dashed, dir=back];
+    plan_init -> plan_json     [label="  embeds sha256\n  into integrityBlock"];
+    plan_json -> plan_schema   [style=dotted, arrowhead=none, color="#F9A825"];
+
+    // baseline-first ordering
+    baseline_first -> worktree_setup [style=bold, color="#E65100", label="  ordering\n  invariant"];
+    worktree_setup -> wt_baseline [label="  1. git worktree add --detach\n     baselineRef", fontcolor="#E65100"];
+    worktree_setup -> wt_candidate [label="  2. git worktree add --detach\n     candidateRef", fontcolor="#E65100"];
+
+    plan_init -> worktree_setup [style=invis];
+  }
+
+  // Phase 0 -> Phase 1 edges
+  scope_json -> plan_init      [label="  --scope", lhead=cluster_phase1, ltail=cluster_phase0];
+  eval_skel -> plan_init       [label="  --eval-set"];
+  assert_skel -> plan_init     [label="  --assertions"];
+
+  // =========================================================
+  // PHASE 2 — PER-CASE EXECUTION (mock vs production fork)
+  // =========================================================
+  subgraph cluster_phase2 {
+    label=<<b>Phase 2 &mdash; per-case execution</b><br/><font point-size="9">cases &times; {baseline, candidate} &times; N samples</font>>;
+    style="rounded,filled";
+    fillcolor="#EDE7F6";
+    color="#4527A0";
+    penwidth=2;
+    fontsize=12;
+
+    // sha verify gate (load-bearing)
+    sha_verify [label="verify\nbenchmark-plan.md.sha256\nbefore each run", shape=octagon, style=filled, fillcolor="#FFEBEE", color="#C62828", penwidth=2];
+
+    // dispatcher
+    run_eval_sh [label="run-eval.sh\n(thin wrapper)", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+    run_eval_js [label="run-eval.js\n--skill-path --query --skill-name\n[--mock-stream-file | --model]", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+
+    // two lanes
+    subgraph cluster_mock {
+      label=<<b>Mock lane</b> (CI / offline)>;
+      style="rounded,dashed";
+      color="#6A1B9A";
+      fillcolor="#F3E5F5";
+
+      mock_fixture [label="fixture.jsonl\n(pre-recorded\nstream-json)", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+      readFileSync [label="readFileSync()\n.split('\\n')", shape=box, style=filled, fillcolor="white"];
+    }
+
+    subgraph cluster_prod {
+      label=<<b>Production lane</b>>;
+      style="rounded,dashed";
+      color="#6A1B9A";
+      fillcolor="#F3E5F5";
+
+      spawn_claude [label="spawn('claude', [\n  '-p', query,\n  '--include-partial-messages',\n  '--output-format', 'stream-json',\n  '--model', &lt;model&gt;])\ncwd=--skill-path", shape=box, style=filled, fillcolor="white"];
+      child_stdout [label="child.stdout\n(stream-json NDJSON)", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+    }
+
+    // convergence
+    analyse [label="analyseStream(lines, skillName)", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+
+    trigger_detect [label=<<b>trigger detection</b><br/>ev.type == "stream_event"<br/>&amp;&amp; ev.event.type == "content_block_start"<br/>&amp;&amp; content_block.type == "tool_use"<br/>&amp;&amp; content_block.input.name == skillName<br/>&rarr; triggered = true>, shape=component, style=filled, fillcolor="#FFF3E0", color="#E65100"];
+
+    result_totals [label=<ev.type == "result"<br/>&amp;&amp; ev.subtype == "success"<br/>&rarr; durationMs, totalTokens>, shape=component, style=filled, fillcolor="#FFF3E0", color="#E65100"];
+
+    per_run_json [label=<<b>per-run JSON (one line)</b><br align="left"/>
+{<br align="left"/>
+&nbsp;&nbsp;skillName,<br align="left"/>
+&nbsp;&nbsp;query,<br align="left"/>
+&nbsp;&nbsp;triggered,<br align="left"/>
+&nbsp;&nbsp;totalTokens,<br align="left"/>
+&nbsp;&nbsp;durationMs,<br align="left"/>
+&nbsp;&nbsp;streamEvents,<br align="left"/>
+&nbsp;&nbsp;mock,<br align="left"/>
+&nbsp;&nbsp;ref  // appended by caller<br align="left"/>
+}<br align="left"/>>, shape=note, style=filled, fillcolor="#FFFDE7", color="#F9A825"];
+
+    run_log [label="runs.jsonl\n(case &times; ref &times; sample)", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+
+    run_eval_sh -> run_eval_js [label="  exec node"];
+    sha_verify -> run_eval_sh [style=bold, color="#C62828", label="  pass"];
+
+    run_eval_js -> readFileSync [label="  if --mock-stream-file\n  mock=true", color="#6A1B9A"];
+    mock_fixture -> readFileSync;
+    readFileSync -> analyse [label="  streamLines"];
+
+    run_eval_js -> spawn_claude [label="  else\n  mock=false", color="#6A1B9A"];
+    spawn_claude -> child_stdout;
+    child_stdout -> analyse [label="  buf.split('\\n')"];
+
+    analyse -> trigger_detect;
+    analyse -> result_totals;
+    trigger_detect -> per_run_json [label="  triggered"];
+    result_totals -> per_run_json [label="  totalTokens,\n  durationMs"];
+    per_run_json -> run_log [label="  append (ref-tagged)"];
+  }
+
+  // P1 -> P2 edges
+  plan_json -> sha_verify [label="  read cases,\n  worktrees"];
+  wt_baseline -> run_eval_js [label="  --skill-path (ref=baseline)"];
+  wt_candidate -> run_eval_js [label="  --skill-path (ref=candidate)"];
+  plan_md_sha -> sha_verify [label="  verify digest", color="#C62828", style=bold];
+
+  // =========================================================
+  // PHASE 3 — AGGREGATION + SUBAGENT TRIO
+  // =========================================================
+  subgraph cluster_phase3 {
+    label=<<b>Phase 3 &mdash; aggregation &amp; grading</b><br/><font point-size="9">stats fold + structural distrust</font>>;
+    style="rounded,filled";
+    fillcolor="#FCE4EC";
+    color="#AD1457";
+    penwidth=2;
+    fontsize=12;
+
+    aggregate_js [label="aggregate-benchmark.js\n--runs runs.jsonl", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+
+    stats_schema [shape=note, style=filled, fillcolor="#FFFDE7", color="#F9A825",
+      label=<<b>aggregate JSON (stdout)</b><br align="left"/>
+{<br align="left"/>
+&nbsp;&nbsp;baseline: {<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;runs, passRate,<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;meanTokens, stddevTokens,<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;meanDurationMs, stddevDurationMs<br align="left"/>
+&nbsp;&nbsp;},<br align="left"/>
+&nbsp;&nbsp;candidate: { ...same shape... },<br align="left"/>
+&nbsp;&nbsp;delta: {<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;passRate:       c - b,<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;meanTokens:     c - b,<br align="left"/>
+&nbsp;&nbsp;&nbsp;&nbsp;meanDurationMs: c - b<br align="left"/>
+&nbsp;&nbsp;}<br align="left"/>
+}<br align="left"/>
+<br align="left"/>
+<i>refs MUST be "baseline" | "candidate";<br align="left"/>
+any other = schema violation</i><br align="left"/>>];
+
+    // subagent subcluster
+    subgraph cluster_subagents {
+      label=<<b>Subagent trio &mdash; structural distrust</b>>;
+      style="rounded,filled";
+      fillcolor="#F3E5F5";
+      color="#6A1B9A";
+      penwidth=2;
+
+      grader   [label=<<b>grader</b><br/>per-assertion evidence<br/>PASS / FAIL / NEEDS_CONTEXT>, shape=box3d, style=filled, fillcolor="#D1C4E9", color="#4527A0"];
+      comparator [label=<<b>comparator</b><br/>BLIND A/B judgement<br/>winner &isin; {A, B, TIE}>, shape=box3d, style=filled, fillcolor="#D1C4E9", color="#4527A0"];
+      analyzer [label=<<b>analyzer</b><br/>post-hoc attribution<br/>(unblind &amp; diff)>, shape=box3d, style=filled, fillcolor="#D1C4E9", color="#4527A0"];
+    }
+
+    // subagent inputs
+    transcript [label="transcript.md\n+ outputsDir/", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+    outputA [label="output A\n(path withheld)", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+    outputB [label="output B\n(path withheld)", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+
+    // subagent outputs
+    grader_out [label=<<b>grader.json</b><br/>results[].verdict<br/>evalCritique[]>, shape=note, style=filled, fillcolor="#FFFDE7"];
+    comparator_out [label=<<b>comparator.json</b><br/>winner, scores,<br/>reasoning>, shape=note, style=filled, fillcolor="#FFFDE7"];
+    analyzer_out [label=<<b>analyzer.json</b><br/>attribution[],<br/>loserFailureModes[],<br/>nonDiscriminatingAssertions[]>, shape=note, style=filled, fillcolor="#FFFDE7"];
+
+    // verdicts (terminals)
+    verdict_pass   [label="PASS", shape=doublecircle, style=filled, fillcolor="#C8E6C9", color="#2E7D32"];
+    verdict_fail   [label="FAIL", shape=doublecircle, style=filled, fillcolor="#FFCDD2", color="#C62828"];
+    verdict_needs  [label="NEEDS_CONTEXT", shape=doublecircle, style=filled, fillcolor="#FFF9C4", color="#F9A825"];
+
+    // wiring
+    aggregate_js -> stats_schema [style=dotted, arrowhead=none, color="#F9A825"];
+
+    // grader reads transcripts + assertions
+    transcript -> grader [label="  read full"];
+    grader -> grader_out;
+    grader_out -> verdict_pass [style=dashed];
+    grader_out -> verdict_fail [style=dashed];
+    grader_out -> verdict_needs [style=dashed];
+
+    // comparator blind
+    outputA -> comparator [label="  A (blind)"];
+    outputB -> comparator [label="  B (blind)"];
+    comparator -> comparator_out;
+
+    // analyzer reads everything
+    comparator_out -> analyzer [label="  unblind"];
+    analyzer -> analyzer_out;
+  }
+
+  // P2 -> P3
+  run_log -> aggregate_js [label="  JSONL fold"];
+
+  // assertion & cases re-read by subagents from plan_json
+  plan_json -> grader [label="  assertions[],\n  cases[]", lhead=cluster_subagents, style=dashed];
+  plan_json -> comparator [label="  query, caseId", style=dashed];
+  plan_json -> analyzer [label="  ref &rarr; skillPath\n  (after comparator\n  returns winner)", style=dashed];
+
+  // worktrees feed subagents (winner/loser skill paths)
+  wt_baseline -> analyzer [label="  loser/winner\n  skill path", style=dashed, color="#6A1B9A"];
+  wt_candidate -> analyzer [label="  loser/winner\n  skill path", style=dashed, color="#6A1B9A"];
+
+  // transcripts come from Phase 2
+  per_run_json -> transcript [style=dashed, label="  transcript\n  capture"];
+
+  // final: plan.json is enriched in place
+  aggregate_js -> plan_json [label="  enrich\n  .aggregate", style=bold, dir=back, color="#AD1457"];
+  grader_out -> plan_json [label="  enrich\n  .results[].assertionResults", style=bold, dir=back, color="#AD1457"];
+
+  // =========================================================
+  // LEGEND
+  // =========================================================
+  subgraph cluster_legend {
+    label=<<b>Legend</b>>;
+    style="rounded,filled";
+    fillcolor="white";
+    color="#333333";
+    fontsize=11;
+    rank=sink;
+
+    l_art    [label="artifact / file", shape=cylinder, style=filled, fillcolor="#E3F2FD", color="#1565C0"];
+    l_script [label="script", shape=box, style="filled,rounded", fillcolor="white", color="black"];
+    l_sub    [label="subagent", shape=box3d, style=filled, fillcolor="#D1C4E9", color="#4527A0"];
+    l_verd   [label="verdict / stat", shape=doublecircle, style=filled, fillcolor="#C8E6C9", color="#2E7D32"];
+    l_gate   [label="integrity gate", shape=octagon, style=filled, fillcolor="#FFEBEE", color="#C62828"];
+    l_note   [label="schema note", shape=note, style=filled, fillcolor="#FFFDE7", color="#F9A825"];
+    l_wt     [label="worktree dir", shape=folder, style=filled, fillcolor="#E1F5FE", color="#0277BD"];
+
+    l_art -> l_script -> l_sub -> l_verd -> l_gate -> l_note -> l_wt [style=invis];
+  }
+}

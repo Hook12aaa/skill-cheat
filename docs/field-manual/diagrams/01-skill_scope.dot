@@ -1,13 +1,26 @@
 digraph skill_scope {
-    rankdir=TB;
-    "Intent received" [shape=box];
-    "Ask name + command" [shape=box];
-    "Ask triggers + verdicts" [shape=box];
-    "Ask Anti-Pattern phrase" [shape=box];
-    "Ask target project path" [shape=box];
-    "Ask new plugin or existing?" [shape=box];
-    "Write scope.md" [shape=box];
-    "SCOPE_LOCKED" [shape=doublecircle];
+    bgcolor="white";
+    fontname="Helvetica";
+    rankdir=LR;
+    ranksep=0.55;
+    nodesep=0.35;
+    node [fontname="Helvetica", fontsize=11, style="filled", fillcolor="#f3f4f6", color="#374151", penwidth=1.3, shape=box, height=0.55];
+    edge [fontname="Helvetica", fontsize=10, color="#6b7280", arrowsize=0.8, penwidth=1.2];
+
+    "Intent received" [fillcolor="#dbeafe", color="#1d4ed8"];
+    "Ask name + command";
+    "Ask triggers + verdicts";
+    "Ask Anti-Pattern phrase";
+    "Ask target project path";
+    "Ask new plugin or existing?";
+    "Write scope.md";
+    "SCOPE_LOCKED" [shape=doublecircle, fillcolor="#dcfce7", color="#15803d", fontsize=10];
+
+    { rank=same; "Intent received"; "Ask target project path"; }
+    { rank=same; "Ask name + command"; "Ask new plugin or existing?"; }
+    { rank=same; "Ask triggers + verdicts"; "Write scope.md"; }
+    { rank=same; "Ask Anti-Pattern phrase"; "SCOPE_LOCKED"; }
+
     "Intent received" -> "Ask name + command";
     "Ask name + command" -> "Ask triggers + verdicts";
     "Ask triggers + verdicts" -> "Ask Anti-Pattern phrase";

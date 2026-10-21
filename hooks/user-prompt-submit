@@ -16,5 +16,5 @@ prompt="$(printf '%s' "$payload" | jq -r '.prompt // empty' 2>/dev/null || true)
 [[ -z "$prompt" ]] && exit 0
 
 if detect_skill_intent "$prompt" "${SKILL_CHEAT_TRIGGER_KEYWORDS[@]}"; then
-  emit_context "SKILL-AUTHORING INTENT DETECTED. Invoke /skill-scope before any other action when building or scaffolding a skill."
+  emit_context "UserPromptSubmit" "SKILL-AUTHORING INTENT DETECTED. Invoke /skill-scope before any other action when building or scaffolding a skill."
 fi

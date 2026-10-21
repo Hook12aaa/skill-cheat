@@ -1,0 +1,22 @@
+digraph skill_voice_review_reviewer {
+    bgcolor="white";
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=14, style="filled", fillcolor="#f3f4f6", color="#374151", penwidth=1.3];
+    edge [fontname="Helvetica", fontsize=13, color="#6b7280"];
+    ranksep=0.28;
+    nodesep=0.22;
+    rankdir=TB;
+    "Dispatch voice-reviewer subagent" [shape=box];
+    "Agent verdict received?" [shape=diamond];
+    "INCONCLUSIVE" [shape=doublecircle];
+    "Merge lint and agent verdicts" [shape=box];
+    "3 consecutive REJECTs?" [shape=diamond];
+    "BLOCKED_VOICE" [shape=doublecircle];
+    "Emit combined verdict" [shape=doublecircle];
+    "Dispatch voice-reviewer subagent" -> "Agent verdict received?";
+    "Agent verdict received?" -> "INCONCLUSIVE" [label="no"];
+    "Agent verdict received?" -> "Merge lint and agent verdicts" [label="yes"];
+    "Merge lint and agent verdicts" -> "3 consecutive REJECTs?";
+    "3 consecutive REJECTs?" -> "BLOCKED_VOICE" [label="yes"];
+    "3 consecutive REJECTs?" -> "Emit combined verdict" [label="no"];
+}

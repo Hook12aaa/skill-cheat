@@ -1,0 +1,36 @@
+digraph skill_design {
+    bgcolor="white";
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=11, style="filled", fillcolor="#f3f4f6", color="#374151", penwidth=1.3];
+    edge [fontname="Helvetica", fontsize=10, color="#6b7280"];
+    ranksep=0.35;
+    nodesep=0.30;
+    rankdir=TB;
+    newrank=true;
+
+    "Read scope.md" [shape=box];
+    "Draft HARD-GATEs" [shape=box];
+    "Draft Core Principle" [shape=box];
+    "Draft Process Flow" [shape=box];
+    "Draft Checklist" [shape=box];
+    "Draft Gate Functions" [shape=box];
+    "Spawn reviewer" [shape=box];
+    "Write Integrity Block" [shape=box];
+    "Emit SHA-256 sidecar" [shape=box];
+    "DESIGN_LOCKED" [shape=doublecircle];
+
+    { rank=same; "Read scope.md"; "Draft Checklist"; "Write Integrity Block"; }
+    { rank=same; "Draft HARD-GATEs"; "Draft Gate Functions"; "Emit SHA-256 sidecar"; }
+    { rank=same; "Draft Core Principle"; "Spawn reviewer"; "DESIGN_LOCKED"; }
+    { rank=same; "Draft Process Flow"; }
+
+    "Read scope.md" -> "Draft HARD-GATEs";
+    "Draft HARD-GATEs" -> "Draft Core Principle";
+    "Draft Core Principle" -> "Draft Process Flow";
+    "Draft Process Flow" -> "Draft Checklist" [constraint=false];
+    "Draft Checklist" -> "Draft Gate Functions";
+    "Draft Gate Functions" -> "Spawn reviewer";
+    "Spawn reviewer" -> "Write Integrity Block" [constraint=false];
+    "Write Integrity Block" -> "Emit SHA-256 sidecar";
+    "Emit SHA-256 sidecar" -> "DESIGN_LOCKED";
+}

@@ -1,0 +1,18 @@
+digraph skill_voice_review_lint {
+    bgcolor="white";
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=13, style="filled", fillcolor="#f3f4f6", color="#374151", penwidth=1.3];
+    edge [fontname="Helvetica", fontsize=12, color="#6b7280"];
+    ranksep=0.40;
+    nodesep=0.30;
+    rankdir=TB;
+    "Receive target SKILL.md" [shape=box];
+    "Run lint.sh" [shape=box];
+    "Lint clean?" [shape=diamond];
+    "REJECT_CRITICAL with findings" [shape=doublecircle];
+    "Dispatch voice-reviewer subagent" [shape=box];
+    "Receive target SKILL.md" -> "Run lint.sh";
+    "Run lint.sh" -> "Lint clean?";
+    "Lint clean?" -> "REJECT_CRITICAL with findings" [label="critical findings"];
+    "Lint clean?" -> "Dispatch voice-reviewer subagent" [label="zero critical"];
+}

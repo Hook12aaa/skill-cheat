@@ -1,0 +1,254 @@
+// skill-cheat pipeline -- artifact lineage atlas
+// Flow A: who writes what, who reads what, and which verdict token passes the baton.
+// Render: landscape 11x17 at 300dpi; target ~4500x2700 px.
+
+digraph skill_cheat_artifact_lineage {
+    rankdir=LR;
+    compound=true;
+    newrank=true;
+    splines=spline;
+    nodesep=0.28;
+    ranksep=0.70;
+    pad=0.4;
+    bgcolor="white";
+    size="15.5,9.5!";
+    ratio=fill;
+
+    graph  [fontname="Helvetica", fontsize=14];
+    node   [fontname="Helvetica", fontsize=11, margin="0.10,0.06"];
+    edge   [fontname="Helvetica", fontsize=9, arrowsize=0.7];
+
+    labelloc="t";
+    label=<<FONT POINT-SIZE="22"><B>skill-cheat pipeline &mdash; artifact lineage &amp; verdict flow</B></FONT><BR/><FONT POINT-SIZE="11" COLOR="gray40">Stage box = work unit &nbsp;&bull;&nbsp; Note = artifact on disk &nbsp;&bull;&nbsp; Double-circle = verdict token &nbsp;&bull;&nbsp; Red = BLOCKED_* escape</FONT>>;
+
+    // ============================================================
+    // STAGE 1 -- skill-scope
+    // ============================================================
+    subgraph cluster_s1 {
+        label=<<B>STAGE 1 &mdash; skill-scope</B><BR/><FONT POINT-SIZE="9" COLOR="gray30">Lock the shape of the work</FONT>>;
+        style="rounded,filled"; fillcolor="#E8F1FB"; color="#1F5C99"; penwidth=2.0; fontsize=13;
+
+        s1_stage [label=<<B>/skill-scope</B><BR/><FONT POINT-SIZE="9">ask 6 Qs one-at-a-time</FONT>>,
+                  shape=box, style="filled,rounded", fillcolor="#1F5C99", fontcolor="white", penwidth=0];
+        s1_emit_eval [label=<<B>emit-eval-<BR/>skeleton.sh</B>>, shape=component, style=filled, fillcolor="#FFE8B8", color="#8B5A00"];
+
+        s1_scope_md [label="scope.md", shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+        s1_scope_json [label="scope.json", shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+        s1_eval_skeleton [label=<evals/eval-set-<BR/>skeleton.json>, shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+
+        s1_verdict [label="SCOPE_\nLOCKED", shape=doublecircle, style=filled, fillcolor="#C6F0C0", color="#1F7A1F", penwidth=2];
+        s1_blocked [label="BLOCKED_\nNEEDS_USER", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+        s1_incomplete [label="SCOPE_\nINCOMPLETE", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+
+        s1_stage -> s1_scope_md [label="produces", style=solid, penwidth=1.8];
+        s1_stage -> s1_scope_json [label="produces", style=solid, penwidth=1.8];
+        s1_stage -> s1_emit_eval [label="invokes", style=dotted];
+        s1_scope_json -> s1_emit_eval [label="reads", style=dashed, color="#555"];
+        s1_emit_eval -> s1_eval_skeleton [label="produces", style=solid, penwidth=1.8];
+        s1_stage -> s1_verdict [style=bold, color="#1F7A1F", penwidth=2];
+        s1_stage -> s1_blocked [label="missing\nAnti-Pattern", style=bold, color="#B00020", fontcolor="#B00020"];
+        s1_stage -> s1_incomplete [label="schema fail", style=bold, color="#B00020", fontcolor="#B00020"];
+    }
+
+    // ============================================================
+    // STAGE 2 -- skill-design
+    // ============================================================
+    subgraph cluster_s2 {
+        label=<<B>STAGE 2 &mdash; skill-design</B><BR/><FONT POINT-SIZE="9" COLOR="gray30">Write the immutable contract</FONT>>;
+        style="rounded,filled"; fillcolor="#F0E8FB"; color="#5B3B99"; penwidth=2.0; fontsize=13;
+
+        s2_stage [label=<<B>/skill-design</B><BR/><FONT POINT-SIZE="9">HARD-GATEs, Core Principle,<BR/>Process Flow, Checklist,<BR/>Integrity Block</FONT>>,
+                  shape=box, style="filled,rounded", fillcolor="#5B3B99", fontcolor="white", penwidth=0];
+        s2_reviewer [label=<<B>voice-reviewer</B><BR/><FONT POINT-SIZE="9">fresh subagent<BR/>(pre-lock)</FONT>>,
+                     shape=box3d, style=filled, fillcolor="#EADBFF", color="#5B3B99"];
+        s2_integrity [label=<<B>integrity-<BR/>hash.sh</B>>, shape=component, style=filled, fillcolor="#FFE8B8", color="#8B5A00"];
+        s2_emit_assert [label=<<B>emit-assertion-<BR/>skeleton.sh</B>>, shape=component, style=filled, fillcolor="#FFE8B8", color="#8B5A00"];
+
+        s2_design_md [label="design.md", shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+        s2_sidecar [label=<<B>design.md.sha256</B><BR/><FONT POINT-SIZE="9">tamper seal</FONT>>, shape=note, style="filled,bold", fillcolor="#FFF1CC", color="#B00020", penwidth=2];
+        s2_design_json [label="design.json", shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+        s2_assertion_skel [label=<evals/assertion-<BR/>skeleton.json>, shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+
+        s2_verdict [label="DESIGN_\nLOCKED", shape=doublecircle, style=filled, fillcolor="#C6F0C0", color="#1F7A1F", penwidth=2];
+        s2_rejected [label="DESIGN_\nREJECTED", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+        s2_blocked_r [label="BLOCKED_\nREVIEWER", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+
+        s2_stage -> s2_design_md [label="produces", style=solid, penwidth=1.8];
+        s2_stage -> s2_reviewer [label="dispatch", style=dotted];
+        s2_reviewer -> s2_stage [label="verdict", style=dotted];
+        s2_stage -> s2_integrity [label="invokes", style=dotted];
+        s2_design_md -> s2_integrity [label="bytes\nbetween markers", style=dashed, color="#555"];
+        s2_integrity -> s2_sidecar [label="produces", style=solid, penwidth=1.8];
+        s2_stage -> s2_design_json [label="produces", style=solid, penwidth=1.8];
+        s2_stage -> s2_emit_assert [label="invokes", style=dotted];
+        s2_design_json -> s2_emit_assert [label="reads", style=dashed, color="#555"];
+        s2_emit_assert -> s2_assertion_skel [label="produces", style=solid, penwidth=1.8];
+        s2_stage -> s2_verdict [style=bold, color="#1F7A1F", penwidth=2];
+        s2_reviewer -> s2_rejected [label="REJECT", style=bold, color="#B00020", fontcolor="#B00020"];
+        s2_reviewer -> s2_blocked_r [label="no resp.", style=bold, color="#B00020", fontcolor="#B00020"];
+    }
+
+    // ============================================================
+    // STAGE 3 -- skill-author
+    // ============================================================
+    subgraph cluster_s3 {
+        label=<<B>STAGE 3 &mdash; skill-author</B><BR/><FONT POINT-SIZE="9" COLOR="gray30">Fill body without touching contract</FONT>>;
+        style="rounded,filled"; fillcolor="#FBEEE0"; color="#A8550B"; penwidth=2.0; fontsize=13;
+
+        s3_stage [label=<<B>/skill-author</B><BR/><FONT POINT-SIZE="9">description, Anti-Pattern,<BR/>Step Details, Bottom Line</FONT>>,
+                  shape=box, style="filled,rounded", fillcolor="#A8550B", fontcolor="white", penwidth=0];
+        s3_verify [label=<<B>re-hash &amp;<BR/>compare</B>>, shape=diamond, style=filled, fillcolor="#FFE8B8", color="#8B5A00"];
+        s3_bash_n [label=<<B>bash -n</B><BR/><FONT POINT-SIZE="9">Bottom Line</FONT>>, shape=diamond, style=filled, fillcolor="#FFE8B8", color="#8B5A00"];
+
+        s3_skill_md [label=<<B>SKILL.md</B><BR/><FONT POINT-SIZE="9">(draft body)</FONT>>, shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+
+        s3_verdict [label="AUTHOR_\nDONE", shape=doublecircle, style=filled, fillcolor="#C6F0C0", color="#1F7A1F", penwidth=2];
+        s3_incomplete [label="AUTHOR_\nINCOMPLETE", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+        s3_tamper [label=<<B>BLOCKED_<BR/>TAMPER</B>>, shape=doublecircle, style="filled,bold", fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020", penwidth=3];
+
+        s3_stage -> s3_verify [label="first", style=dotted];
+        s3_verify -> s3_tamper [label="drift", style=bold, color="#B00020", fontcolor="#B00020", penwidth=2];
+        s3_verify -> s3_stage [label="match", style=dotted, color="#1F7A1F"];
+        s3_stage -> s3_skill_md [label="produces", style=solid, penwidth=1.8];
+        s3_stage -> s3_bash_n [label="extract", style=dotted];
+        s3_bash_n -> s3_stage [label="fail", style=dotted, color="#B00020"];
+        s3_bash_n -> s3_verdict [label="pass", style=bold, color="#1F7A1F", penwidth=2];
+        s3_stage -> s3_incomplete [label="gap", style=bold, color="#B00020", fontcolor="#B00020"];
+    }
+
+    // ============================================================
+    // STAGE 4 -- skill-voice-review
+    // ============================================================
+    subgraph cluster_s4 {
+        label=<<B>STAGE 4 &mdash; skill-voice-review</B><BR/><FONT POINT-SIZE="9" COLOR="gray30">Structural distrust &mdash; author never grades author</FONT>>;
+        style="rounded,filled"; fillcolor="#E4F4EE"; color="#1F7A5C"; penwidth=2.0; fontsize=13;
+
+        s4_stage [label=<<B>/skill-voice-review</B><BR/><FONT POINT-SIZE="9">lint + fresh subagent,<BR/>merge verdicts</FONT>>,
+                  shape=box, style="filled,rounded", fillcolor="#1F7A5C", fontcolor="white", penwidth=0];
+        s4_lint [label=<<B>lint.sh /<BR/>lint.js</B>>, shape=component, style=filled, fillcolor="#D6EEE4", color="#1F7A5C"];
+        s4_reviewer [label=<<B>voice-reviewer<BR/>subagent</B><BR/><FONT POINT-SIZE="9">fresh context</FONT>>,
+                     shape=box3d, style=filled, fillcolor="#D6EEE4", color="#1F7A5C"];
+        s4_bench_engine [label=<<B>run-eval.js +<BR/>aggregate.js</B><BR/><FONT POINT-SIZE="9">Plan 5 engine</FONT>>,
+                         shape=component, style=filled, fillcolor="#D6EEE4", color="#1F7A5C"];
+
+        s4_lint_report [label=<lint report<BR/>(JSON)>, shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+        s4_reviewer_verdict [label=<voice-reviewer<BR/>verdict + findings>, shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+        s4_bench_plan [label=<<B>benchmark-plan.json</B><BR/><FONT POINT-SIZE="9">cases + assertions +<BR/>results + aggregate</FONT>>, shape=note, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+        s4_bench_sidecar [label=<<B>benchmark-plan.<BR/>md.sha256</B>>, shape=note, style="filled,bold", fillcolor="#FFF1CC", color="#B00020", penwidth=2];
+
+        s4_accept [label="ACCEPT", shape=doublecircle, style=filled, fillcolor="#C6F0C0", color="#1F7A1F", penwidth=2];
+        s4_accept_minor [label="ACCEPT_\nWITH_MINOR", shape=doublecircle, style=filled, fillcolor="#E0F5CF", color="#4A7A1F"];
+        s4_reject_c [label="REJECT_\nCRITICAL", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+        s4_reject_i [label="REJECT_\nIMPORTANT", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+        s4_inconclusive [label="INCONCLU-\nSIVE", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+        s4_blocked [label=<<B>BLOCKED_<BR/>VOICE</B>>, shape=doublecircle, style="filled,bold", fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020", penwidth=3];
+
+        s4_stage -> s4_lint [label="invokes", style=dotted];
+        s4_lint -> s4_lint_report [label="produces", style=solid, penwidth=1.8];
+        s4_lint_report -> s4_stage [label="reads", style=dashed, color="#555"];
+        s4_stage -> s4_reviewer [label="dispatch", style=dotted];
+        s4_reviewer -> s4_reviewer_verdict [label="produces", style=solid, penwidth=1.8];
+        s4_reviewer_verdict -> s4_stage [label="merge", style=dashed, color="#555"];
+        s4_stage -> s4_bench_engine [label="dispatch", style=dotted];
+        s4_bench_engine -> s4_bench_plan [label="produces", style=solid, penwidth=1.8];
+        s4_bench_engine -> s4_bench_sidecar [label="produces", style=solid, penwidth=1.8];
+
+        s4_stage -> s4_accept [style=bold, color="#1F7A1F", penwidth=2];
+        s4_stage -> s4_accept_minor [style=bold, color="#4A7A1F"];
+        s4_stage -> s4_reject_c [label="lint crit", style=bold, color="#B00020", fontcolor="#B00020"];
+        s4_stage -> s4_reject_i [style=bold, color="#B00020", fontcolor="#B00020"];
+        s4_stage -> s4_inconclusive [label="no agent", style=bold, color="#B00020", fontcolor="#B00020"];
+        s4_stage -> s4_blocked [label="3 consec.\nREJECTs", style=bold, color="#B00020", fontcolor="#B00020", penwidth=2];
+    }
+
+    // ============================================================
+    // STAGE 5 -- skill-scaffold
+    // ============================================================
+    subgraph cluster_s5 {
+        label=<<B>STAGE 5 &mdash; skill-scaffold</B><BR/><FONT POINT-SIZE="9" COLOR="gray30">Emit canonical tree exactly</FONT>>;
+        style="rounded,filled"; fillcolor="#FBE4ED"; color="#8B1F5C"; penwidth=2.0; fontsize=13;
+
+        s5_stage [label=<<B>/skill-scaffold</B><BR/><FONT POINT-SIZE="9">verdict + scope mode,<BR/>write canonical tree</FONT>>,
+                  shape=box, style="filled,rounded", fillcolor="#8B1F5C", fontcolor="white", penwidth=0];
+        s5_gate_accept [label="verdict\n== ACCEPT?", shape=diamond, style=filled, fillcolor="#F7D4E3", color="#8B1F5C"];
+        s5_gate_overwrite [label="plugin.json\nexists?", shape=diamond, style=filled, fillcolor="#F7D4E3", color="#8B1F5C"];
+        s5_bash_n [label=<<B>bash -n</B><BR/><FONT POINT-SIZE="9">authored BL</FONT>>, shape=diamond, style=filled, fillcolor="#F7D4E3", color="#8B1F5C"];
+
+        s5_tree [label=<<B>plugin tree on disk</B><BR/><FONT POINT-SIZE="9">.claude-plugin/plugin.json<BR/>CLAUDE.md, hooks/*,<BR/>skills/&lt;name&gt;/SKILL.md,<BR/>commands/&lt;name&gt;.md, tests/*</FONT>>, shape=folder, style=filled, fillcolor="#FFFBEA", color="#8B5A00"];
+
+        s5_complete [label="SCAFFOLD_\nCOMPLETE", shape=doublecircle, style=filled, fillcolor="#C6F0C0", color="#1F7A1F", penwidth=2.5];
+        s5_incomplete [label="SCAFFOLD_\nINCOMPLETE", shape=doublecircle, style=filled, fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020"];
+        s5_blocked_ow [label=<<B>BLOCKED_<BR/>OVERWRITE</B>>, shape=doublecircle, style="filled,bold", fillcolor="#FBD4D4", color="#B00020", fontcolor="#B00020", penwidth=3];
+
+        s5_stage -> s5_gate_accept [style=dotted];
+        s5_gate_accept -> s5_incomplete [label="not\nACCEPT", style=bold, color="#B00020", fontcolor="#B00020"];
+        s5_gate_accept -> s5_gate_overwrite [label="ACCEPT", style=dotted, color="#1F7A1F"];
+        s5_gate_overwrite -> s5_blocked_ow [label="user\nsays no", style=bold, color="#B00020", fontcolor="#B00020"];
+        s5_gate_overwrite -> s5_tree [label="ok", style=solid, penwidth=1.8];
+        s5_tree -> s5_bash_n [label="verify", style=dotted];
+        s5_bash_n -> s5_incomplete [label="fail", style=bold, color="#B00020", fontcolor="#B00020"];
+        s5_bash_n -> s5_complete [label="pass", style=bold, color="#1F7A1F", penwidth=2.5];
+    }
+
+    // ============================================================
+    // CROSS-STAGE EDGES (constraint=false so they don't distort layout)
+    // ============================================================
+
+    // scope.md (human trace) + scope.json (machine-read) feed downstream
+    s1_scope_md -> s2_stage [label="reads", style=dashed, color="#444", constraint=false];
+    s1_scope_json -> s5_stage [label="reads\nplugin-mode", style=dashed, color="#444", constraint=false];
+    s1_scope_json -> s4_bench_engine [label="skillName", style=dashed, color="#444", constraint=false];
+    s1_eval_skeleton -> s4_bench_engine [label="cases[] seed", style=dashed, color="#1F5C99", penwidth=1.6, constraint=false];
+
+    // SHA-256 integrity loop: design -> author rehash vs. sidecar
+    s2_design_md -> s3_stage [label="reads", style=dashed, color="#444", constraint=false];
+    s2_design_json -> s3_stage [label="reads", style=dashed, color="#444", constraint=false];
+    s2_sidecar -> s3_verify [label="expected\nhash", style=dashed, color="#B00020", penwidth=2, constraint=false];
+
+    // Assertion skeleton feeds benchmark
+    s2_assertion_skel -> s4_bench_engine [label="assertions[] seed", style=dashed, color="#5B3B99", penwidth=1.6, constraint=false];
+
+    // Author output feeds lint + reviewer + scaffold
+    s3_skill_md -> s4_lint [label="lint target", style=dashed, color="#444", constraint=false];
+    s3_skill_md -> s4_reviewer [label="review target", style=dashed, color="#444", constraint=false];
+    s3_skill_md -> s5_stage [label="reads\nbody + BL fence", style=dashed, color="#444", constraint=false];
+
+    // ACCEPT is a hard precondition for scaffold
+    s4_accept -> s5_stage [label="required\nprecondition", style=bold, color="#1F7A1F", penwidth=2.5, constraint=false];
+    // ACCEPT_WITH_MINOR forces a rerun before scaffold can proceed
+    s4_accept_minor -> s4_stage [label="rerun", style="bold,dashed", color="#4A7A1F", constraint=false];
+
+    // Verdict batons -- the happy path backbone
+    s1_verdict -> s2_stage [label="baton", style=bold, color="#1F7A1F", penwidth=2.5, constraint=false];
+    s2_verdict -> s3_stage [label="baton", style=bold, color="#1F7A1F", penwidth=2.5, constraint=false];
+    s3_verdict -> s4_stage [label="baton", style=bold, color="#1F7A1F", penwidth=2.5, constraint=false];
+
+    // ============================================================
+    // LEGEND -- use HTML-like table for a compact, bounded panel
+    // ============================================================
+    legend [shape=none, margin=0, label=<
+      <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="6" CELLPADDING="4" COLOR="#333333" BGCOLOR="#F5F5F5">
+        <TR><TD COLSPAN="8" ALIGN="CENTER"><FONT POINT-SIZE="14"><B>Legend</B></FONT></TD></TR>
+        <TR>
+          <TD BGCOLOR="#666666"><FONT COLOR="white"><B>stage</B></FONT></TD>
+          <TD BGCOLOR="#FFFBEA">artifact (note)</TD>
+          <TD BGCOLOR="#FFE8B8">emitter script</TD>
+          <TD BGCOLOR="#EADBFF">subagent</TD>
+          <TD BGCOLOR="#FFE8B8">gate / check</TD>
+          <TD BGCOLOR="#C6F0C0"><B>happy verdict</B></TD>
+          <TD BGCOLOR="#FBD4D4"><FONT COLOR="#B00020"><B>BLOCKED_* verdict</B></FONT></TD>
+          <TD BGCOLOR="#FFF1CC"><FONT COLOR="#B00020"><B>SHA-256 seal</B></FONT></TD>
+        </TR>
+        <TR>
+          <TD COLSPAN="2" ALIGN="LEFT"><B>solid</B> &rarr; produces on disk</TD>
+          <TD COLSPAN="2" ALIGN="LEFT"><B>dashed</B> &rarr; reads artifact</TD>
+          <TD COLSPAN="2" ALIGN="LEFT"><B>dotted</B> &rarr; invokes / dispatches</TD>
+          <TD ALIGN="LEFT"><FONT COLOR="#1F7A1F"><B>bold green</B></FONT> &rarr; verdict baton</TD>
+          <TD ALIGN="LEFT"><FONT COLOR="#B00020"><B>bold red</B></FONT> &rarr; BLOCKED_* escape</TD>
+        </TR>
+        <TR>
+          <TD COLSPAN="8" ALIGN="LEFT"><FONT POINT-SIZE="10" COLOR="gray30">Dashed red from <B>design.md.sha256</B> to Stage 3 re-hash step = the tamper-seal verification loop. Drift &rarr; BLOCKED_TAMPER.</FONT></TD>
+        </TR>
+      </TABLE>
+    >];
+}

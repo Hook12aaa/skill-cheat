@@ -10,43 +10,7 @@ mainfont: "Helvetica Neue"
 monofont: "Menlo"
 ---
 
-# skill-cheat — Field Manual
-
-> A comprehensive snapshot of the skill-cheat plugin as it exists today — every skill, every rule, every schematic, every script. Written to be read on an iPad with a pencil in hand.
-
----
-
-## What this manual is
-
-skill-cheat is a Claude Code plugin that scaffolds other Claude Code skills in an imperative, gate-driven, contract-first style. This manual is a single source of truth for the project's current state: seven skills, twenty-one lint rules, five slash commands, four reviewer subagents, a two-hook SessionStart/UserPromptSubmit injector, a behavioral benchmark engine, and a twenty-nine-test safety net. Each part is self-contained so you can read in any order; the recommended reading order is Part I → Part X → whichever stage feels most open.
-
-## Table of Contents
-
-- **Part I** — Project Overview *(architecture, hooks, manifest, commit history, design principles)*
-- **Part II** — Stage 1: `skill-scope` *(lock the shape — name, triggers, verdicts, Anti-Pattern, path, plugin-mode)*
-- **Part III** — Stage 2: `skill-design` *(lock the immutable contract — HARD-GATEs, Integrity Block, SHA-256 sidecar)*
-- **Part IV** — Stage 3: `skill-author` *(fill the body under the locked Integrity Block; pushy descriptions; canonical 13-section anatomy)*
-- **Part V** — Stage 4: `skill-voice-review` *(declarative lint engine, all 21 rules, denylists, allowlists, detector catalog)*
-- **Part VI** — Reviewer agents and benchmark engine *(voice-reviewer persona, grader/comparator/analyzer trio, run-eval.js, aggregate-benchmark.js, git-worktree setup)*
-- **Part VII** — `receiving-voice-review` and `skill-scaffold` *(fix-loop discipline; terminal write stage; plugin skeleton + hook templates)*
-- **Part VIII** — Bootstrap and slash commands *(using-skill-cheat; five command stubs; trigger hierarchy)*
-- **Part IX** — Test suite *(29 tests, 21 fixtures, rule-coverage invariant, dogfood self-audit)*
-- **Part X** — Evolution, philosophy, and open questions *(five phases of development; 8 load-bearing open tensions to think through)*
-
-## How to use this PDF on the iPad
-
-1. Skim the ToC above. Mark the three parts that feel least settled.
-2. Read Part I and Part X cover to cover — they are the context every other part assumes.
-3. Drill into your marked parts.
-4. Treat Part V as a reference — flip to a rule ID; don't read linearly.
-5. Open questions are in Part X §6. Each one is a decision you can redirect.
-
-\newpage
-
-
-\newpage
-
-## Part I — Project Overview
+## Part I — Project Overview {.part-heading}
 
 ### 1. What skill-cheat is
 
@@ -213,7 +177,7 @@ The evolution is tooling-first, not skills-first. The plugin is built in numbere
 - **Self-contained, four file types only** — the scaffolder writes `.md`, `.js`, `.sh`, and `.json` exclusively; the plugin has no runtime dependency on other plugins and ships its own hook entry points, lint engine, subagent prompts, and benchmark runtime.
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part II — Stage 1: skill-scope
 
@@ -250,8 +214,26 @@ Lock the shape of the work before any design begins.
 
 ## Process Flow
 
-![Stage 1 — skill-scope flow](diagrams/01-skill_scope.png){ width=75% }
-
+```dot
+digraph skill_scope {
+    rankdir=TB;
+    "Intent received" [shape=box];
+    "Ask name + command" [shape=box];
+    "Ask triggers + verdicts" [shape=box];
+    "Ask Anti-Pattern phrase" [shape=box];
+    "Ask target project path" [shape=box];
+    "Ask new plugin or existing?" [shape=box];
+    "Write scope.md" [shape=box];
+    "SCOPE_LOCKED" [shape=doublecircle];
+    "Intent received" -> "Ask name + command";
+    "Ask name + command" -> "Ask triggers + verdicts";
+    "Ask triggers + verdicts" -> "Ask Anti-Pattern phrase";
+    "Ask Anti-Pattern phrase" -> "Ask target project path";
+    "Ask target project path" -> "Ask new plugin or existing?";
+    "Ask new plugin or existing?" -> "Write scope.md";
+    "Write scope.md" -> "SCOPE_LOCKED";
+}
+```
 
 ## Checklist
 
@@ -341,7 +323,11 @@ The wrapper is a thin frontmatter-plus-one-line shim: typing `/skill-scope` disp
 
 ### 4. Process flow schematic
 
-![Stage 1 — skill-scope flow](diagrams/02-skill_scope.png){ width=75% }
+
+<figure class="diagram">
+  <img src="diagrams/01-skill_scope.png" alt="Stage 1 flow — skill-scope"/>
+  <figcaption>Stage 1 flow — skill-scope</figcaption>
+</figure>
 
 
 Control flow is strictly linear: each box is a single atomic question to the user, and no edge loops backwards. The sole sink state is the `SCOPE_LOCKED` double-circle, reached only after all six inputs have been collected and written to disk. There is no branch for "skip" — every skill walks the full path.
@@ -433,7 +419,7 @@ echo "VERDICT: SCOPE_LOCKED"
 The literal final line of a successful run: once all six checklist items are written and the schema validates, Claude echoes this token and the pipeline hands control to `/skill-design`.
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part III — Stage 2: `skill-design`
 
@@ -474,8 +460,30 @@ Write the immutable contract before writing the body.
 
 ## Process Flow
 
-![Stage 2 — skill-design flow](diagrams/03-skill_design.png){ width=75% }
-
+```dot
+digraph skill_design {
+    rankdir=TB;
+    "Read scope.md" [shape=box];
+    "Draft HARD-GATEs" [shape=box];
+    "Draft Core Principle" [shape=box];
+    "Draft Process Flow" [shape=box];
+    "Draft Checklist" [shape=box];
+    "Draft Gate Functions" [shape=box];
+    "Spawn reviewer" [shape=box];
+    "Write Integrity Block" [shape=box];
+    "Emit SHA-256 sidecar" [shape=box];
+    "DESIGN_LOCKED" [shape=doublecircle];
+    "Read scope.md" -> "Draft HARD-GATEs";
+    "Draft HARD-GATEs" -> "Draft Core Principle";
+    "Draft Core Principle" -> "Draft Process Flow";
+    "Draft Process Flow" -> "Draft Checklist";
+    "Draft Checklist" -> "Draft Gate Functions";
+    "Draft Gate Functions" -> "Spawn reviewer";
+    "Spawn reviewer" -> "Write Integrity Block";
+    "Write Integrity Block" -> "Emit SHA-256 sidecar";
+    "Emit SHA-256 sidecar" -> "DESIGN_LOCKED";
+}
+```
 
 ## Checklist
 
@@ -593,7 +601,11 @@ Invoke the `skill-cheat:skill-design` skill.
 
 ### 4. Process flow schematic
 
-![Stage 2 — skill-design flow](diagrams/04-skill_design.png){ width=75% }
+
+<figure class="diagram">
+  <img src="diagrams/02-skill_design.png" alt="Stage 2 flow — skill-design"/>
+  <figcaption>Stage 2 flow — skill-design</figcaption>
+</figure>
 
 
 Control flow is strictly linear, top-to-bottom: scope ingestion, six drafting steps, a blocking reviewer dispatch, then two finalization steps that produce the audit trail. The `Spawn reviewer` node is the only place where an external verdict can redirect flow back to earlier nodes; if the reviewer rejects, the state is not recorded in the graph but emits `DESIGN_REJECTED` and returns the author to `Draft HARD-GATEs`. SHA-256 hashing fits after the Integrity Block is written and before the terminal `DESIGN_LOCKED` verdict — the hash is both the last authored byte stream and the tamper-evident seal the downstream stages verify.
@@ -748,7 +760,7 @@ fi
 ```
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part IV — Stage 3: `skill-author`
 
@@ -789,8 +801,33 @@ Fill the body without changing the locked contract.
 
 ## Process Flow
 
-![Stage 3 — skill-author flow](diagrams/05-skill_author.png){ width=75% }
-
+```dot
+digraph skill_author {
+    rankdir=TB;
+    "Read design.md" [shape=box];
+    "Verify sidecar hash" [shape=diamond];
+    "BLOCKED_TAMPER" [shape=doublecircle];
+    "Draft pushy description" [shape=box];
+    "Draft Anti-Pattern" [shape=box];
+    "Draft Step Details" [shape=box];
+    "Draft Rationalization Table" [shape=box];
+    "Draft Red Flags" [shape=box];
+    "Draft Bottom Line" [shape=box];
+    "Run bash -n" [shape=diamond];
+    "AUTHOR_DONE" [shape=doublecircle];
+    "Read design.md" -> "Verify sidecar hash";
+    "Verify sidecar hash" -> "BLOCKED_TAMPER" [label="drift"];
+    "Verify sidecar hash" -> "Draft pushy description" [label="clean"];
+    "Draft pushy description" -> "Draft Anti-Pattern";
+    "Draft Anti-Pattern" -> "Draft Step Details";
+    "Draft Step Details" -> "Draft Rationalization Table";
+    "Draft Rationalization Table" -> "Draft Red Flags";
+    "Draft Red Flags" -> "Draft Bottom Line";
+    "Draft Bottom Line" -> "Run bash -n";
+    "Run bash -n" -> "AUTHOR_DONE" [label="pass"];
+    "Run bash -n" -> "Draft Bottom Line" [label="fail"];
+}
+```
 
 ## Checklist
 
@@ -899,7 +936,11 @@ Invoke the `skill-cheat:skill-author` skill.
 
 ### 4. Process flow schematic
 
-![Stage 3 — skill-author flow](diagrams/06-skill_author.png){ width=75% }
+
+<figure class="diagram">
+  <img src="diagrams/03-skill_author.png" alt="Stage 3 flow — skill-author"/>
+  <figcaption>Stage 3 flow — skill-author</figcaption>
+</figure>
 
 
 Drift handling is structural, not advisory. The `Verify sidecar hash` diamond has exactly two edges: `drift` routes straight to the `BLOCKED_TAMPER` double-circle terminal, while `clean` unlocks the drafting chain. There is no bypass — once the sidecar fails the recomputed hash, the graph has no path back to `AUTHOR_DONE` in the same run; remediation requires a fresh `skill-design` pass. The `Run bash -n` diamond adds a second self-healing loop: a failing syntax check kicks authoring back to `Draft Bottom Line` rather than permitting a broken stage-exit script downstream.
@@ -1081,7 +1122,7 @@ echo "VERDICT: AUTHOR_DONE"
 ```
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part V — Stage 4: skill-voice-review
 
@@ -1091,7 +1132,7 @@ echo "VERDICT: AUTHOR_DONE"
 
 ### 2. SKILL.md in full
 
-```markdown
+````markdown
 ---
 name: skill-voice-review
 description: Stage 4 of a skill-cheat pipeline. Trigger /skill-voice-review whenever the user says "review my SKILL.md I just wrote", "voice-check my authored draft", "run lint and reviewer on my draft", "audit my authored draft for drift", or "check imperative voice before shipping". Fires only after AUTHOR_DONE is in hand. Runs lint.sh first to catch structural violations, then dispatches a fresh voice-reviewer subagent with no authoring context so an author never grades an author's own work, and merges both verdicts into one. Emits ACCEPT, ACCEPT_WITH_MINOR, REJECT_CRITICAL, REJECT_IMPORTANT, INCONCLUSIVE, or BLOCKED_VOICE.
@@ -1122,8 +1163,32 @@ Structural distrust — the author does not evaluate the author's work.
 
 ## Process Flow
 
-![Flow diagram 7](diagrams/07-skill_voice_review.png){ width=75% }
-
+```dot
+digraph skill_voice_review {
+    rankdir=TB;
+    "Receive target SKILL.md" [shape=box];
+    "Run lint.sh" [shape=box];
+    "Lint clean?" [shape=diamond];
+    "REJECT_CRITICAL with findings" [shape=doublecircle];
+    "Dispatch voice-reviewer subagent" [shape=box];
+    "Agent verdict received?" [shape=diamond];
+    "INCONCLUSIVE" [shape=doublecircle];
+    "Merge lint and agent verdicts" [shape=box];
+    "3 consecutive REJECTs?" [shape=diamond];
+    "BLOCKED_VOICE" [shape=doublecircle];
+    "Emit combined verdict" [shape=doublecircle];
+    "Receive target SKILL.md" -> "Run lint.sh";
+    "Run lint.sh" -> "Lint clean?";
+    "Lint clean?" -> "REJECT_CRITICAL with findings" [label="critical findings"];
+    "Lint clean?" -> "Dispatch voice-reviewer subagent" [label="zero critical"];
+    "Dispatch voice-reviewer subagent" -> "Agent verdict received?";
+    "Agent verdict received?" -> "INCONCLUSIVE" [label="no"];
+    "Agent verdict received?" -> "Merge lint and agent verdicts" [label="yes"];
+    "Merge lint and agent verdicts" -> "3 consecutive REJECTs?";
+    "3 consecutive REJECTs?" -> "BLOCKED_VOICE" [label="yes"];
+    "3 consecutive REJECTs?" -> "Emit combined verdict" [label="no"];
+}
+```
 
 ## Checklist
 
@@ -1215,7 +1280,7 @@ bash skills/skill-voice-review/scripts/lint.sh "$target" > "$report"
 verdict="$(jq -r '.verdict' "$report")"
 echo "VERDICT: ${verdict}"
 ```
-```
+````
 
 ### 3. Slash command wrapper
 
@@ -1229,7 +1294,15 @@ Invoke the `skill-cheat:skill-voice-review` skill.
 
 ### 4. Process flow schematic
 
-![Flow diagram 8](diagrams/08-skill_voice_review.png){ width=75% }
+
+<figure class="diagram">
+  <img src="diagrams/04a-skill_voice_review_lint.png" alt="Stage 4a — lint gate"/>
+  <figcaption>Stage 4a — lint gate (skill-voice-review)</figcaption>
+</figure>
+<figure class="diagram">
+  <img src="diagrams/04b-skill_voice_review_reviewer.png" alt="Stage 4b — voice-reviewer dispatch"/>
+  <figcaption>Stage 4b — voice-reviewer dispatch and verdict merge</figcaption>
+</figure>
 
 
 The graph makes the lint-first / agent-second ordering load-bearing. Lint has a hard short-circuit: any CRITICAL finding terminates the run with `REJECT_CRITICAL` and the subagent is never dispatched, because subagent tokens are scarce and an author-grades-author review on a structurally-broken draft is noise. Only when the structural layer is clean does the voice-reviewer fire on a fresh context. At the merge step the verdict ladder decides the downstream hand-off: `ACCEPT` and `ACCEPT_WITH_MINOR` pass the draft to Stage 5 (`receiving-voice-review`) with, respectively, zero required edits or a bounded list of minor edits; `REJECT_IMPORTANT` and `REJECT_CRITICAL` return the draft to the author with findings attached and increment the session REJECT counter that ultimately trips the 3-REJECT `BLOCKED_VOICE` fuse.
@@ -2161,7 +2234,7 @@ echo "VERDICT: ${verdict}"
 ```
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part VI — Reviewer Agents and Benchmark Engine
 
@@ -2442,7 +2515,7 @@ receiving-voice-review (Part VII)
 ```
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part VII — Receiving Review and Scaffold (closing the loop)
 
@@ -2485,8 +2558,33 @@ Technical correctness over social comfort.
 
 ## Process Flow
 
-![receiving-voice-review flow](diagrams/09-receiving_voice_review.png){ width=75% }
-
+```dot
+digraph receiving_voice_review {
+    rankdir=TB;
+    "Receive findings" [shape=box];
+    "Verify each against SKILL.md" [shape=box];
+    "Verified?" [shape=diamond];
+    "Push back with technical reason" [shape=box];
+    "Decide fix or push back" [shape=box];
+    "Implement fix" [shape=box];
+    "Re-run lint" [shape=box];
+    "Lint clean?" [shape=diamond];
+    "Fix lint error" [shape=box];
+    "Emit FEEDBACK_PROCESSED" [shape=doublecircle];
+    "Receive findings" -> "Verify each against SKILL.md";
+    "Verify each against SKILL.md" -> "Verified?";
+    "Verified?" -> "Decide fix or push back" [label="yes"];
+    "Verified?" -> "Push back with technical reason" [label="no match found"];
+    "Decide fix or push back" -> "Implement fix" [label="fix"];
+    "Decide fix or push back" -> "Push back with technical reason" [label="push back"];
+    "Push back with technical reason" -> "Re-run lint";
+    "Implement fix" -> "Re-run lint";
+    "Re-run lint" -> "Lint clean?";
+    "Lint clean?" -> "Fix lint error" [label="no"];
+    "Fix lint error" -> "Re-run lint";
+    "Lint clean?" -> "Emit FEEDBACK_PROCESSED" [label="yes"];
+}
+```
 
 ## Checklist
 
@@ -2534,6 +2632,13 @@ esac
 ````
 
 ### 3. Process flow
+
+
+<figure class="diagram">
+  <img src="diagrams/05-receiving_voice_review.png" alt="receiving-voice-review flow"/>
+  <figcaption>receiving-voice-review flow</figcaption>
+</figure>
+
 
 The `Verified?` diamond is the verify-before-implementing gate: a finding that fails verification never reaches the fix path, it goes to a technical pushback instead. The fix path and the pushback path both drain into the same `Re-run lint` node, and the `Lint clean?` diamond creates a mandatory re-lint loop — every fix is individually re-verified by lint, and any new lint error created by a fix must be resolved before the next finding is touched. Only a clean re-lint lets the skill emit `FEEDBACK_PROCESSED`.
 
@@ -2603,8 +2708,35 @@ Emit the canonical tree exactly; refuse anything off-grid.
 
 ## Process Flow
 
-![Stage 5 — skill-scaffold flow](diagrams/10-skill_scaffold.png){ width=75% }
-
+```dot
+digraph skill_scaffold {
+    rankdir=TB;
+    "Read voice-review verdict" [shape=box];
+    "Verdict is ACCEPT?" [shape=diamond];
+    "Read scope mode from scope.md" [shape=box];
+    "Scope mode read?" [shape=diamond];
+    "New plugin?" [shape=diamond];
+    "Emit full canonical tree" [shape=box];
+    "Emit skill-only delta" [shape=box];
+    "Run authored Bottom Line" [shape=box];
+    "Bottom Line passes bash -n?" [shape=diamond];
+    "SCAFFOLD_INCOMPLETE" [shape=doublecircle];
+    "SCAFFOLD_COMPLETE" [shape=doublecircle];
+    "Read voice-review verdict" -> "Verdict is ACCEPT?";
+    "Verdict is ACCEPT?" -> "SCAFFOLD_INCOMPLETE" [label="not ACCEPT"];
+    "Verdict is ACCEPT?" -> "Read scope mode from scope.md" [label="ACCEPT"];
+    "Read scope mode from scope.md" -> "Scope mode read?";
+    "Scope mode read?" -> "SCAFFOLD_INCOMPLETE" [label="not found"];
+    "Scope mode read?" -> "New plugin?" [label="found"];
+    "New plugin?" -> "Emit full canonical tree" [label="yes"];
+    "New plugin?" -> "Emit skill-only delta" [label="no"];
+    "Emit full canonical tree" -> "Run authored Bottom Line";
+    "Emit skill-only delta" -> "Run authored Bottom Line";
+    "Run authored Bottom Line" -> "Bottom Line passes bash -n?";
+    "Bottom Line passes bash -n?" -> "SCAFFOLD_INCOMPLETE" [label="fail"];
+    "Bottom Line passes bash -n?" -> "SCAFFOLD_COMPLETE" [label="pass"];
+}
+```
 
 ## Checklist
 
@@ -2639,7 +2771,16 @@ Emit the canonical tree exactly; refuse anything off-grid.
 - "plugin.json is auto-generated so overwriting is safe"
 ````
 
-### 9. Hard gates (all three)
+### 9. Process flow schematic
+
+
+<figure class="diagram">
+  <img src="diagrams/06-skill_scaffold.png" alt="Stage 5 flow — skill-scaffold"/>
+  <figcaption>Stage 5 flow — skill-scaffold</figcaption>
+</figure>
+
+
+### 10. Hard gates (all three)
 
 1. *Do NOT write to the target project if voice-review did not return ACCEPT. STOP and rerun voice-review.*
 2. *Never write a file with extension outside `.md`, `.js`, `.sh`, `.json`. STOP and correct the write.*
@@ -2744,7 +2885,7 @@ fi
 | "Ship it to disk" | Stage 5 — `skill-scaffold` | Canonical plugin tree written at target root | `SCAFFOLD_COMPLETE` / `SCAFFOLD_INCOMPLETE` / `BLOCKED_OVERWRITE` | Plugin installed |
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part VIII — Bootstrap and Slash Commands
 
@@ -2754,7 +2895,7 @@ fi
 
 ### 2. `using-skill-cheat` SKILL.md in full
 
-```markdown
+````markdown
 ---
 name: using-skill-cheat
 description: Bootstrap context for skill-cheat, auto-loaded at session start via SessionStart hook and never user-triggered. Stay in context whenever a user says "I want to build a skill", "let's make a new plugin", "scaffold a Claude Code skill", or "turn this workflow into a skill", and route every such request through skill-cheat's 5-stage pipeline starting with /skill-scope. Downstream stages return SCOPE_LOCKED, DESIGN_LOCKED, AUTHOR_DONE, ACCEPT, and SCAFFOLD_COMPLETE — only SCAFFOLD_COMPLETE writes a SKILL.md to disk.
@@ -2817,7 +2958,7 @@ Skip the pipeline for: reference file edits, test fixtures, CLAUDE.md notes, doc
 ```bash
 echo "VERDICT: BOOTSTRAP_READY"
 ```
-```
+````
 
 ### 3. Why the bootstrap gets lint exemptions
 
@@ -2938,7 +3079,7 @@ User types:
 Two trigger paths converge on the same skill. The SessionStart hook pre-loads the bootstrap so the HARD-GATEs are already in context; the UserPromptSubmit hook watches live prompts for authoring keywords and injects a reminder when it sees one. Either way, Claude ends up at `/skill-scope`.
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part IX — Test Suite
 
@@ -3174,7 +3315,7 @@ Coverage looks complete against the contracts the plugin currently ships. Every 
 3. Run `bash tests/run-tests.sh` from the repo root to confirm the new file is discovered.
 
 
-\newpage
+<div class="page-break"></div>
 
 ## Part X — Evolution, Philosophy, and Open Questions
 

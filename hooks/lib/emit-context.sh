@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 emit_context() {
-  local text="$1"
-  # Invariant: stdout must be a single valid JSON object with additionalContext set.
-  jq -nc --arg t "$text" \
-    '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $t}}'
+  local event="$1"
+  local text="$2"
+  jq -nc --arg e "$event" --arg t "$text" \
+    '{hookSpecificOutput: {hookEventName: $e, additionalContext: $t}}'
 }

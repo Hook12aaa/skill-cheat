@@ -1,10 +1,15 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "skill-cheat-local",
   "description": "Local marketplace for the skill-cheat plugin during development.",
+  "owner": { "name": "hook" },
   "plugins": [
     {
       "name": "skill-cheat",
-      "path": "."
+      "description": "Scaffolds Claude Code skills in the imperative, gate-driven, contract-first style. Self-triggers on skill-authoring prompts.",
+      "category": "developer-tools",
+      "source": "./",
+      "keywords": ["skills", "scaffolding", "plugin-authoring", "lint", "hooks"]
     }
   ]
 }

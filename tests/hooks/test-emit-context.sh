@@ -5,17 +5,26 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 # shellcheck source=/dev/null
 source "${HERE}/hooks/lib/emit-context.sh"
 
-actual="$(emit_context "hello world")"
+actual="$(emit_context "SessionStart" "hello world")"
 expected='{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"hello world"}}'
 
 if [[ "$actual" != "$expected" ]]; then
-  echo "FAIL: emit_context plain text"
+  echo "FAIL: emit_context plain text (SessionStart)"
+  diff <(printf '%s\n' "$expected") <(printf '%s\n' "$actual") || true
+  exit 1
+fi
+
+actual="$(emit_context "UserPromptSubmit" "reminder")"
+expected='{"hookSpecificOutput":{"hookEventName":"UserPromptSubmit","additionalContext":"reminder"}}'
+
+if [[ "$actual" != "$expected" ]]; then
+  echo "FAIL: emit_context plain text (UserPromptSubmit)"
   diff <(printf '%s\n' "$expected") <(printf '%s\n' "$actual") || true
   exit 1
 fi
 
 tricky='line with "quotes" and \backslash'
-actual="$(emit_context "$tricky")"
+actual="$(emit_context "SessionStart" "$tricky")"
 if ! printf '%s' "$actual" | jq -e . >/dev/null; then
   echo "FAIL: emit_context output is not valid JSON for tricky input"
   echo "$actual"

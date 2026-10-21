@@ -1,0 +1,297 @@
+// B-trigger-dispatch-flow.dot
+// skill-cheat — hook + trigger dispatch flow atlas
+// Canvas target: 17in x 11in landscape @ 300dpi (~5100 x 3300 px)
+// Reader workflow: iPad pinch-zoom along swimlanes, top-to-bottom by entry path,
+// left-to-right by time.
+
+digraph B_trigger_dispatch {
+  // ---- canvas ----
+  rankdir=LR;
+  size="17,11!";
+  ratio=fill;
+  margin=0.35;
+  bgcolor="#fbfbf7";
+  compound=true;
+  newrank=true;
+  splines=spline;
+  concentrate=false;
+  nodesep=0.35;
+  ranksep=0.75;
+  fontname="Helvetica";
+  labelloc="t";
+  label=<<B>skill-cheat — Hook &amp; Trigger Dispatch Atlas</B><BR/><FONT POINT-SIZE="14">Three entry paths (SessionStart / UserPromptSubmit / explicit slash) converging on Claude's context, then fanning out to five stage skills</FONT>>;
+  fontsize=22;
+
+  // ---- default node/edge ----
+  node [fontname="Helvetica", fontsize=12, style="filled,rounded", shape=box, penwidth=1.2, color="#333333"];
+  edge [fontname="Helvetica", fontsize=10, color="#444444", penwidth=1.2, arrowsize=0.8];
+
+  // ===================================================================
+  //  CLUSTER 0 — USER ACTORS / ENTRY PATHS
+  // ===================================================================
+  subgraph cluster_entry {
+    label=<<B>Entry Paths</B>>;
+    style="rounded,filled";
+    fillcolor="#f4f1e8";
+    color="#bfb89c";
+    fontsize=16;
+    margin=14;
+
+    entry_startup   [label="A. Cold session start\n(startup | clear | compact)", fillcolor="#d9eaff", shape=octagon];
+    entry_prompt    [label="B. User types any prompt\n(e.g. \"I want to build a skill for X\")", fillcolor="#ffe6cc", shape=octagon];
+    entry_slash     [label="C. User types explicit slash\n/skill-scope | /skill-design | /skill-author |\n/skill-voice-review | /skill-scaffold", fillcolor="#e6ffe0", shape=octagon];
+  }
+
+  // ===================================================================
+  //  CLUSTER 1 — HOOK RUNTIME (hooks.json + shell)
+  // ===================================================================
+  subgraph cluster_hooks {
+    label=<<B>Hook Runtime</B>  <FONT POINT-SIZE="11">(Claude Code harness → shell)</FONT>>;
+    style="rounded,filled";
+    fillcolor="#eef4ff";
+    color="#8aa6d1";
+    fontsize=16;
+    margin=14;
+
+    hooks_json [label=<<B>hooks/hooks.json</B><BR/>SessionStart matcher: <FONT FACE="Courier">startup|clear|compact</FONT><BR/>UserPromptSubmit: no matcher (every prompt)>, fillcolor="#ffffff", shape=note];
+
+    // --- SessionStart path ---
+    ss_matcher   [label=<regex match<BR/><FONT FACE="Courier">startup|clear|compact</FONT>>, shape=diamond, fillcolor="#fff4b8"];
+    ss_hook      [label=<<B>hooks/session-start</B><BR/>set -euo pipefail<BR/>reads SKILL.md → emit_context>, fillcolor="#ffffff"];
+    ss_bootstrap [label=<read bootstrap<BR/><FONT FACE="Courier">skills/using-skill-cheat/SKILL.md</FONT><BR/>silent exit 0 if missing>, fillcolor="#f7f7f7"];
+    ss_emit      [label=<<B>lib/emit-context.sh</B><BR/>emit_context()<BR/>jq -nc to stdout>, fillcolor="#ffffff"];
+
+    // --- UserPromptSubmit path ---
+    ups_hook     [label=<<B>hooks/user-prompt-submit</B><BR/>set -euo pipefail<BR/>trap 'exit 0' ERR>, fillcolor="#ffffff"];
+    ups_stdin    [label=<read JSON payload from stdin<BR/><FONT FACE="Courier">jq -r '.prompt // empty'</FONT>>, fillcolor="#f7f7f7"];
+    ups_cfg      [label=<source <B>config.sh</B><BR/>loads SKILL_CHEAT_TRIGGER_KEYWORDS>, fillcolor="#ffffff"];
+    ups_override [label=<override check<BR/><FONT FACE="Courier">$CLAUDE_PROJECT_DIR/.skill-cheat.sh</FONT>>, shape=diamond, fillcolor="#fff4b8"];
+    ups_detect   [label=<<B>lib/detect-skill-intent.sh</B><BR/>detect_skill_intent()<BR/>case-insensitive substring match<BR/>loop each keyword>, fillcolor="#ffffff"];
+    ups_match    [label=<any keyword ⊂ prompt?<BR/>return 0 on first hit<BR/>return 1 otherwise>, shape=diamond, fillcolor="#fff4b8"];
+    ups_emit     [label=<<B>lib/emit-context.sh</B><BR/>emit_context()<BR/>INTENT DETECTED reminder>, fillcolor="#ffffff"];
+    ups_silent   [label=<silent fallthrough<BR/>no stdout, exit 0<BR/>Claude sees only the raw prompt>, fillcolor="#f0f0f0", shape=box, style="filled,rounded,dashed"];
+  }
+
+  // ===================================================================
+  //  CLUSTER 2 — JSON ENVELOPE (wire format)
+  // ===================================================================
+  subgraph cluster_envelope {
+    label=<<B>Hook Wire Format</B>>;
+    style="rounded,filled";
+    fillcolor="#fff6ea";
+    color="#d2a96a";
+    fontsize=16;
+    margin=14;
+
+    envelope_ss [label=<<FONT FACE="Courier"><B>stdout (SessionStart)</B><BR ALIGN="LEFT"/>{<BR ALIGN="LEFT"/>  "hookSpecificOutput": {<BR ALIGN="LEFT"/>    "hookEventName": "SessionStart",<BR ALIGN="LEFT"/>    "additionalContext": "&lt;SKILL.md body&gt;"<BR ALIGN="LEFT"/>  }<BR ALIGN="LEFT"/>}</FONT>>, shape=note, fillcolor="#ffffff"];
+
+    envelope_ups [label=<<FONT FACE="Courier"><B>stdout (UserPromptSubmit, on match)</B><BR ALIGN="LEFT"/>{<BR ALIGN="LEFT"/>  "hookSpecificOutput": {<BR ALIGN="LEFT"/>    "hookEventName": "SessionStart",<BR ALIGN="LEFT"/>    "additionalContext":<BR ALIGN="LEFT"/>      "SKILL-AUTHORING INTENT DETECTED.<BR ALIGN="LEFT"/>       Invoke /skill-scope before any<BR ALIGN="LEFT"/>       other action…"<BR ALIGN="LEFT"/>  }<BR ALIGN="LEFT"/>}</FONT>>, shape=note, fillcolor="#ffffff"];
+
+    envelope_in [label=<<FONT FACE="Courier"><B>stdin (UserPromptSubmit)</B><BR ALIGN="LEFT"/>{<BR ALIGN="LEFT"/>  "prompt": "&lt;user text&gt;",<BR ALIGN="LEFT"/>  "session_id": "…",<BR ALIGN="LEFT"/>  …<BR ALIGN="LEFT"/>}</FONT>>, shape=note, fillcolor="#ffffff"];
+
+    envelope_note [label=<<B>Exit codes</B><BR ALIGN="LEFT"/>• 0 + stdout JSON → inject additionalContext<BR ALIGN="LEFT"/>• 0 + no stdout → no-op (silent)<BR ALIGN="LEFT"/>• nonzero → fail silent (trap ERR)>, shape=note, fillcolor="#fffbe6"];
+  }
+
+  // ===================================================================
+  //  CLUSTER 3 — CONFIG (config.sh + override)
+  // ===================================================================
+  subgraph cluster_config {
+    label=<<B>Trigger Config</B>>;
+    style="rounded,filled";
+    fillcolor="#f1f7ef";
+    color="#9ac08a";
+    fontsize=16;
+    margin=14;
+
+    cfg_plugin [label=<<B>config.sh</B> (plugin-shipped)<BR/>SKILL_CHEAT_TRIGGER_KEYWORDS=(<BR ALIGN="LEFT"/>  "author a skill"<BR ALIGN="LEFT"/>  "build a skill"<BR ALIGN="LEFT"/>  "new skill"<BR ALIGN="LEFT"/>  "scaffold a skill"<BR ALIGN="LEFT"/>  "make a skill"<BR ALIGN="LEFT"/>  "write a skill"<BR ALIGN="LEFT"/>  "author a plugin"<BR ALIGN="LEFT"/>  "new plugin"<BR ALIGN="LEFT"/>  "skill-cheat"<BR ALIGN="LEFT"/>)<BR/>SKILL_CHEAT_WORK_DIR="docs/…/skills-in-progress">, shape=folder, fillcolor="#ffffff"];
+
+    cfg_override [label=<<B>.skill-cheat.sh</B> (project-local)<BR/>optional override<BR/>sourced if present<BR/>redefines KEYWORDS / WORK_DIR>, shape=folder, fillcolor="#f7f7f7", style="filled,rounded,dashed"];
+  }
+
+  // ===================================================================
+  //  CLUSTER 4 — CLAUDE CONTEXT (the meeting point)
+  // ===================================================================
+  subgraph cluster_context {
+    label=<<B>Claude's In-Context State</B>>;
+    style="rounded,filled";
+    fillcolor="#f7e9f2";
+    color="#b280a0";
+    fontsize=16;
+    margin=14;
+
+    ctx [label=<<B>Claude context window</B><BR/>additionalContext merged by harness<BR/>Claude now “knows” using-skill-cheat’s HARD-GATEs>, fillcolor="#ffffff", shape=box3d, penwidth=2];
+
+    bootstrap_rule [label=<<B>using-skill-cheat bootstrap</B> (loaded into ctx)<BR/>HARD-GATE 1: do NOT write SKILL.md without /skill-scope<BR/>HARD-GATE 2: do NOT write SKILL.md without ACCEPT/ACCEPT_WITH_MINOR<BR/>Route: <I>any skill-authoring intent → /skill-scope</I>>, fillcolor="#fff0fa", shape=note];
+
+    intent_reminder [label=<<B>INTENT DETECTED reminder</B> (on match)<BR/>“Invoke /skill-scope before any other action<BR/>when building or scaffolding a skill.”>, fillcolor="#fff0fa", shape=note];
+
+    claude_decision [label=<<B>Claude decision node</B><BR/>sees prompt + bootstrap + (optional reminder)<BR/>applies HARD-GATE routing>, shape=diamond, fillcolor="#ffe8f5", penwidth=2];
+  }
+
+  // ===================================================================
+  //  CLUSTER 5 — SLASH COMMANDS (thin wrappers)
+  // ===================================================================
+  subgraph cluster_commands {
+    label=<<B>Slash Commands</B>  <FONT POINT-SIZE="11">commands/*.md — thin wrappers</FONT>>;
+    style="rounded,filled";
+    fillcolor="#eaf5f5";
+    color="#77a8a8";
+    fontsize=16;
+    margin=14;
+
+    cmd_scope        [label=<<B>/skill-scope</B><BR/>→ Invoke skill-cheat:skill-scope>, fillcolor="#ffffff"];
+    cmd_design       [label=<<B>/skill-design</B><BR/>→ Invoke skill-cheat:skill-design>, fillcolor="#ffffff"];
+    cmd_author       [label=<<B>/skill-author</B><BR/>→ Invoke skill-cheat:skill-author>, fillcolor="#ffffff"];
+    cmd_voicereview  [label=<<B>/skill-voice-review</B><BR/>→ Invoke skill-cheat:skill-voice-review>, fillcolor="#ffffff"];
+    cmd_scaffold     [label=<<B>/skill-scaffold</B><BR/>→ Invoke skill-cheat:skill-scaffold>, fillcolor="#ffffff"];
+  }
+
+  // ===================================================================
+  //  CLUSTER 6 — STAGE SKILLS (the 5-stage pipeline targets)
+  // ===================================================================
+  subgraph cluster_skills {
+    label=<<B>Stage Skills (pipeline targets)</B>>;
+    style="rounded,filled";
+    fillcolor="#eef6ea";
+    color="#7aa86a";
+    fontsize=16;
+    margin=14;
+
+    sk_scope        [label=<<B>skill-scope</B> — Stage 1<BR/>SKILL.md loads<BR/>Verdicts: SCOPE_LOCKED / SCOPE_INCOMPLETE / BLOCKED_NEEDS_USER>, fillcolor="#d9f2cc", shape=component];
+    sk_design       [label=<<B>skill-design</B> — Stage 2<BR/>Verdicts: DESIGN_LOCKED / DESIGN_REJECTED / BLOCKED_REVIEWER>, fillcolor="#e3f2d6", shape=component];
+    sk_author       [label=<<B>skill-author</B> — Stage 3<BR/>Verdicts: AUTHOR_DONE / AUTHOR_INCOMPLETE / BLOCKED_TAMPER>, fillcolor="#ecf2d9", shape=component];
+    sk_voicereview  [label=<<B>skill-voice-review</B> — Stage 4<BR/>Verdicts: ACCEPT / ACCEPT_WITH_MINOR / REJECT_CRITICAL /<BR/>REJECT_IMPORTANT / INCONCLUSIVE / BLOCKED_VOICE>, fillcolor="#f2eedb", shape=component];
+    sk_scaffold     [label=<<B>skill-scaffold</B> — Stage 5<BR/>Verdicts: SCAFFOLD_COMPLETE / SCAFFOLD_INCOMPLETE / BLOCKED_OVERWRITE<BR/><B>only stage that writes to disk</B>>, fillcolor="#f2e7db", shape=component];
+  }
+
+  // ===================================================================
+  //  EDGES — Entry A (SessionStart)
+  // ===================================================================
+  entry_startup -> hooks_json [label="triggers", color="#2a6bb0", penwidth=2];
+  hooks_json    -> ss_matcher [label="dispatches on event", color="#2a6bb0"];
+  ss_matcher    -> ss_hook    [label="match", color="#2a6bb0"];
+  ss_matcher    -> ss_silent  [label="no match → no-op", color="#999999", style=dotted, ltail=cluster_hooks];
+  ss_hook       -> ss_bootstrap [label="$CLAUDE_PLUGIN_ROOT/skills/using-skill-cheat/SKILL.md", color="#2a6bb0"];
+  ss_bootstrap  -> ss_emit    [label="cat → arg", color="#2a6bb0"];
+  ss_emit       -> envelope_ss [label="writes JSON to stdout", color="#2a6bb0", penwidth=2];
+  envelope_ss   -> ctx        [label="harness merges additionalContext", color="#2a6bb0", penwidth=2, lhead=cluster_context];
+
+  // Placeholder target for a no-op branch (kept inside hooks cluster as phantom)
+  ss_silent [label=<no-op branch<BR/>non-matching event (e.g. tool call, notification)<BR/>SessionStart not fired>, style="filled,rounded,dashed", fillcolor="#f0f0f0"];
+
+  // ===================================================================
+  //  EDGES — Entry B (UserPromptSubmit)
+  // ===================================================================
+  entry_prompt  -> hooks_json   [label="every prompt", color="#c06a16", penwidth=2];
+  hooks_json    -> ups_hook     [label="UserPromptSubmit\n(no matcher → always fires)", color="#c06a16"];
+  ups_hook      -> ups_stdin    [label="cat | jq", color="#c06a16"];
+  ups_stdin     -> envelope_in  [label="payload shape", style=dashed, arrowhead=none, color="#c06a16"];
+  ups_stdin     -> ups_cfg      [label="prompt extracted", color="#c06a16"];
+  ups_cfg       -> cfg_plugin   [label="source", style=dashed, color="#5c8b3e", dir=both];
+  ups_cfg       -> ups_override [label="then check override", color="#c06a16"];
+  ups_override  -> cfg_override [label="yes → source & redefine", color="#5c8b3e", style=dashed, dir=both];
+  ups_override  -> ups_detect   [label="no → keep plugin defaults", color="#c06a16"];
+  cfg_override  -> ups_detect   [label="redefined KEYWORDS", color="#5c8b3e", style=dashed];
+  ups_detect    -> ups_match    [label="iterate KEYWORDS[]", color="#c06a16"];
+  ups_match     -> ups_emit     [label="HIT (return 0)", color="#c06a16", penwidth=2];
+  ups_match     -> ups_silent   [label="MISS (return 1)", color="#999999", style=dashed];
+  ups_emit      -> envelope_ups [label="writes JSON to stdout", color="#c06a16", penwidth=2];
+  envelope_ups  -> intent_reminder [label="harness merges", color="#c06a16", penwidth=2];
+  intent_reminder -> ctx        [label="reminder reaches Claude", color="#c06a16"];
+  ups_silent    -> ctx          [label="prompt passes through\nno additionalContext injected", color="#999999", style=dashed];
+
+  // ===================================================================
+  //  EDGES — Entry C (explicit slash command)
+  // ===================================================================
+  entry_slash -> cmd_scope       [label="direct invocation", color="#2e8b2e", penwidth=2];
+  entry_slash -> cmd_design      [color="#2e8b2e"];
+  entry_slash -> cmd_author      [color="#2e8b2e"];
+  entry_slash -> cmd_voicereview [color="#2e8b2e"];
+  entry_slash -> cmd_scaffold    [color="#2e8b2e"];
+
+  // Slash also travels through UserPromptSubmit, but matcher is on slash payload — annotate
+  entry_slash -> ups_hook [label="(also hits UserPromptSubmit\nwith literal '/skill-…')", color="#2e8b2e", style=dotted, fontsize=9];
+
+  // ===================================================================
+  //  EDGES — Bootstrap already-in-context routing
+  // ===================================================================
+  ctx            -> bootstrap_rule [label="resolved by", style=dashed, arrowhead=none, color="#7a4a6c"];
+  ctx            -> claude_decision [label="Claude reads ctx", color="#7a4a6c"];
+  bootstrap_rule -> claude_decision [label="gate rules apply", color="#7a4a6c"];
+
+  claude_decision -> cmd_scope       [label="skill-authoring intent\n→ invoke /skill-scope", color="#7a4a6c", penwidth=2];
+  claude_decision -> cmd_design      [label="Stage 1 done → Stage 2", style=dashed, color="#7a4a6c"];
+  claude_decision -> cmd_author      [label="Stage 2 done → Stage 3", style=dashed, color="#7a4a6c"];
+  claude_decision -> cmd_voicereview [label="Stage 3 done → Stage 4", style=dashed, color="#7a4a6c"];
+  claude_decision -> cmd_scaffold    [label="Stage 4 ACCEPT* → Stage 5", style=dashed, color="#7a4a6c"];
+
+  // ===================================================================
+  //  EDGES — Commands → Stage skills
+  // ===================================================================
+  cmd_scope       -> sk_scope       [label="loads plugin-namespaced skill", color="#4a7d3a", penwidth=2];
+  cmd_design      -> sk_design      [color="#4a7d3a"];
+  cmd_author      -> sk_author      [color="#4a7d3a"];
+  cmd_voicereview -> sk_voicereview [color="#4a7d3a"];
+  cmd_scaffold    -> sk_scaffold    [color="#4a7d3a"];
+
+  // ===================================================================
+  //  PIPELINE CHAINING (stage → stage via verdicts)
+  // ===================================================================
+  sk_scope       -> sk_design      [label="SCOPE_LOCKED", color="#4a7d3a", style=bold];
+  sk_design      -> sk_author      [label="DESIGN_LOCKED", color="#4a7d3a", style=bold];
+  sk_author      -> sk_voicereview [label="AUTHOR_DONE", color="#4a7d3a", style=bold];
+  sk_voicereview -> sk_scaffold    [label="ACCEPT / ACCEPT_WITH_MINOR", color="#4a7d3a", style=bold];
+  sk_scaffold    -> disk           [label="SCAFFOLD_COMPLETE\n(only write path)", color="#884b00", penwidth=2];
+
+  disk [label=<<B>target project disk</B><BR/>plugin tree emitted at<BR/><FONT FACE="Courier">$SKILL_CHEAT_WORK_DIR</FONT>>, shape=cylinder, fillcolor="#fff0d0"];
+
+  // ===================================================================
+  //  LEGEND
+  // ===================================================================
+  subgraph cluster_legend {
+    label=<<B>Legend</B>>;
+    style="rounded,filled";
+    fillcolor="#ffffff";
+    color="#888888";
+    fontsize=14;
+    margin=10;
+
+    leg_a [label="A. SessionStart entry", fillcolor="#d9eaff", shape=octagon];
+    leg_b [label="B. UserPromptSubmit entry", fillcolor="#ffe6cc", shape=octagon];
+    leg_c [label="C. Explicit slash entry", fillcolor="#e6ffe0", shape=octagon];
+    leg_decision [label="decision / matcher", shape=diamond, fillcolor="#fff4b8"];
+    leg_envelope [label="JSON envelope", shape=note, fillcolor="#ffffff"];
+    leg_stage [label="stage skill", fillcolor="#d9f2cc", shape=component];
+    leg_silent [label="silent fallthrough\n(no injection)", style="filled,rounded,dashed", fillcolor="#f0f0f0"];
+    leg_disk [label="disk write", shape=cylinder, fillcolor="#fff0d0"];
+
+    leg_a -> leg_b [style=invis];
+    leg_b -> leg_c [style=invis];
+    leg_c -> leg_decision [style=invis];
+    leg_decision -> leg_envelope [style=invis];
+    leg_envelope -> leg_stage [style=invis];
+    leg_stage -> leg_silent [style=invis];
+    leg_silent -> leg_disk [style=invis];
+
+    leg_edge_blue   [label="SessionStart flow", shape=plaintext, fontcolor="#2a6bb0"];
+    leg_edge_orange [label="UserPromptSubmit flow", shape=plaintext, fontcolor="#c06a16"];
+    leg_edge_green  [label="slash / pipeline", shape=plaintext, fontcolor="#2e8b2e"];
+    leg_edge_grey   [label="silent / no-op", shape=plaintext, fontcolor="#999999"];
+    leg_edge_purple [label="Claude context routing", shape=plaintext, fontcolor="#7a4a6c"];
+
+    leg_disk -> leg_edge_blue [style=invis];
+    leg_edge_blue -> leg_edge_orange [style=invis];
+    leg_edge_orange -> leg_edge_green [style=invis];
+    leg_edge_green -> leg_edge_grey [style=invis];
+    leg_edge_grey -> leg_edge_purple [style=invis];
+  }
+
+  // ===================================================================
+  //  RANK HINTS — keep entry paths together on the left
+  // ===================================================================
+  { rank=source; entry_startup; entry_prompt; entry_slash; }
+  { rank=same; ctx; bootstrap_rule; intent_reminder; }
+  { rank=same; cmd_scope; cmd_design; cmd_author; cmd_voicereview; cmd_scaffold; }
+  { rank=same; sk_scope; sk_design; sk_author; sk_voicereview; sk_scaffold; }
+  { rank=sink; disk; }
+}

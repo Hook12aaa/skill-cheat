@@ -1,36 +1,59 @@
 # skill-cheat
 
-A Claude Code plugin that scaffolds skills in the imperative, gate-driven, contract-first style.
+> A Claude Code plugin that authors skills the way I think they should be authored. Five gated stages. Twenty-one lint rules. No vibes.
 
-**Runs standalone. No plugin dependencies.** Host-tool prerequisites: `bash`, `openssl`, `node`, `graphviz` (`dot`), `jq`.
+**Status:** 0.1.0 · MIT · standalone, no plugin dependencies.
 
-## Install
+Writing a SKILL.md is not the same as writing a markdown file. The markdown part is easy. The hard part is keeping a behaviour contract disciplined across twenty skills, across two months, across the temptation to soften an imperative because the model is reading it and feels like a person.
+
+That is what this handles. It treats every skill as a typed artifact. It lints the artifact against a canonical anatomy. It freezes the design before the body gets written. It refuses to let the same agent both produce and approve its own work.
+
+If that sounds like the discipline you want, keep reading. If it sounds slow, it is, and you should not use this.
+
+---
+
+## Quickstart
 
 ```
-/plugin marketplace add /path/to/skill_cheat
-/plugin install skill-cheat
+/plugin marketplace add /path/to/skill-cheat
+/plugin install skill-cheat@skill-cheat-local
 ```
 
-## Use
+Open a session. Say "I want to build a skill for X" — or type `/skill-scope` to start explicitly. The `UserPromptSubmit` hook detects skill-authoring intent and reminds Claude to run the pipeline.
 
-Any of these invocations kicks off the 5-stage pipeline:
+Host tools you need on `PATH`: `bash`, `openssl`, `node`, `graphviz` (`dot`), `jq`.
 
-- Type `/skill-scope` to start explicitly.
-- Say "I want to build a skill for X" — the UserPromptSubmit hook reminds Claude to start the pipeline.
+---
 
-## Stages
+## The five stages
 
-1. `/skill-scope` — lock name, triggers, verdicts, Anti-Pattern. Emits `scope.md`, `scope.json`, `evals/eval-set-skeleton.json`.
-2. `/skill-design` — write HARD-GATEs, Core Principle, flow, checklist. Emits `design.md`, `design.json`, `evals/assertion-skeleton.json`, Integrity Block + SHA-256.
-3. `/skill-author` — fill the skill body; verify Integrity Block unchanged.
-4. `/skill-voice-review` — mechanical lint + voice-reviewer subagent; REJECT or ACCEPT. Phase-3 behavioral benchmark lands in Plan 5+.
-5. `/skill-scaffold` — emit the plugin tree at the target path (`evals/` travels with the skill).
+```mermaid
+flowchart LR
+    A[/skill-scope/] --> B[/skill-design/]
+    B --> C[/skill-author/]
+    C --> D[/skill-voice-review/]
+    D -->|REJECT| C
+    D -->|ACCEPT| E[/skill-scaffold/]
 
-## Validation: /skill-stress-test
+    classDef stage fill:#1f1a14,stroke:#c98c3c,color:#f5ecd8;
+    class A,B,C,D,E stage;
+```
 
-Stress-tests any connected Claude Code plugin by running the voice-review lint engine over every SKILL.md in the target.
+| Command | The gate | Your job |
+|---|---|---|
+| `/skill-scope` | Name, triggers, verdicts, Anti-Pattern locked. Emits `scope.md`, `scope.json`, and an eval-set skeleton seeded from declared triggers. | Confirm the scope is right. |
+| `/skill-design` | HARD-GATEs, Core Principle, flow diagram, checklist, assertion skeleton. Hashed into an Integrity Block with a SHA-256 sidecar. | Approve the design. |
+| `/skill-author` | Body filled in. Integrity Block re-verified — edit a design field after lock-in and the SHA-256 sidecar breaks. The pipeline halts. That is the point. | Watch. Do not edit the design backdoor. |
+| `/skill-voice-review` | Mechanical lint over twenty-one rules, then a reviewer subagent that did not see the author's work. REJECT or ACCEPT. | Apply the fixes, or argue the rule. |
+| `/skill-scaffold` | Emits the plugin tree at the target path. The `evals/` directory travels with the skill. | Wire it into your plugin. |
 
-Usage:
+You approve at three gates: the scope, the design, and the voice-review verdict. Everything in between is the pipeline doing its job.
+
+---
+
+## Validation: `/skill-stress-test`
+
+Point it at any Claude Code plugin and it will run the voice-review lint engine over every `SKILL.md` in the target.
 
 ```bash
 # explicit target
@@ -40,24 +63,132 @@ node skills/skill-stress-test/scripts/qa-orchestrator.js --plugin /abs/path/to/p
 cd /abs/path/to/plugin && node /abs/path/to/skill-cheat/skills/skill-stress-test/scripts/qa-orchestrator.js
 ```
 
-Output: `<target>/.skill-cheat-qa/runs/<run-id>/report.json` plus a single `VERDICT: <token>` line on stdout.
-
-Verdicts (Plan 1, static layer only):
+Output lands at `<target>/.skill-cheat-qa/runs/<run-id>/report.json` and a single `VERDICT: <token>` line on stdout. Tokens:
 
 - `VALIDATION_CLEAN` — every SKILL.md returned ACCEPT.
 - `PLUGIN_DRIFT` — at least one SKILL.md returned ACCEPT_WITH_MINOR or REJECT_*.
-- `VALIDATION_INCONCLUSIVE` — the layer could not complete.
+- `VALIDATION_INCONCLUSIVE` — the layer could not complete (no skills, depth violation, symlink refusal).
 - `BLOCKED_NO_TARGET` — no plugin resolved from arg or cwd.
 
-Layers 2–4 (behavioral, E2E, evolutionary) land in subsequent plans.
+The static layer ships now. The behavioural, end-to-end, and evolutionary layers land in subsequent plans.
 
-## Principles
+A V1 corpus run on 14 May 2026 against 47 real plugins from `~/.claude/plugins/cache/` and a wider corpus returned 34 PLUGIN_DRIFT, 13 INCONCLUSIVE (no-skills plugins routed correctly), 0 false CLEAN, 0 crashes. The lint engine's signal-to-noise on foreign plugins is now bounded by SKILL-shape rules only.
 
-- Contract-first, library-last.
-- Imperative voice, ALL-CAPS verdicts, zero hedges.
-- `.md` + `.js` + `.sh` + `.json` only.
-- Structural distrust — no agent both produces and approves its own work.
-- Self-contained — no plugin dependencies.
+---
+
+## Why this exists
+
+I was writing my fifth Claude Code skill in a week when I noticed I kept typing the same scaffolding at the top of every one. The same all-caps verdicts. The same anti-hedge reminders. The same HARD-GATE blocks. By the time I had eight skills, I had a tacit anatomy I was applying by reflex but never as a contract.
+
+That is the gap this fills. A SKILL.md is a behaviour contract — the model is the executor, and a sloppy contract gives you sloppy behaviour. The hard part is not the prose. The hard part is keeping the prose disciplined across twenty skills, two months, and the temptation to soften an imperative because the language model is reading it and feels like a person.
+
+skill-cheat is the version of myself that does not get tired. It lints the artifact against twenty-one rules grounded in published practice. It freezes the design before the body gets written. It refuses to let the same agent both produce and approve its own work. The point is not to replace your taste. The point is to make your taste show up consistently when you are not paying attention.
+
+---
+
+## How it actually behaves
+
+### The skill is a contract. Treat it like one.
+
+Frontmatter is validated. Sections are typed. Voice is mechanical. The lint engine carries twenty-one rules in `skills/skill-voice-review/references/lint-rules.json`, dispatched through a seven-way detector switch (`grep-denylist`, `hard-gate-span`, `yaml-frontmatter`, `bash-syntax`, `regex-line`, `find-extensions`, `digraph-fence`). Every rule is declarative. New rules are JSON, not code.
+
+### Lint before you eval.
+
+A static, deterministic gate runs before any behavioural test. Lint failures are cheap, repeatable, and bound by a known rule set. Behavioural failures are stochastic, expensive, and only meaningful once the artifact under test is shape-correct. This is shift-left applied to LLM artifacts. Lint first. Eval second.
+
+### Two kinds of rule. Know which.
+
+Rules carry a `kind` axis. `skill-shape` rules apply universally — every Claude Code skill, anywhere, should hold these. `plugin-policy` rules are skill-cheat's local opinion: file-extension allowlist, directory layout. When the stress-test harness runs against a foreign plugin, the `--mode cross-plugin` flag filters the policy rules out. That way your signal on someone else's plugin is bounded by what is genuinely portable.
+
+The split is borrowed straight from ESLint's `eslint:recommended` plus project overrides. It is not novel. It is, as of May 2026, the only `skill-shape` vs `plugin-policy` taxonomy in a public Claude Code skill linter.
+
+### The design is tamper-evident.
+
+`/skill-design` writes a SHA-256 sidecar over the locked design fields. `/skill-author` re-verifies the hash before it lets the body proceed. Edit `scope.json` or `design.json` after lock-in, and the next stage halts. The point is not security. The point is that authoring drift across stages costs you a re-derivation.
+
+### No agent grades its own work.
+
+`/skill-author` writes. `/skill-voice-review` judges. They are separate subagents with separate prompts. The reviewer does not see the author's reasoning, only the artifact. The same rule applies to the stress harness: a third reviewer judges the lint output, not the lint engine's own claims.
+
+This separation is the LLM analogue of branch protection. It is fifty years old in code review (Fagan inspections, 1976). It is overdue in prompt authoring.
+
+---
+
+## How it compares
+
+Honest table. As of May 2026.
+
+| | Anthropic `skill-creator` | `superpowers:writing-skills` | `claudelint` | `SkillCheck` | `skill-cheat` |
+|---|---|---|---|---|---|
+| Schema-driven static lint | no | no | yes | yes | yes |
+| Imperative-voice / hedge denylist | partial | no | no | no | yes |
+| 13-section canonical anatomy | no | no | no | no | yes |
+| `skill-shape` vs `plugin-policy` split | — | — | no | no | yes |
+| Cross-plugin worst-wins harness | — | — | no | partial | yes |
+| LLM-as-judge eval loop | yes | partial | no | no | Plan 5+ |
+| Author / reviewer separation | partial | yes | no | no | yes |
+
+The orthogonal axis is opinion. `skill-creator` meets you wherever you are. `superpowers:writing-skills` teaches a discipline through narrative. `claudelint` and `SkillCheck` apply broadly safe checks. skill-cheat takes a specific position on how a skill should read and enforces it mechanically. If you disagree with the position, fork the rules. The rule shape is portable.
+
+---
+
+## On HARD-GATE syntactic enforcement
+
+Anthropic's published prompt-engineering guidance treats `MUST` / `NEVER` / `ALWAYS` blocks as a yellow flag. Their reasoning: readers pattern-match nag text and tune it out, so the imperative loses force. Rule-plus-reasoning prose ("use constructor injection — field injection breaks testability because...") is preferred.
+
+I think that is correct for human readers and wrong for LLM readers.
+
+A human holds context across paragraphs and decides which line is binding. An LLM following a multi-screen skill needs a syntactic anchor — a token shape that says "this is the non-negotiable line, ignore the surrounding prose if it contradicts." The HARD-GATE block is that anchor. It is the LLM analogue of an `assert` statement: ugly, repetitive, deliberately interruptive, and exactly what you want when correctness depends on the assertion firing.
+
+If your skill is going to be read mostly by humans, fork the rule. If it is going to be executed by an LLM under load, the HARD-GATE earns its place. The argument is open. I will defend it.
+
+---
+
+## When not to use this
+
+Skip this if any of the following are true.
+
+- **You want a friendly authoring flow.** The pipeline is gauntlet-shaped on purpose. There is no "vibe with me" path. Use `skill-creator`.
+- **You disagree with the 13-section anatomy.** It is a position, not a discovery. You will fight the linter forever.
+- **Your skills are read mostly by humans.** The voice rules optimise for LLM-readability. The all-caps fatigue is real.
+- **You need behavioural eval today.** Static layer ships now. Behavioural, E2E, and evolutionary layers land in subsequent plans.
+- **You bounce off opinionated tools.** This one is not going to flatter your skill. It will tell you it is incoherent and where.
+
+---
+
+## Repository layout
+
+```
+.
+├── .claude-plugin/        plugin manifest + local marketplace
+├── hooks/                 SessionStart bootstrap + UserPromptSubmit intent detector
+├── skills/
+│   ├── using-skill-cheat/   session-start introduction (auto-loaded)
+│   ├── skill-scope/         lock name, triggers, verdicts
+│   ├── skill-design/        HARD-GATEs, flow, Integrity Block
+│   ├── skill-author/        body, verify Integrity unchanged
+│   ├── skill-voice-review/  lint engine + reviewer subagent
+│   ├── skill-scaffold/      emit the plugin tree
+│   └── skill-stress-test/   cross-plugin QA harness
+├── tests/                 44 shell tests; every hook + script covered
+├── docs/                  field manual + flow atlas + internal plans
+├── CLAUDE.md              project instructions for contributors
+└── README.md
+```
+
+---
+
+## The principles I will not bend on
+
+1. **Contract-first, library-last.** A SKILL.md is a behaviour contract. Schemas, denylists, and integrity hashes come before tooling.
+2. **Imperative voice. ALL-CAPS verdicts. Zero hedges.** "Could", "might", "would", "should", "may" — denylisted in the body, allowed in references.
+3. **`.md` + `.js` + `.sh` + `.json` only.** Generated artifacts (diagrams, PDFs) live in `docs/`. The runtime carries no other formats.
+4. **No agent both produces and approves its own work.** Author and reviewer are separate prompts.
+5. **The design is tamper-evident.** Edit a locked design field and the next stage halts.
+6. **Lint before eval.** Static deterministic checks run before any behavioural test. Always.
+7. **Crash loud.** Silent error swallowing is a defect. Wrong-but-plausible output is worse than no output.
+
+---
 
 ## Canonical sources for the hedge-word denylist
 
@@ -85,18 +216,18 @@ sed -n '861,930p' docs/hedge-research/demir-2018.txt   # Appendix A
 
 ## Canonical sources for the library-names denylist
 
-The library-names denylist at `skills/skill-voice-review/references/library-names-denylist.json` is seeded from programmatic JSON feeds (not hand-curation alone) so the provenance is reproducible. Every entry is a distinct proper-noun library name with low false-positive risk in English prose.
+The library-names denylist at `skills/skill-voice-review/references/library-names-denylist.json` is seeded from programmatic JSON feeds so the provenance is reproducible. Every entry is a distinct proper-noun library name with low false-positive risk in English prose.
 
 | Source | Role | URL |
 |---|---|---|
-| hugovk — *Top PyPI packages* (monthly) | Canonical JSON feed for Python popularity; seeds numpy / pandas / pydantic / httpx / etc. | https://hugovk.dev/top-pypi-packages/top-pypi-packages.min.json |
-| tristan-f-r/npm-rank | Canonical JSON feed for npm popularity; seeds axios / lodash / rxjs / eslint / prettier | https://github.com/tristan-f-r/npm-rank/releases/download/latest/raw.json |
+| hugovk — *Top PyPI packages* (monthly) | Canonical JSON feed for Python popularity | https://hugovk.dev/top-pypi-packages/top-pypi-packages.min.json |
+| tristan-f-r/npm-rank | Canonical JSON feed for npm popularity | https://github.com/tristan-f-r/npm-rank/releases/download/latest/raw.json |
 | crates.io API | Rust popularity (CC0); reserved for future expansion | https://crates.io/api/v1/crates?sort=downloads&per_page=100 |
 | libraries.io open dataset | Multi-ecosystem SourceRank (CC-BY-SA) | https://libraries.io/data |
-| anthropics/skills (claude-api, skill-creator) | Calibrates which library names leak into AI-instruction prose | https://github.com/anthropics/skills |
-| PatrickJS/awesome-cursorrules | Corpus of AI-coding-assistant instructions; informs frontend/state adds (redux, zustand, shadcn, tailwindcss) | https://github.com/PatrickJS/awesome-cursorrules |
+| anthropics/skills | Calibrates which library names leak into AI-instruction prose | https://github.com/anthropics/skills |
+| PatrickJS/awesome-cursorrules | Corpus of AI-coding-assistant instructions; informs frontend/state adds | https://github.com/PatrickJS/awesome-cursorrules |
 
-Raw JSON downloads are checked in under `docs/library-research/` for provenance. To re-extract top 200 names per ecosystem:
+Raw JSON downloads are checked in under `docs/library-research/` for provenance. To re-extract the top 200 names per ecosystem:
 
 ```bash
 set -euo pipefail
@@ -112,33 +243,42 @@ jq -r '.[:200][].name'       docs/library-research/npm-rank.json          > npm-
 
 Before merging new names into `entries[]`, filter out English-word collisions (`requests`, `click`, `fetch`, `bootstrap`, `six`, `wheel`, `build`, `guidance`, `anthropic`, `openai`) — the detector is case-insensitive with word boundaries, so any library name that doubles as a common English word will produce false positives.
 
-## Benchmark artifacts
+---
 
-Every skill authored through skill-cheat carries its own behavioral benchmark inputs in `skills/<name>/evals/`:
+## What's coming
 
-- `eval-set-skeleton.json` — positive + adversarial trigger cases, seeded by `/skill-scope` from declared triggers via `scripts/emit-eval-skeleton.sh`.
-- `assertion-skeleton.json` — one behavioral assertion per HARD-GATE + Gate Function, seeded by `/skill-design` via `scripts/emit-assertion-skeleton.sh`.
-
-The skeletons are JSON-seeded contracts. The skill author fills in realistic queries and refines assertions before `/skill-voice-review` dispatches them against git-isolated baseline/candidate worktrees (Plan 5).
-
-Schemas live in:
-
-- `skills/skill-scope/references/scope-schema.md`
-- `skills/skill-design/references/design-schema.md`
-- `skills/skill-voice-review/references/benchmark-plan-schema.md`
-- `skills/skill-voice-review/references/adversarial-eval-patterns.md`
-
-## Benchmark engine
-
-Plan 5 ships the runtime that consumes the eval and assertion skeletons emitted by `/skill-scope` and `/skill-design` and produces enriched per-skill benchmark results.
+Plan 5 ships the benchmark runtime that consumes the eval-set and assertion skeletons emitted by `/skill-scope` and `/skill-design` and produces enriched per-skill behavioural results.
 
 Components in `skills/skill-voice-review/`:
 
-- `scripts/git-worktree-setup.sh` — materializes baseline + candidate worktrees at `<root>/<run-id>/{baseline,candidate}/`.
-- `scripts/benchmark-plan-init.sh` — writes `benchmark-plan.json` + `benchmark-plan.md` (with Integrity Block) + SHA-256 sidecar from scope.json + eval-set + assertion-skeleton + refs.
-- `scripts/benchmark-integrity-hash.sh` — companion hasher for benchmark-plan.md's integrity block.
-- `scripts/run-eval.js` / `run-eval.sh` — spawns `claude -p --include-partial-messages`, watches the JSONL stream for skill activation (`content_block_start` with matching tool_use name), emits `{triggered, durationMs, totalTokens, streamEvents}`. Mock-stream mode (`--mock-stream-file`) unblocks CI.
-- `scripts/aggregate-benchmark.js` — folds N run-eval outputs into pass-rate + mean/stddev tokens + mean/stddev duration per ref, plus delta.
-- `agents/grader.md` / `comparator.md` / `analyzer.md` — subagent prompts (ported from [anthropics/skills](https://github.com/anthropics/skills) under Apache 2.0; see `/NOTICE`).
+- `scripts/git-worktree-setup.sh` — materialises baseline + candidate worktrees at `<root>/<run-id>/{baseline,candidate}/`.
+- `scripts/benchmark-plan-init.sh` — writes `benchmark-plan.json` + `benchmark-plan.md` (with Integrity Block) + SHA-256 sidecar.
+- `scripts/run-eval.js` / `run-eval.sh` — spawns `claude -p --include-partial-messages`, watches the JSONL stream for skill activation, emits `{triggered, durationMs, totalTokens, streamEvents}`.
+- `scripts/aggregate-benchmark.js` — folds N run-eval outputs into pass-rate + mean/stddev tokens + mean/stddev duration per ref.
+- `agents/grader.md` / `comparator.md` / `analyzer.md` — subagent prompts ported from [anthropics/skills](https://github.com/anthropics/skills) under Apache 2.0 (see `NOTICE`).
 
-Plan 6 wires `/skill-voice-review` phase 3 to this engine and adds the Node dashboard UI (mirrors model_trainer/report's `dashboard/` layout).
+Plan 6 wires `/skill-voice-review` phase 3 to this engine and ships the dashboard.
+
+---
+
+## Inspirations
+
+- **Superpowers.** The originator of the gate-driven, review-separated, TDD-flavoured Claude-skill genre. The two-stage author / reviewer separation, the `writing-plans` discipline, and the `subagent-driven-development` pattern all come from there.
+- **Spectral (Stoplight).** The reference architecture for typed-rule schema engines targeting structured-but-prose-shaped artifacts. The `kind` axis is borrowed straight from ESLint's `eslint:recommended` plus project overrides pattern.
+- **CoNLL-2010 Shared Task on hedge cue detection.** The hedge-word denylist sits on Farkas et al.'s BioScope corpus and Hyland's metadiscourse work. Not vibes. Citations.
+- **`anthropics/skills`.** Three grader / comparator / analyzer subagent prompts are ported under Apache 2.0. See `NOTICE`.
+- **Fagan inspections (1976).** The author-cannot-self-review rule predates code review tooling by thirty years. It works because separation is the constraint, not the format.
+
+---
+
+## Contributing
+
+Open invitation. If you have a better way of handling a stage, a lint rule the engine is missing, or a detector pattern that improves on what is here, I want to see it. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, the conventions skills follow, and the rule shape in `lint-rules.json`.
+
+A standing offer: if you think a lint rule is wrong, open an issue with the counter-argument. The rules are versioned. They are also intentionally opinionated. Forks are fine.
+
+---
+
+## Licence
+
+MIT. See [LICENSE](LICENSE) for the full text. Use it. Fork it. Build on it. Attribution welcome, not required.

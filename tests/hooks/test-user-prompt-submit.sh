@@ -12,6 +12,12 @@ if ! printf '%s' "$out" | jq -e '.hookSpecificOutput.additionalContext' >/dev/nu
   echo "$out"; exit 1
 fi
 
+event="$(printf '%s' "$out" | jq -r '.hookSpecificOutput.hookEventName')"
+if [[ "$event" != "UserPromptSubmit" ]]; then
+  echo "FAIL: hookEventName must be 'UserPromptSubmit', got: $event"
+  exit 1
+fi
+
 content="$(printf '%s' "$out" | jq -r '.hookSpecificOutput.additionalContext')"
 if [[ "$content" != *"/skill-scope"* ]]; then
   echo "FAIL: reminder does not name /skill-scope"; exit 1

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>skill-cheat — Flow Atlas</title>
+  <style>
+    @page {
+      size: 17in 11in;    /* landscape tabloid */
+      margin: 0.5in 0.6in 0.6in 0.6in;
+      @top-right {
+        content: "skill-cheat flow atlas";
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        font-size: 8.5pt;
+        color: #9ca3af;
+      }
+      @bottom-center {
+        content: counter(page) " / " counter(pages);
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        font-size: 9pt;
+        color: #9ca3af;
+      }
+    }
+    @page :first {
+      @top-right { content: ""; }
+      @bottom-center { content: ""; }
+      margin: 0;
+    }
+    @page flow-cover { margin: 0.4in 0.5in 0.5in 0.5in; }
+    @page flow-notes { margin: 0.8in 1.2in 1in 1.2in; }
+
+    html { font-size: 11pt; }
+    body {
+      font-family: "Charter", "Iowan Old Style", Georgia, serif;
+      line-height: 1.5;
+      color: #111827;
+      margin: 0;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.2;
+    }
+
+    /* ===== Cover page ===== */
+    .atlas-cover {
+      page: first;
+      page-break-after: always;
+      padding: 2in 1in 0 1in;
+      text-align: center;
+      height: 100%;
+    }
+    .atlas-cover .hero {
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 5em;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #111827;
+      margin: 0;
+      line-height: 1.05;
+    }
+    .atlas-cover .subhero {
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 2em;
+      font-weight: 300;
+      color: #374151;
+      margin: 0.1em 0 1em 0;
+    }
+    .atlas-cover .tag {
+      font-style: italic;
+      color: #6b7280;
+      font-size: 1.25em;
+      margin: 0 0 2em 0;
+    }
+    .atlas-cover .toc {
+      display: inline-block;
+      text-align: left;
+      margin: 1em auto 0 auto;
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 1.1em;
+      line-height: 2.1;
+    }
+    .atlas-cover .toc b { color: #0f172a; }
+    .atlas-cover .toc .desc { color: #6b7280; font-weight: 400; }
+
+    /* ===== Flow figure pages ===== */
+    section.flow-cover {
+      page: flow-cover;
+      page-break-before: always;
+      page-break-after: always;
+      padding: 0;
+      display: block;
+    }
+    .flow-badge {
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 0.75em;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #6366f1;
+      text-transform: uppercase;
+      margin: 0 0 0.2em 0;
+    }
+    .flow-badge.small { font-size: 0.65em; margin-bottom: 0.3em; }
+    h1.flow-title {
+      font-size: 2.1em;
+      margin: 0 0 0.35em 0;
+      padding-bottom: 0.15em;
+      border-bottom: 2px solid #111827;
+    }
+    figure.flow-figure {
+      margin: 0;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+    figure.flow-figure img {
+      max-width: 100%;
+      max-height: 8.7in;  /* leave room for title + badge + margins */
+      height: auto;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 0.2em;
+      background: white;
+    }
+
+    /* ===== Companion notes pages ===== */
+    section.flow-notes {
+      page: flow-notes;
+      page-break-before: always;
+      page-break-after: always;
+      max-width: 9in;
+      margin: 0 auto;
+    }
+    section.flow-notes h2 {
+      font-size: 2em;
+      margin: 0 0 0.8em 0;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 0.15em;
+    }
+    section.flow-notes .notes-body {
+      column-count: 2;
+      column-gap: 0.5in;
+      column-rule: 1px solid #e5e7eb;
+      font-size: 11pt;
+      line-height: 1.55;
+    }
+    section.flow-notes h3 {
+      font-size: 1.15em;
+      margin: 0.8em 0 0.3em 0;
+      color: #1f2937;
+      break-inside: avoid;
+    }
+    section.flow-notes p {
+      margin: 0.4em 0 0.7em 0;
+    }
+    section.flow-notes ul, section.flow-notes ol {
+      margin: 0.4em 0 0.7em 0;
+      padding-left: 1.2em;
+    }
+    section.flow-notes li { margin: 0.2em 0; }
+    section.flow-notes code {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.85em;
+      background: #f3f4f6;
+      color: #be185d;
+      padding: 0.05em 0.28em;
+      border-radius: 3px;
+    }
+    section.flow-notes pre {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 9pt;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 0.6em 0.8em;
+      border-radius: 5px;
+      break-inside: avoid;
+      white-space: pre-wrap;
+      column-span: all;
+    }
+    section.flow-notes blockquote {
+      border-left: 3px solid #6366f1;
+      background: #f5f5fd;
+      padding: 0.2em 0.8em;
+      margin: 0.5em 0;
+      break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+
+<section class="atlas-cover">
+  <div class="hero">Flow Atlas</div>
+  <div class="subhero">skill-cheat internals</div>
+  <div class="tag">Four detailed cross-cutting flows. One per spread.</div>
+  <div class="toc">
+    <div><b>A &nbsp;·&nbsp; Pipeline artifact lineage</b> — <span class="desc">every artifact each stage produces and consumes, verdict batons between stages, the SHA-256 tamper loop</span></div>
+    <div><b>B &nbsp;·&nbsp; Hook and trigger dispatch</b> — <span class="desc">SessionStart, UserPromptSubmit, slash commands, bootstrap routing, three converging entry paths</span></div>
+    <div><b>C &nbsp;·&nbsp; Lint engine internals</b> — <span class="desc">rule loading, detector dispatch fan-out, severity aggregation, verdict ladder</span></div>
+    <div><b>D &nbsp;·&nbsp; Benchmark engine (Plan 5)</b> — <span class="desc">four phases, mock vs production fork, grader / comparator / analyzer trio, git-worktree isolation</span></div>
+  </div>
+  <p style="margin-top: 2.5em; font-family: 'Helvetica Neue', Helvetica, sans-serif; color: #6b7280; font-size: 0.9em;">Tabloid landscape — pinch-zoom each page on the iPad. Each flow gets one full-page diagram + one page of companion notes.</p>
+</section>
+
+
+    <section class="flow-cover">
+      <div class="flow-badge">Flow A</div>
+      <h1 class="flow-title">Pipeline artifact lineage</h1>
+      <figure class="flow-figure">
+        <img src="diagrams/A-pipeline-artifact-lineage.png" alt="Pipeline artifact lineage"/>
+      </figure>
+    </section>
+
+    <section class="flow-notes">
+      <div class="flow-badge small">Flow A — notes</div>
+      <h2>Pipeline artifact lineage</h2>
+      <div class="notes-body">
+        <h1 id="a-pipeline-artifact-lineage">A — Pipeline Artifact Lineage</h1>
+<p>Landscape 11×17 in at 300 dpi. Source:
+<code>A-pipeline-artifact-lineage.dot</code>. Render:
+<code>A-pipeline-artifact-lineage.png</code> (4562×2850 px).</p>
+<h2 id="what-the-diagram-shows">What the diagram shows</h2>
+<p>Five horizontal bands, one per pipeline stage —
+<code>skill-scope</code>, <code>skill-design</code>,
+<code>skill-author</code>, <code>skill-voice-review</code>,
+<code>skill-scaffold</code> — stacked top-to-bottom so the reader sees
+the full pipeline at a glance. Inside each band, the stage box sits on
+the left and everything it touches (emitters, subagents, on-disk
+artifacts, verdicts) flows left-to-right out of it. The happy path is a
+bold green chain of verdict batons
+(<code>SCOPE_LOCKED → DESIGN_LOCKED → AUTHOR_DONE → ACCEPT → SCAFFOLD_COMPLETE</code>)
+that crosses the bands vertically. Every <code>BLOCKED_*</code> escape
+is colored red and exits its stage sideways. Artifacts are drawn as
+note-shapes; scripts that emit artifacts
+(<code>emit-eval-skeleton.sh</code>,
+<code>emit-assertion-skeleton.sh</code>, <code>integrity-hash.sh</code>,
+<code>lint.sh</code>, <code>run-eval.js</code>) are drawn as component
+boxes; dispatched subagents use the 3-D box shape.</p>
+<h2 id="key-insights">Key insights</h2>
+<ol type="1">
+<li><p><strong>scope.json is the keystone, not scope.md.</strong>
+scope.md is the human trace; scope.json is what every downstream stage
+actually reads. It alone carries <code>plugin-mode</code> to Stage 5 and
+<code>skillName</code> to the Stage 4 benchmark engine. Edit scope.md by
+hand and you invalidate nothing; edit scope.json and the pipeline
+breaks.</p></li>
+<li><p><strong>The SHA-256 integrity loop is a single thin red
+line.</strong> Stage 2’s <code>integrity-hash.sh</code> produces
+<code>design.md.sha256</code>. Stage 3’s first action is to re-hash the
+bytes between the integrity-block markers and compare against that
+sidecar. Any drift drops straight into <code>BLOCKED_TAMPER</code> — the
+only BLOCKED state in the pipeline that is self-diagnosed by a
+cryptographic test rather than a heuristic.</p></li>
+<li><p><strong>Two parallel “skeleton” emitters seed the benchmark
+engine.</strong> <code>emit-eval-skeleton.sh</code> (Stage 1) writes
+<code>eval-set-skeleton.json</code>;
+<code>emit-assertion-skeleton.sh</code> (Stage 2) writes
+<code>assertion-skeleton.json</code>. Both feed into Stage 4’s
+<code>run-eval.js</code> as <code>cases[]</code> and
+<code>assertions[]</code> respectively. Without either, the Plan-5
+benchmark engine has nothing to run against.</p></li>
+<li><p><strong>Voice-review’s ACCEPT is a hard lock on Stage 5.</strong>
+The red edge from Stage 5’s <code>verdict == ACCEPT?</code> diamond to
+<code>SCAFFOLD_INCOMPLETE</code> is the single choke point between
+passing voice-review and shipping to disk.
+<code>ACCEPT_WITH_MINOR</code> is drawn looping back into Stage 4
+because the scaffold stage rejects it as not-quite-ACCEPT and forces a
+rerun.</p></li>
+<li><p><strong>Three “fresh subagent” dispatches, all
+authored-context-free.</strong> The design reviewer (Stage 2, pre-lock),
+the voice-reviewer (Stage 4), and the benchmark-engine runs (Stage 4)
+all run in isolated contexts. This is the “structural distrust”
+principle made concrete in the diagram: no stage ever grades its own
+output with its own memory.</p></li>
+</ol>
+<h2 id="surprising-dependencies-single-points-of-failure">Surprising
+dependencies / single points of failure</h2>
+<ul>
+<li><strong><code>design.md.sha256</code> is the single artifact whose
+absence is catastrophic across two stages</strong>: Stage 3 refuses to
+start without it (BLOCKED_TAMPER on missing sidecar) and Stage 2 refuses
+to emit <code>DESIGN_LOCKED</code> without writing it. One file gates
+two stages.</li>
+<li><strong><code>scope.json.pluginMode</code> is the only thing that
+tells Stage 5 whether to write a full tree or a skill-only
+delta.</strong> If scope.json is missing or <code>pluginMode</code> is
+unrecognized, Stage 5 emits <code>SCAFFOLD_INCOMPLETE</code> — not
+<code>BLOCKED_*</code>. The diagram labels this “not found →
+SCAFFOLD_INCOMPLETE” to make the distinction visible.</li>
+<li><strong>lint.sh runs before the voice-reviewer subagent.</strong>
+Any critical lint finding short-circuits the whole stage to
+<code>REJECT_CRITICAL</code> without the subagent ever being dispatched
+— a cost-saving structural gate.</li>
+</ul>
+<h2 id="how-to-read-the-legend">How to read the legend</h2>
+<p>Top-left panel. Row 1 = node styles (stage box, artifact note,
+emitter script, subagent 3-D box, gate diamond, happy verdict
+double-circle, BLOCKED_* double-circle, SHA-256 tamper-seal note). Row 2
+= edge semantics (solid = produces, dashed = reads, dotted = invokes,
+bold green = verdict baton, bold red = BLOCKED_* escape). The dashed red
+edge from <code>design.md.sha256</code> into Stage 3’s
+<code>re-hash &amp; compare</code> diamond is the tamper-seal
+verification loop — that one edge is the entire integrity contract
+visualized.</p>
+
+      </div>
+    </section>
+    
+
+    <section class="flow-cover">
+      <div class="flow-badge">Flow B</div>
+      <h1 class="flow-title">Hook and trigger dispatch</h1>
+      <figure class="flow-figure">
+        <img src="diagrams/B-trigger-dispatch-flow.png" alt="Hook and trigger dispatch"/>
+      </figure>
+    </section>
+
+    <section class="flow-notes">
+      <div class="flow-badge small">Flow B — notes</div>
+      <h2>Hook and trigger dispatch</h2>
+      <div class="notes-body">
+        <h1 id="b-hook-trigger-dispatch-flow">B — Hook &amp; Trigger Dispatch
+Flow</h1>
+<p>Companion to <code>B-trigger-dispatch-flow.png</code> /
+<code>.dot</code>. Canvas: 17×11 in landscape @ 300 dpi (~5196×3510 px),
+built for iPad pinch-zoom along swimlanes.</p>
+<h2 id="what-the-diagram-shows">What the diagram shows</h2>
+<p>The atlas traces every path by which skill-cheat self-triggers and
+ultimately routes a prompt into the 5-stage pipeline. Three coloured
+entry paths on the left converge on Claude’s context window in the
+middle, then fan out right into the five slash commands and the five
+stage skills they load. Read it left-to-right as time; read
+top-to-bottom as entry path.</p>
+<p><strong>Entry A (blue) — cold SessionStart.</strong> The harness
+fires on <code>startup | clear | compact</code> (yellow diamond matcher
+node). <code>hooks/session-start</code> reads
+<code>skills/using-skill-cheat/SKILL.md</code> and pipes it through
+<code>lib/emit-context.sh</code>, which <code>jq</code>-builds the
+envelope
+<code>{hookSpecificOutput:{hookEventName:"SessionStart", additionalContext:"&lt;body&gt;"}}</code>
+on stdout. The harness merges that into Claude’s context before the
+first turn.</p>
+<p><strong>Entry B (orange) — every user prompt.</strong>
+<code>UserPromptSubmit</code> has no matcher, so
+<code>hooks/user-prompt-submit</code> runs for every submission. It
+reads JSON stdin, extracts <code>.prompt</code> with <code>jq</code>,
+sources <code>config.sh</code> (with the project-local
+<code>.skill-cheat.sh</code> override check next to it), then calls
+<code>detect_skill_intent</code> which lowercases both sides and
+substring-matches each keyword. On hit, it emits the same envelope shape
+but with an “INTENT DETECTED” reminder. On miss, the dashed grey
+silent-fallthrough branch shows the prompt reaching Claude unadorned —
+no additionalContext, no error, <code>trap 'exit 0' ERR</code> eating
+any failure.</p>
+<p><strong>Entry C (green) — explicit slash.</strong>
+<code>/skill-scope</code> and siblings bypass intent detection entirely:
+each <code>commands/*.md</code> file is a one-line wrapper that tells
+Claude to “Invoke the <code>skill-cheat:skill-&lt;stage&gt;</code>
+skill.” (A dotted green edge shows that slash input still traverses
+<code>UserPromptSubmit</code> — it just wouldn’t match a keyword.)</p>
+<p>All three paths land on the Claude-context cluster, where the
+<code>using-skill-cheat</code> bootstrap (already resident from path A)
+plus the optional INTENT reminder (from path B) constrain the decision
+node. The HARD-GATE routing forces skill-authoring intent through
+<code>/skill-scope</code>, and pipeline chaining edges show how verdicts
+(<code>SCOPE_LOCKED → DESIGN_LOCKED → AUTHOR_DONE → ACCEPT → SCAFFOLD_COMPLETE</code>)
+walk downstream. Only <code>skill-scaffold</code> writes to disk — the
+cylinder on the far right.</p>
+<h2 id="key-insights">Key insights</h2>
+<ol type="1">
+<li><strong>Self-triggering is a two-layer lock.</strong> The bootstrap
+(<code>using-skill-cheat</code>) is the persistent rule; the
+UserPromptSubmit hook is the just-in-time re-reminder. Either alone
+would work; together they make skipping <code>/skill-scope</code> nearly
+impossible.</li>
+<li><strong>Both hooks emit the same envelope shape.</strong> Even
+though the orange path fires on <code>UserPromptSubmit</code>, the JSON
+it writes still names <code>"hookEventName": "SessionStart"</code> — the
+plugin deliberately piggybacks on SessionStart’s additionalContext
+channel.</li>
+<li><strong>The silent path is load-bearing.</strong>
+<code>trap 'exit 0' ERR</code>, <code>|| true</code> on <code>jq</code>,
+and unconditional <code>exit 0</code> on missing bootstrap guarantee the
+plugin never blocks a user’s prompt. Failure mode is invisibility, not
+error.</li>
+<li><strong>Config override is last-writer-wins.</strong>
+<code>config.sh</code> ships defaults, then <code>.skill-cheat.sh</code>
+(if present in <code>$CLAUDE_PROJECT_DIR</code>) is sourced after it,
+redefining <code>SKILL_CHEAT_TRIGGER_KEYWORDS</code> /
+<code>SKILL_CHEAT_WORK_DIR</code> without the plugin needing to know the
+project exists.</li>
+<li><strong>Slash commands and hook triggers converge, they don’t
+compete.</strong> The same five stage skills are reachable via explicit
+slash OR via Claude following the bootstrap’s routing rule after a
+keyword match. The <code>rank=same</code> row for commands and the row
+for stage skills makes this convergence visually obvious.</li>
+</ol>
+<h2 id="what-the-reader-should-take-away">What the reader should take
+away</h2>
+<p>skill-cheat does not police the user — it rigs the context.
+SessionStart plants the rule; UserPromptSubmit re-surfaces it exactly
+when a keyword appears; slash commands offer a clean fast-path for users
+who already know the pipeline. The hook runtime is deliberately dumb
+(shell + <code>jq</code>), the intelligence sits in Claude’s
+interpretation of the injected bootstrap. That is what “hooks make the
+plugin self-triggering” means in practice: no agent code, just a
+reliable whisper at the right moment.</p>
+
+      </div>
+    </section>
+    
+
+    <section class="flow-cover">
+      <div class="flow-badge">Flow C</div>
+      <h1 class="flow-title">Lint engine internals</h1>
+      <figure class="flow-figure">
+        <img src="diagrams/C-lint-engine-internals.png" alt="Lint engine internals"/>
+      </figure>
+    </section>
+
+    <section class="flow-notes">
+      <div class="flow-badge small">Flow C — notes</div>
+      <h2>Lint engine internals</h2>
+      <div class="notes-body">
+        <h1 id="flow-c-lint-engine-internals">Flow C — Lint Engine
+Internals</h1>
+<p>Diagram: <code>C-lint-engine-internals.png</code> (4970×3300 px, 300
+dpi, landscape tabloid).</p>
+<h2 id="what-the-diagram-shows">What the diagram shows</h2>
+<p>The diagram traces one invocation of
+<code>lint.sh &lt;SKILL.md&gt;</code> from the bash entrypoint to the
+JSON verdict report emitted on stdout. Eight clusters read
+top-to-bottom: <strong>Entrypoint</strong>, <strong>Rule
+Loader</strong>, the central <strong>dispatcher hexagon</strong>, two
+detector clusters (<strong>shell detectors</strong> from
+<code>lint.sh</code>, <strong>JS detectors</strong> spawned via
+<code>node lint.js</code>), a <strong>data-dependencies</strong> strip
+of reference JSON files feeding specific detectors, the <strong>findings
+aggregation</strong> row with four severity/pass buckets, and finally
+the <strong>verdict-ladder</strong> decision chain that collapses the
+buckets into one of four verdict tokens before the report is
+serialized.</p>
+<h2 id="detector-dispatch-as-the-architectural-spine">Detector dispatch
+as the architectural spine</h2>
+<p>The centerpiece is <code>dispatch_detector(rule)</code> — a
+<code>case $dtype in …</code> switch that reads the rule’s
+<code>detector.type</code> discriminator and routes to exactly one of
+eleven detector functions. Six types (<code>find-extensions</code>,
+<code>grep-denylist</code>, <code>grep-required</code>,
+<code>regex-line</code>, <code>bash-syntax</code>,
+<code>dot-parse</code>) execute inline in bash using <code>jq</code>,
+<code>grep</code>, <code>awk</code>, <code>find</code>,
+<code>bash -n</code>, and <code>dot -Tcanon</code>. Five types that need
+richer string parsing (<code>yaml-frontmatter</code>,
+<code>section-order</code>, <code>cross-reference</code>,
+<code>hard-gate-span</code>, <code>rationalization-table-cells</code>)
+are delegated to a spawned
+<code>node lint.js --detector &lt;type&gt; --skill &lt;path&gt; --config &lt;cfg&gt;</code>
+process, which emits <code>{findings:[…]}</code> on stdout and exits
+non-zero only on detector error (not on rule failure). Every detector
+obeys the same contract: read config + artifact, return a JSON array of
+<code>{location, message, excerpt}</code> findings. The dispatcher then
+stamps each finding with the rule’s <code>ruleId</code> and
+<code>severity</code> before concatenating it into the running
+<code>findings_json</code> array.</p>
+<h2
+id="declarative-rule-json-mechanical-detector-separation">Declarative
+rule JSON + mechanical detector separation</h2>
+<p>The core design win is that rules are <strong>data, not
+code</strong>. <code>references/lint-rules.json</code> carries 21 rules
+where each rule is a tuple of
+<code>{id, description, severity, detector}</code> and the detector
+block is just a type tag plus typed parameters (<code>section</code>,
+<code>allowlist</code>, <code>expected-order</code>,
+<code>forbidden-tokens</code>, etc.). Authors of new lint rules never
+write detector logic — they pick an existing type and parametrize it.
+New detector <strong>kinds</strong> require one case-branch in the
+dispatcher plus one function; once added, any number of rules can reuse
+them. The denylist / allowlist JSON files
+(<code>hedge-words-denylist.json</code>,
+<code>library-names-denylist.json</code>,
+<code>imperative-verbs-allowlist.json</code>) are referenced by path
+from the rule’s <code>detector.source</code>, so corpus updates are
+pure-data edits.</p>
+<h2 id="extends-disable-cascade">Extends / disable cascade</h2>
+<p><code>resolve_manifest()</code> runs before dispatch. It reads
+<code>&lt;skill-dir&gt;/lint.json</code>; if
+<code>.extends == "skill-cheat:baseline"</code> it performs a
+<code>jq</code> merge that (1) drops every baseline rule whose
+<code>id</code> appears in the local <code>rules[]</code> (local
+override wins), (2) drops every baseline rule whose <code>id</code>
+appears in the local <code>disable[]</code>, (3) concatenates the kept
+baseline rules with the local rules. The voice-review skill itself ships
+<code>lint.json = {extends: "skill-cheat:baseline", disable: ["LINT-001"]}</code>
+— suppressing the plugin-wide file-extension check because the skill
+inspects individual skill files, not the plugin root. If
+<code>extends</code> is absent, the local manifest is used verbatim
+(full override).</p>
+<h2 id="verdict-ladder-semantics">Verdict-ladder semantics</h2>
+<p>The four severity counters drive a strictly monotonic ladder:
+<code>critical &gt; 0 → REJECT_CRITICAL</code> (the only exit-1 path);
+else <code>important &gt; 0 → REJECT_IMPORTANT</code>; else
+<code>minor &gt; 0 → ACCEPT_WITH_MINOR</code>; else <code>ACCEPT</code>.
+Higher severity always masks lower — a single CRITICAL finding rejects
+the skill regardless of minor count. This is why the severity color-code
+(red → amber → gray → green) in the diagram maps directly to the ladder:
+you read the diamonds top-to-bottom and take the first <code>yes</code>
+branch. The final JSON report preserves full detail under
+<code>summary</code> (per-severity counts plus a <code>passed</code>
+count of zero-finding rules) and <code>findings[]</code> (every tagged
+finding), giving downstream reviewers both the verdict and the evidence
+trail.</p>
+
+      </div>
+    </section>
+    
+
+    <section class="flow-cover">
+      <div class="flow-badge">Flow D</div>
+      <h1 class="flow-title">Benchmark engine flow (Plan 5)</h1>
+      <figure class="flow-figure">
+        <img src="diagrams/D-benchmark-engine-flow.png" alt="Benchmark engine flow (Plan 5)"/>
+      </figure>
+    </section>
+
+    <section class="flow-notes">
+      <div class="flow-badge small">Flow D — notes</div>
+      <h2>Benchmark engine flow (Plan 5)</h2>
+      <div class="notes-body">
+        <h1 id="d-benchmark-engine-flow">D-benchmark-engine-flow</h1>
+<p>Companion note for <code>D-benchmark-engine-flow.png</code> — the
+Plan 5 benchmark engine in skill-cheat.</p>
+<h2 id="what-the-engine-does">What the engine does</h2>
+<p>The benchmark engine is the behavioural-evaluation layer that sits
+downstream of <code>skill-scope</code> and <code>skill-design</code>. It
+takes an already-scoped, already-designed skill and answers one question
+with numbers: <em>does the candidate revision actually behave better
+than the baseline?</em> It does so in four phases, each with its own
+artefacts and its own failure domain.</p>
+<p><strong>Phase 0 (seeding)</strong> turns declarative upstream inputs
+into testable skeletons. <code>emit-eval-skeleton.sh</code> reads
+<code>scope.json</code>, walks <code>.triggers[]</code>, and writes one
+<code>shouldTrigger: true</code> positive per trigger plus five
+<code>shouldTrigger: false</code> adversarial placeholders
+(trigger-collision, instruction-injection, degenerate-prompt,
+keyword-without-context, cross-skill-ambiguity) — the set is derived
+from published prompt-injection literature.
+<code>emit-assertion-skeleton.sh</code> reads <code>design.json</code>
+and emits <code>hard-gate-violation-absent</code> assertions per
+<code>hardGates[]</code> plus <code>gate-function-question</code>
+assertions per <code>gateFunctions[]</code>.</p>
+<p><strong>Phase 1 (plan init)</strong> is where the run becomes
+reproducible. <code>benchmark-plan-init.sh</code> writes
+<code>benchmark-plan.md</code> with an explicit integrity block
+(<code>skillName</code>, <code>baselineRef</code>,
+<code>candidateRef</code>, <code>caseQueries[]</code>,
+<code>assertionPatterns[]</code>) bracketed by
+<code>&lt;!-- integrity-block:start --&gt;</code> /
+<code>&lt;!-- integrity-block:end --&gt;</code> markers.
+<code>benchmark-integrity-hash.sh</code> then awk-extracts the byte
+range <em>strictly between</em> those markers (the markers themselves
+never enter the hash) and writes a 64-hex-char SHA-256 sidecar. That
+digest is embedded into <code>benchmark-plan.json</code>’s
+<code>integrityBlock.sha256</code>. In parallel,
+<code>git-worktree-setup.sh</code> materialises two detached worktrees
+under <code>&lt;root&gt;/&lt;run-id&gt;/{baseline,candidate}/</code> —
+and always <code>baseline</code> first, because every other stage reads
+them in that order and the plan-as-log schema enforces
+<code>baselineRef</code> before <code>candidateRef</code>.</p>
+<p><strong>Phase 2 (per-case execution)</strong> iterates
+<code>cases × {baseline, candidate} × N samples</code> and dispatches
+<code>run-eval.js</code>. The script forks on one flag. In
+<strong>mock</strong> mode (<code>--mock-stream-file</code>), a
+pre-recorded JSONL fixture is <code>readFileSync</code>’d — this is what
+CI uses, because it is free and deterministic. In
+<strong>production</strong> mode, the script <code>spawn</code>s
+<code>claude -p --include-partial-messages --output-format stream-json</code>
+with <code>cwd</code> set to the worktree skill path. Both lanes
+converge on <code>analyseStream()</code>, which does a single thing that
+matters: it looks for a <code>stream_event</code> whose
+<code>content_block_start</code> is a <code>tool_use</code> with
+<code>input.name === skillName</code>. That one match sets
+<code>triggered = true</code>. A <code>result/success</code> event
+contributes <code>durationMs</code> and <code>totalTokens</code>. Each
+run emits one line of JSON tagged with <code>ref</code>.</p>
+<p><strong>Phase 3 (aggregation + grading)</strong> folds the JSONL.
+<code>aggregate-benchmark.js</code> partitions by <code>ref</code> (any
+ref that is not literally <code>"baseline"</code> or
+<code>"candidate"</code> is a schema violation and exits 65) and
+produces
+<code>{runs, passRate, meanTokens, stddevTokens, meanDurationMs, stddevDurationMs}</code>
+per side plus a <code>delta</code> block. Then three subagents dispatch:
+<strong>grader</strong> reads transcripts + assertions and returns
+tri-state <code>PASS / FAIL / NEEDS_CONTEXT</code> per assertion with
+concrete evidence; <strong>comparator</strong> does a blind A/B
+judgement — it <em>must not</em> know which output came from which ref
+and is required to STOP if it can infer the mapping;
+<strong>analyzer</strong> unblinds the comparator, reads both SKILL.md
+files, and attributes the win to specific skill-text differences.</p>
+<h2 id="why-worktree-isolation-sha-256-are-load-bearing">Why worktree
+isolation + SHA-256 are load-bearing</h2>
+<p>Worktrees guarantee that baseline and candidate runs cannot bleed
+state. No shared scratch, no shared settings, no “oh, the candidate saw
+the baseline’s cache.” The SHA-256 over the integrity block is the
+anti-drift contract: if any of <code>skillName</code>,
+<code>baselineRef</code>, <code>candidateRef</code>, the case queries,
+or the assertion patterns are silently edited mid-run, the digest
+changes and any stage that re-verifies will halt. Integrity violation =
+STOP.</p>
+<h2 id="structural-distrust">Structural distrust</h2>
+<p>The three subagents are not redundant — they are adversarial by
+construction. Grader cannot judge quality; comparator cannot see
+origins; analyzer cannot overturn the verdict. No single agent holds all
+of (assertions, blind outputs, skill texts). That separation makes it
+structurally hard for one judgement to contaminate another.</p>
+<h2 id="mode-split-pays-for-ci">Mode split pays for CI</h2>
+<p>The <code>--mock-stream-file</code> path exists precisely so that
+pull-request CI can replay a recorded stream and verify the analysis
+logic, the aggregation maths, and the plan schema without ever spawning
+the real Claude CLI. Production runs flip one flag.</p>
+
+      </div>
+    </section>
+    
+
+</body>
+</html>

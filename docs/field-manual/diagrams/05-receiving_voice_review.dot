@@ -1,0 +1,52 @@
+digraph receiving_voice_review {
+    bgcolor="white";
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=11, style="filled", fillcolor="#f3f4f6", color="#374151", penwidth=1.3];
+    edge [fontname="Helvetica", fontsize=10, color="#6b7280"];
+    rankdir=TB;
+    ranksep=0.45;
+    nodesep=0.40;
+    splines=spline;
+
+    "Receive findings" [shape=box];
+    "Verify each against SKILL.md" [shape=box];
+    "Verified?" [shape=diamond];
+    "Push back with technical reason" [shape=box];
+    "Decide fix or push back" [shape=box];
+    "Implement fix" [shape=box];
+    "Re-run lint" [shape=box, fillcolor="#fde68a", color="#92400e"];
+    "Lint clean?" [shape=diamond, fillcolor="#fde68a", color="#92400e"];
+    "Fix lint error" [shape=box, fillcolor="#fde68a", color="#92400e"];
+    "Emit FEEDBACK_PROCESSED" [shape=doublecircle, fillcolor="#dcfce7", color="#166534", fontsize=10];
+
+    { rank=same; "Verified?"; "Push back with technical reason"; }
+    { rank=same; "Decide fix or push back"; "Implement fix"; }
+    { rank=same; "Re-run lint"; "Fix lint error"; }
+
+    subgraph cluster_lintloop {
+        label="retry loop";
+        labelloc="b";
+        fontname="Helvetica";
+        fontsize=10;
+        fontcolor="#92400e";
+        style="rounded,dashed";
+        color="#92400e";
+        penwidth=1.2;
+        "Re-run lint";
+        "Lint clean?";
+        "Fix lint error";
+    }
+
+    "Receive findings" -> "Verify each against SKILL.md";
+    "Verify each against SKILL.md" -> "Verified?";
+    "Verified?" -> "Decide fix or push back" [label="yes"];
+    "Verified?" -> "Push back with technical reason" [label="no match found"];
+    "Decide fix or push back" -> "Implement fix" [label="fix"];
+    "Decide fix or push back" -> "Push back with technical reason" [label="push back"];
+    "Push back with technical reason" -> "Re-run lint";
+    "Implement fix" -> "Re-run lint";
+    "Re-run lint" -> "Lint clean?";
+    "Lint clean?" -> "Fix lint error" [label="no", color="#b45309", penwidth=2.2, fontcolor="#92400e"];
+    "Fix lint error" -> "Re-run lint" [color="#b45309", penwidth=2.2, constraint=false];
+    "Lint clean?" -> "Emit FEEDBACK_PROCESSED" [label="yes"];
+}
