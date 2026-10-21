@@ -1,0 +1,25 @@
+digraph receiving_voice_review {
+    rankdir=TB;
+    "Receive findings" [shape=box];
+    "Verify each against SKILL.md" [shape=box];
+    "Verified?" [shape=diamond];
+    "Push back with technical reason" [shape=box];
+    "Decide fix or push back" [shape=box];
+    "Implement fix" [shape=box];
+    "Re-run lint" [shape=box];
+    "Lint clean?" [shape=diamond];
+    "Fix lint error" [shape=box];
+    "Emit FEEDBACK_PROCESSED" [shape=doublecircle];
+    "Receive findings" -> "Verify each against SKILL.md";
+    "Verify each against SKILL.md" -> "Verified?";
+    "Verified?" -> "Decide fix or push back" [label="yes"];
+    "Verified?" -> "Push back with technical reason" [label="no match found"];
+    "Decide fix or push back" -> "Implement fix" [label="fix"];
+    "Decide fix or push back" -> "Push back with technical reason" [label="push back"];
+    "Push back with technical reason" -> "Re-run lint";
+    "Implement fix" -> "Re-run lint";
+    "Re-run lint" -> "Lint clean?";
+    "Lint clean?" -> "Fix lint error" [label="no"];
+    "Fix lint error" -> "Re-run lint";
+    "Lint clean?" -> "Emit FEEDBACK_PROCESSED" [label="yes"];
+}

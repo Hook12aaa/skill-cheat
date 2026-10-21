@@ -1,0 +1,22 @@
+digraph skill_design {
+    rankdir=TB;
+    "Read scope.md" [shape=box];
+    "Draft HARD-GATEs" [shape=box];
+    "Draft Core Principle" [shape=box];
+    "Draft Process Flow" [shape=box];
+    "Draft Checklist" [shape=box];
+    "Draft Gate Functions" [shape=box];
+    "Spawn reviewer" [shape=box];
+    "Write Integrity Block" [shape=box];
+    "Emit SHA-256 sidecar" [shape=box];
+    "DESIGN_LOCKED" [shape=doublecircle];
+    "Read scope.md" -> "Draft HARD-GATEs";
+    "Draft HARD-GATEs" -> "Draft Core Principle";
+    "Draft Core Principle" -> "Draft Process Flow";
+    "Draft Process Flow" -> "Draft Checklist";
+    "Draft Checklist" -> "Draft Gate Functions";
+    "Draft Gate Functions" -> "Spawn reviewer";
+    "Spawn reviewer" -> "Write Integrity Block";
+    "Write Integrity Block" -> "Emit SHA-256 sidecar";
+    "Emit SHA-256 sidecar" -> "DESIGN_LOCKED";
+}

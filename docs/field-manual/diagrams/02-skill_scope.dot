@@ -1,0 +1,18 @@
+digraph skill_scope {
+    rankdir=TB;
+    "Intent received" [shape=box];
+    "Ask name + command" [shape=box];
+    "Ask triggers + verdicts" [shape=box];
+    "Ask Anti-Pattern phrase" [shape=box];
+    "Ask target project path" [shape=box];
+    "Ask new plugin or existing?" [shape=box];
+    "Write scope.md" [shape=box];
+    "SCOPE_LOCKED" [shape=doublecircle];
+    "Intent received" -> "Ask name + command";
+    "Ask name + command" -> "Ask triggers + verdicts";
+    "Ask triggers + verdicts" -> "Ask Anti-Pattern phrase";
+    "Ask Anti-Pattern phrase" -> "Ask target project path";
+    "Ask target project path" -> "Ask new plugin or existing?";
+    "Ask new plugin or existing?" -> "Write scope.md";
+    "Write scope.md" -> "SCOPE_LOCKED";
+}

@@ -1,0 +1,5 @@
+{
+  "name": "symlink-plugin",
+  "version": "0.0.1",
+  "description": "Fixture: skills/x/SKILL.md is a symlink to a host file outside skills/. Expected: INCONCLUSIVE."
+}

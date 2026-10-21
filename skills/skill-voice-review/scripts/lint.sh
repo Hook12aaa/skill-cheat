@@ -9,6 +9,43 @@ if [[ "${1:-}" == "--source-only" ]]; then
   shift
 fi
 
+# Invariant: --mode {self|cross-plugin} controls rule filtering. Default self runs every rule.
+# Invariant: cross-plugin skips rules whose kind == "plugin-policy" before dispatch.
+# Invariant: --plugin-root-only runs ONLY rules with detector.scope == "plugin-root" against --target <plugin-root>.
+# Invariant: without --plugin-root-only, rules with detector.scope == "plugin-root" are skipped (pre-pass owns them).
+LINT_MODE="self"
+PLUGIN_ROOT_ONLY=0
+TARGET_PATH=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --mode)
+      LINT_MODE="$2"
+      shift 2
+      ;;
+    --plugin-root-only)
+      PLUGIN_ROOT_ONLY=1
+      shift
+      ;;
+    --target)
+      TARGET_PATH="$2"
+      shift 2
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+case "$LINT_MODE" in
+  self|cross-plugin) ;;
+  *) echo "lint.sh: --mode must be 'self' or 'cross-plugin', got '$LINT_MODE'" >&2; exit 64 ;;
+esac
+
+if [[ "$PLUGIN_ROOT_ONLY" == "1" && -z "$TARGET_PATH" ]]; then
+  echo "lint.sh: --plugin-root-only requires --target <plugin-root>" >&2
+  exit 64
+fi
+
 # detect_find_extensions <dir> <json-allowlist-array> → findings JSON array on stdout
 detect_find_extensions() {
   local dir="$1"
@@ -182,13 +219,17 @@ detect_dot_parse() {
 
 if [[ -z "${_LINT_SOURCE_ONLY:-}" ]]; then
 
-if [[ $# -lt 1 ]]; then
-  echo "usage: lint.sh <path-to-SKILL.md>" >&2
-  exit 64
+if [[ "$PLUGIN_ROOT_ONLY" == "1" ]]; then
+  [[ -d "$TARGET_PATH" ]] || { echo "lint: target dir not found: $TARGET_PATH" >&2; exit 66; }
+  SKILL_PATH=""
+else
+  if [[ $# -lt 1 ]]; then
+    echo "usage: lint.sh <path-to-SKILL.md>" >&2
+    exit 64
+  fi
+  SKILL_PATH="$1"
+  [[ -f "$SKILL_PATH" ]] || { echo "lint: file not found: $SKILL_PATH" >&2; exit 66; }
 fi
-
-SKILL_PATH="$1"
-[[ -f "$SKILL_PATH" ]] || { echo "lint: file not found: $SKILL_PATH" >&2; exit 66; }
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REF="$(cd "${HERE}/../references" && pwd)"
@@ -196,15 +237,21 @@ RULES_FILE="${REF}/lint-rules.json"
 
 # resolve_manifest → merged-rules-json on stdout
 resolve_manifest() {
-  local skill_dir
-  skill_dir="$(dirname "$SKILL_PATH")"
-  local local_manifest="${skill_dir}/lint.json"
   local base_manifest="${REF}/lint-rules.json"
 
   if [[ ! -f "$base_manifest" ]]; then
     echo '{"schemaVersion":"1.0","rules":[]}'
     return
   fi
+
+  if [[ "$PLUGIN_ROOT_ONLY" == "1" || -z "$SKILL_PATH" ]]; then
+    cat "$base_manifest"
+    return
+  fi
+
+  local skill_dir
+  skill_dir="$(dirname "$SKILL_PATH")"
+  local local_manifest="${skill_dir}/lint.json"
 
   if [[ ! -f "$local_manifest" ]]; then
     cat "$base_manifest"
@@ -252,7 +299,11 @@ dispatch_detector() {
       scope="$(printf '%s' "$cfg" | jq -r '.scope // "plugin-root"')"
       if [[ "$scope" == "plugin-root" ]]; then
         local plugin_root
-        plugin_root="$(dirname "$(dirname "$(dirname "$SKILL_PATH")")")"
+        if [[ "$PLUGIN_ROOT_ONLY" == "1" ]]; then
+          plugin_root="$TARGET_PATH"
+        else
+          plugin_root="$(dirname "$(dirname "$(dirname "$SKILL_PATH")")")"
+        fi
         local allowlist
         allowlist="$(printf '%s' "$cfg" | jq -c '.allowlist')"
         raw="$(detect_find_extensions "$plugin_root" "$allowlist")"
@@ -310,6 +361,16 @@ dispatch_detector() {
 count="$(printf '%s' "$RULES_JSON" | jq '.rules | length')"
 for (( i=0; i<count; i++ )); do
   rule="$(printf '%s' "$RULES_JSON" | jq -c ".rules[$i]")"
+  rule_kind="$(printf '%s' "$rule" | jq -r '.kind // "plugin-policy"')"
+  if [[ "$LINT_MODE" == "cross-plugin" && "$rule_kind" == "plugin-policy" ]]; then
+    continue
+  fi
+  rule_scope="$(printf '%s' "$rule" | jq -r '.detector.scope // empty')"
+  if [[ "$PLUGIN_ROOT_ONLY" == "1" ]]; then
+    [[ "$rule_scope" == "plugin-root" ]] || continue
+  else
+    [[ "$rule_scope" != "plugin-root" ]] || continue
+  fi
   dispatch_detector "$rule"
 done
 
@@ -319,8 +380,11 @@ elif (( minor > 0 )); then verdict="ACCEPT_WITH_MINOR"
 else verdict="ACCEPT"
 fi
 
+skill_arg="$SKILL_PATH"
+[[ "$PLUGIN_ROOT_ONLY" == "1" ]] && skill_arg="$TARGET_PATH"
+
 jq -n \
-  --arg skill "$SKILL_PATH" \
+  --arg skill "$skill_arg" \
   --arg runId "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
   --argjson critical "$critical" \
   --argjson important "$important" \

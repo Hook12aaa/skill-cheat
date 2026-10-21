@@ -1,0 +1,5 @@
+{
+  "name": "empty-skills-plugin",
+  "version": "0.0.1",
+  "description": "Fixture: has skills/ but no SKILL.md anywhere. Expected: INCONCLUSIVE."
+}

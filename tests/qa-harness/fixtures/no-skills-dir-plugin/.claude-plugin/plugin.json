@@ -1,0 +1,5 @@
+{
+  "name": "no-skills-dir-plugin",
+  "version": "0.0.1",
+  "description": "Fixture: has no skills/ directory at all. Expected: INCONCLUSIVE."
+}

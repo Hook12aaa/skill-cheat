@@ -1,0 +1,25 @@
+digraph skill_author {
+    rankdir=TB;
+    "Read design.md" [shape=box];
+    "Verify sidecar hash" [shape=diamond];
+    "BLOCKED_TAMPER" [shape=doublecircle];
+    "Draft pushy description" [shape=box];
+    "Draft Anti-Pattern" [shape=box];
+    "Draft Step Details" [shape=box];
+    "Draft Rationalization Table" [shape=box];
+    "Draft Red Flags" [shape=box];
+    "Draft Bottom Line" [shape=box];
+    "Run bash -n" [shape=diamond];
+    "AUTHOR_DONE" [shape=doublecircle];
+    "Read design.md" -> "Verify sidecar hash";
+    "Verify sidecar hash" -> "BLOCKED_TAMPER" [label="drift"];
+    "Verify sidecar hash" -> "Draft pushy description" [label="clean"];
+    "Draft pushy description" -> "Draft Anti-Pattern";
+    "Draft Anti-Pattern" -> "Draft Step Details";
+    "Draft Step Details" -> "Draft Rationalization Table";
+    "Draft Rationalization Table" -> "Draft Red Flags";
+    "Draft Red Flags" -> "Draft Bottom Line";
+    "Draft Bottom Line" -> "Run bash -n";
+    "Run bash -n" -> "AUTHOR_DONE" [label="pass"];
+    "Run bash -n" -> "Draft Bottom Line" [label="fail"];
+}

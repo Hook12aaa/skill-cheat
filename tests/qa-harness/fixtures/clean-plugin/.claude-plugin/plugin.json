@@ -1,0 +1,5 @@
+{
+  "name": "clean-plugin",
+  "version": "0.0.1",
+  "description": "Fixture plugin that must pass the static layer."
+}

@@ -1,0 +1,5 @@
+{
+  "name": "cross-plugin-clean-plugin",
+  "version": "0.0.1",
+  "description": "A plugin with non-allowlisted assets (.yaml, .png) that should land VALIDATION_CLEAN in cross-plugin mode."
+}

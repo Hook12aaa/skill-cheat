@@ -1,0 +1,5 @@
+{
+  "name": "multi-skill-noise-plugin",
+  "version": "0.0.1",
+  "description": "Three skills + a plugin-root file that would trip LINT-001 in self mode."
+}

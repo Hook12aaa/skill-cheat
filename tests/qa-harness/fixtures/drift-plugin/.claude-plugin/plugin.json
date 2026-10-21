@@ -1,0 +1,5 @@
+{
+  "name": "drift-plugin",
+  "version": "0.0.1",
+  "description": "Fixture plugin with intentional drift; must NOT pass the static layer."
+}

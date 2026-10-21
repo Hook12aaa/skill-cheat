@@ -34,17 +34,15 @@ for fixture in "${HERE}/tests/lint/fixtures/bad/LINT-"*".md"; do
     *)         echo "FAIL: $rule_id has unknown severity '$severity'"; exit 1 ;;
   esac
 
-  # Invariant: LINT-001 (find-extensions) requires a disallowed-extension file present in plugin scope at run time; inject a decoy for the duration of this fixture only.
+  # Invariant: LINT-001 (find-extensions) is a plugin-root rule; route via --plugin-root-only --target with a decoy disallowed-extension file in the scanned dir.
   decoy=""
   if [[ "$rule_id" == "LINT-001" ]]; then
     decoy="${HERE}/tests/lint/fixtures/bad/LINT-001.py"
     printf '# decoy disallowed-extension file for LINT-001 fixture coverage\n' > "$decoy"
-  fi
-
-  report="$(bash "$LINT" "$fixture" 2>/dev/null || true)"
-
-  if [[ -n "$decoy" ]]; then
+    report="$(bash "$LINT" --plugin-root-only --target "${HERE}/tests/lint/fixtures/bad" 2>/dev/null || true)"
     rm -f "$decoy"
+  else
+    report="$(bash "$LINT" "$fixture" 2>/dev/null || true)"
   fi
 
   verdict="$(printf '%s' "$report" | jq -r '.verdict')"

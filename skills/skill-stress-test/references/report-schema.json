@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stress-test report",
+  "type": "object",
+  "required": ["verdict", "manifest", "layers"],
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "VALIDATION_CLEAN",
+        "PLUGIN_DRIFT",
+        "HARNESS_GAP",
+        "VALIDATION_INCONCLUSIVE",
+        "BLOCKED_NO_TARGET"
+      ]
+    },
+    "manifest": {
+      "type": "object",
+      "required": ["target", "harness_version", "run_id", "started_at"],
+      "properties": {
+        "target": {
+          "type": "object",
+          "required": ["path", "plugin_name"],
+          "properties": {
+            "path": { "type": "string" },
+            "plugin_name": { "type": "string" },
+            "plugin_version": { "type": "string" },
+            "git_sha": { "type": "string" },
+            "skills": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "harness_version": { "type": "string" },
+        "run_id": { "type": "string" },
+        "started_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "token_estimate": { "type": "integer" },
+        "token_actual": { "type": "integer" },
+        "duration_ms": { "type": "integer" }
+      }
+    },
+    "layers": {
+      "type": "object",
+      "properties": {
+        "static": {
+          "type": "object",
+          "required": ["verdict", "per_skill"],
+          "properties": {
+            "verdict": {
+              "type": "string",
+              "enum": ["ACCEPT", "ACCEPT_WITH_MINOR", "REJECT_IMPORTANT", "REJECT_CRITICAL", "INCONCLUSIVE"]
+            },
+            "plugin_findings": {
+              "type": "array",
+              "default": []
+            },
+            "per_skill": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["skill", "verdict", "findings"],
+                "properties": {
+                  "skill": { "type": "string" },
+                  "verdict": { "type": "string" },
+                  "findings": { "type": "array" }
+                }
+              }
+            },
+            "reason": { "type": "string" }
+          }
+        },
+        "behavioral": { "type": ["object", "null"] },
+        "e2e": { "type": ["object", "null"] },
+        "evolutionary": { "type": ["object", "null"] }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "properties": {
+        "plugin_author_actions": { "type": "array", "items": { "type": "string" } },
+        "skill_cheat_actions":   { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

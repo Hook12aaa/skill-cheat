@@ -1,0 +1,27 @@
+digraph skill_scaffold {
+    rankdir=TB;
+    "Read voice-review verdict" [shape=box];
+    "Verdict is ACCEPT?" [shape=diamond];
+    "Read scope mode from scope.md" [shape=box];
+    "Scope mode read?" [shape=diamond];
+    "New plugin?" [shape=diamond];
+    "Emit full canonical tree" [shape=box];
+    "Emit skill-only delta" [shape=box];
+    "Run authored Bottom Line" [shape=box];
+    "Bottom Line passes bash -n?" [shape=diamond];
+    "SCAFFOLD_INCOMPLETE" [shape=doublecircle];
+    "SCAFFOLD_COMPLETE" [shape=doublecircle];
+    "Read voice-review verdict" -> "Verdict is ACCEPT?";
+    "Verdict is ACCEPT?" -> "SCAFFOLD_INCOMPLETE" [label="not ACCEPT"];
+    "Verdict is ACCEPT?" -> "Read scope mode from scope.md" [label="ACCEPT"];
+    "Read scope mode from scope.md" -> "Scope mode read?";
+    "Scope mode read?" -> "SCAFFOLD_INCOMPLETE" [label="not found"];
+    "Scope mode read?" -> "New plugin?" [label="found"];
+    "New plugin?" -> "Emit full canonical tree" [label="yes"];
+    "New plugin?" -> "Emit skill-only delta" [label="no"];
+    "Emit full canonical tree" -> "Run authored Bottom Line";
+    "Emit skill-only delta" -> "Run authored Bottom Line";
+    "Run authored Bottom Line" -> "Bottom Line passes bash -n?";
+    "Bottom Line passes bash -n?" -> "SCAFFOLD_INCOMPLETE" [label="fail"];
+    "Bottom Line passes bash -n?" -> "SCAFFOLD_COMPLETE" [label="pass"];
+}

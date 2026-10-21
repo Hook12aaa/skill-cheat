@@ -1,0 +1,24 @@
+digraph skill_voice_review {
+    rankdir=TB;
+    "Receive target SKILL.md" [shape=box];
+    "Run lint.sh" [shape=box];
+    "Lint clean?" [shape=diamond];
+    "REJECT_CRITICAL with findings" [shape=doublecircle];
+    "Dispatch voice-reviewer subagent" [shape=box];
+    "Agent verdict received?" [shape=diamond];
+    "INCONCLUSIVE" [shape=doublecircle];
+    "Merge lint and agent verdicts" [shape=box];
+    "3 consecutive REJECTs?" [shape=diamond];
+    "BLOCKED_VOICE" [shape=doublecircle];
+    "Emit combined verdict" [shape=doublecircle];
+    "Receive target SKILL.md" -> "Run lint.sh";
+    "Run lint.sh" -> "Lint clean?";
+    "Lint clean?" -> "REJECT_CRITICAL with findings" [label="critical findings"];
+    "Lint clean?" -> "Dispatch voice-reviewer subagent" [label="zero critical"];
+    "Dispatch voice-reviewer subagent" -> "Agent verdict received?";
+    "Agent verdict received?" -> "INCONCLUSIVE" [label="no"];
+    "Agent verdict received?" -> "Merge lint and agent verdicts" [label="yes"];
+    "Merge lint and agent verdicts" -> "3 consecutive REJECTs?";
+    "3 consecutive REJECTs?" -> "BLOCKED_VOICE" [label="yes"];
+    "3 consecutive REJECTs?" -> "Emit combined verdict" [label="no"];
+}

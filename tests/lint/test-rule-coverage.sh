@@ -19,7 +19,7 @@ while IFS= read -r rule_id; do
     decoy="${FIXTURES}/LINT-001.py"
     trap 'rm -f "$decoy"' RETURN
     printf '# decoy disallowed-extension file for LINT-001\n' > "$decoy"
-    report="$(bash "$LINT" "$fixture" 2>/dev/null || true)"
+    report="$(bash "$LINT" --plugin-root-only --target "$FIXTURES" 2>/dev/null || true)"
     rm -f "$decoy"
   else
     report="$(bash "$LINT" "$fixture" 2>/dev/null || true)"

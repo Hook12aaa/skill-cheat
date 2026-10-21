@@ -1,0 +1,5 @@
+{
+  "name": "nested-skill-plugin",
+  "version": "0.0.1",
+  "description": "Fixture: has skills/category/subskill/SKILL.md (unsupported depth). Expected: INCONCLUSIVE."
+}

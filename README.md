@@ -26,6 +26,31 @@ Any of these invocations kicks off the 5-stage pipeline:
 4. `/skill-voice-review` — mechanical lint + voice-reviewer subagent; REJECT or ACCEPT. Phase-3 behavioral benchmark lands in Plan 5+.
 5. `/skill-scaffold` — emit the plugin tree at the target path (`evals/` travels with the skill).
 
+## Validation: /skill-stress-test
+
+Stress-tests any connected Claude Code plugin by running the voice-review lint engine over every SKILL.md in the target.
+
+Usage:
+
+```bash
+# explicit target
+node skills/skill-stress-test/scripts/qa-orchestrator.js --plugin /abs/path/to/plugin
+
+# cwd auto-detect
+cd /abs/path/to/plugin && node /abs/path/to/skill-cheat/skills/skill-stress-test/scripts/qa-orchestrator.js
+```
+
+Output: `<target>/.skill-cheat-qa/runs/<run-id>/report.json` plus a single `VERDICT: <token>` line on stdout.
+
+Verdicts (Plan 1, static layer only):
+
+- `VALIDATION_CLEAN` — every SKILL.md returned ACCEPT.
+- `PLUGIN_DRIFT` — at least one SKILL.md returned ACCEPT_WITH_MINOR or REJECT_*.
+- `VALIDATION_INCONCLUSIVE` — the layer could not complete.
+- `BLOCKED_NO_TARGET` — no plugin resolved from arg or cwd.
+
+Layers 2–4 (behavioral, E2E, evolutionary) land in subsequent plans.
+
 ## Principles
 
 - Contract-first, library-last.
